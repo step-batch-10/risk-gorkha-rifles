@@ -7,7 +7,13 @@
 //     return game;
 //   }
 
-//   allotPlayer(noOfPlayers:number=6,playerId:string) {
-//     const game= this.games.find((game) => game.noOfPlayers === noOfPlayers && game.);
+//   isWaitingGame = (game) => {
+//     return game.noOfPlayers === noOfPlayers && game.status === "waiting";
 //   }
+
+//   allotPlayer(noOfPlayers: number = 6, playerId: string) {
+//     const game = this.games.find((game) => isWaitingGame(game));
+//     game.addPlayer(playerId);
+//   }
+
 // };
