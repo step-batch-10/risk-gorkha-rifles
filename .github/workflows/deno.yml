@@ -10,7 +10,7 @@ name: Test and Lint
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
 
 permissions:
   id-token: write
@@ -39,10 +39,10 @@ jobs:
 
       - name: Run tests
         run: deno test -A
-     
+
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "priyanksuhp-risk-gorkha-95"
-          entrypoint: "main.ts"
-          root: "."
+          project: 'priyanksuhp-risk-gorkha-95'
+          entrypoint: './src/main.ts'
+          root: '.'
