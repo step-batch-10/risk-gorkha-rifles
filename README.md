@@ -23,7 +23,7 @@ Our version adds:
 - Players can fortify troops between connected territories.
 - The last player remaining wins.
 
-For complete rules and game flow, 🔗[click here](https://www.hasbro.com/common/instruct/risk.pdf)
+For complete rules, 🔗[click here](https://www.hasbro.com/common/instruct/risk.pdf)
 
 ## 📚 Documentation
 
