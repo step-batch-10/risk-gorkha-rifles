@@ -44,5 +44,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "priyanksuhp-risk-gorkha-95"
-          entrypoint: "src/main.ts"
+          entrypoint: "main.ts"
           root: "."
