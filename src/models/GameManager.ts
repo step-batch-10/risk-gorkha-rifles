@@ -1,19 +1,31 @@
-// export default class GameManager { 
-//   private games: Game[] = [];
-  
-//   createGame(noOfPlayers: 3|4|6, createdBy:number=0) {
-//     const game = new Game(noOfPlayers, createdBy);
-//     this.games.push(game);
-//     return game;
-//   }
+import Game from "./game.ts";
 
-//   isWaitingGame = (game) => {
-//     return game.noOfPlayers === noOfPlayers && game.status === "waiting";
-//   }
+export default class GameManager {
+  public games: Game[] = [];
 
-//   allotPlayer(noOfPlayers: number = 6, playerId: string) {
-//     const game = this.games.find((game) => isWaitingGame(game));
-//     game.addPlayer(playerId);
-//   }
+  public createGame(noOfPlayers: number = 6, createdBy: string = "") {
+    const game = new Game(noOfPlayers, createdBy);
+    this.games.push(game);
 
-// };
+    return game;
+  }
+
+  private isWaitingGame = (game: Game, noOfPlayers: number) => {
+    return game.noOfPlayers === noOfPlayers && game.status === "waiting";
+  };
+
+  public allotPlayer(
+    noOfPlayers: number = 6,
+    playerId: string,
+    playerName: string
+  ) {
+    const waitingGame = this.games.find((game) =>
+      this.isWaitingGame(game, noOfPlayers)
+    );
+
+    const game = waitingGame || this.createGame(noOfPlayers);
+    game.addPlayer(playerName, playerId);
+
+    return game;
+  }
+}
