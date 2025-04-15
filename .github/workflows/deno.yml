@@ -40,3 +40,9 @@ jobs:
       - name: Run tests
         run: deno test -A
      
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: "priyanksuhp-risk-gorkha-86"
+          entrypoint: "src/main.ts"
+          root: "."
