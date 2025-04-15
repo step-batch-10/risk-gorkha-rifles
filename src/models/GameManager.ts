@@ -1,3 +1,4 @@
+import { GameStatus } from "../types/game.ts";
 import Game from "./game.ts";
 
 export default class GameManager {
@@ -14,6 +15,12 @@ export default class GameManager {
     return game.noOfPlayers === noOfPlayers && game.status === "waiting";
   };
 
+  public playerActiveGame(playerId: string) {
+    return this.games.find(game =>
+      playerId in game.state.players
+      && (game.status === GameStatus.running || game.status === GameStatus.waiting));
+  }
+
   public allotPlayer(
     noOfPlayers: number = 6,
     playerId: string,
@@ -24,7 +31,7 @@ export default class GameManager {
     );
 
     const game = waitingGame || this.createGame(noOfPlayers);
-    game.addPlayer(playerName, playerId);
+    game.addPlayer(playerId, playerName);
 
     return game;
   }

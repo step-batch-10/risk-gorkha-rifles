@@ -2,7 +2,7 @@ import Risk from "./risk.ts";
 import { GameStatus } from "../types/game.ts";
 
 export default class Game {
-  public gameId: number;
+  public gameId: string;
   public noOfPlayers: number;
   public createdBy: string;
   public createdAt: number;
@@ -12,7 +12,7 @@ export default class Game {
   constructor(
     noOfPlayers: number = 6,
     createdBy: string = "",
-    generateId = () => 1,
+    generateId = () => '1',
     createdAt = () => 1
   ) {
     this.gameId = generateId();
