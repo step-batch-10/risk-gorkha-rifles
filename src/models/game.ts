@@ -35,5 +35,6 @@ export default class Game {
 
   private startGame() {
     this.status = GameStatus.running;
+    this.state.init();
   }
 }
