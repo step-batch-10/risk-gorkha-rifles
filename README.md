@@ -1,1 +1,3 @@
-# risk-the-gorkhas  
+# risk-the-gorkhas
+
+Risk board game
