@@ -39,9 +39,26 @@ Check out the 🔗 [Wiki](https://github.com/step-batch-10/risk-gorkha-rifles/wi
 - Typescript
 - Hono (Web framework)
 
+## 🧱 Build It Yourself
+
+Follow these steps to get the project up and running locally:
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/step-batch-10/risk-gorkha-rifles.git
+cd risk-gorkha-rifles
+```
+
+2. Run the setup script
+
+```bash
+. hooks/setup.sh
+```
+
 ## 🕹️ Play the game
 
-Hosted version: 🔗[Tap to play](https://priyanksuhp-risk-gorkha-95-084v4qt8y734.deno.dev/)
+Hosted version: 🔗[Tap to play](https://priyanksuhp-risk-gorkha-95.deno.dev/)
 
 ## 🧠 Contributors
 
