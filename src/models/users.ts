@@ -15,7 +15,7 @@ export default class Users {
 
   createUser(userName: string) {
     const newUser: UserDetail = {
-      userName: userName,
+      userName,
       userId: this.uniqueId(),
     };
 

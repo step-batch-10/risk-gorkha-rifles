@@ -5,7 +5,7 @@ import Session from "../models/session.ts";
 
 export const loginHandler = async (context: Context) => {
   const { username } = await context.req.json();
-  if (!username) context.json({ message: 'Username must be filled out' }, 400);
+  if (!username) return context.json({ message: 'Username must be filled out' }, 400);
   const users: Users = context.get('users');
 
   if (!users.findByUserName(username)) {
