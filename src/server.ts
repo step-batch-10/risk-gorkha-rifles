@@ -12,7 +12,7 @@ export default class Server {
   app: App;
   users: Users; session: Session; uniqueId: () => string;
 
-  constructor(users: Users, session: Session, uniqueId: () => string) {
+  constructor(users: Users = new Users(), session: Session = new Session(), uniqueId: () => string = () => "1") {
     this.app = new Hono();
     this.appMethod(this.app);
     this.users = users;

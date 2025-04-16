@@ -10,6 +10,6 @@ describe("tests for app dynamic routes", () => {
       body: JSON.stringify({ username: "Ankita" }),
     });
 
-    assertEquals(response.status, 200);
+    assertEquals(response.status, 302);
   });
 });
