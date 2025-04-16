@@ -4,7 +4,7 @@ import lodash from 'lodash';
 export const divideTerritories = (
   continents: Record<string, string[]>,
   players: string[]
-) => {
+): Map<string, Territory> => {
   const territories = new Map<string, Territory>();
 
   Object.values(continents).forEach((group) => {
