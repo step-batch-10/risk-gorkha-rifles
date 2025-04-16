@@ -14,6 +14,6 @@ export default class Server {
 
   private appMethod(app: Hono<BlankEnv, BlankSchema, '/'>) {
     app.use(logger());
-    app.get('/', serveStatic({ root: './public' }));
+    app.get('*', serveStatic({ root: './public/' }));
   }
 }
