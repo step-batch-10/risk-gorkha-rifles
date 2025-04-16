@@ -1,5 +1,5 @@
 import { assertEquals } from "assert";
-import { describe, it } from "testing";
+import { describe, it } from "jsr:@std/testing/bdd";
 import Risk from "../src/models/risk.ts";
 
 describe('tests for risk model', () => {
