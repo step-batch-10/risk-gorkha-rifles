@@ -9,7 +9,7 @@ import { loginHandler } from "./handler/authHandler.ts";
 type App = Hono<BlankEnv, BlankSchema, "/">;
 
 export default class Server {
-  app: App;
+  readonly app: App;
   users: Users; session: Session; uniqueId: () => string;
 
   constructor(users: Users = new Users(), session: Session = new Session(), uniqueId: () => string = () => "1") {
@@ -18,11 +18,6 @@ export default class Server {
     this.users = users;
     this.session = session;
     this.uniqueId = uniqueId;
-  }
-
-  start() {
-    console.log("Server is started");
-    Deno.serve({ port: 3000 }, this.app.fetch);
   }
 
   private async setContext(context: Context, next: Next) {

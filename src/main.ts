@@ -11,7 +11,7 @@ const main = () => {
   const users = new Users(uniqueId);
 
   const server = new Server(users, session, uniqueId);
-  server.start();
+  Deno.serve({ port: 3000 }, server.app.fetch);
 };
 
 main();

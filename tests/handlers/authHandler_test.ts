@@ -4,7 +4,6 @@ import Server from "../../src/server.ts";
 import Users from "../../src/models/users.ts";
 import Session from "../../src/models/session.ts";
 
-
 describe("tests for app dynamic routes", () => {
   it("Should give status 400 if username not given", async () => {
     const server = new Server();
@@ -46,7 +45,7 @@ describe("tests for app dynamic routes", () => {
   it("should create a new session on each login", async () => {
     const users = new Users();
     const session = new Session();
-    const server = new Server(users, session);
+    const server = new Server(users, session, () => "1");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Ankita" })
