@@ -1,12 +1,20 @@
 import { Context } from "hono";
 import Users from "../models/users.ts";
+import { setCookie } from 'hono/cookie';
+import Session from "../models/session.ts";
 
 export const loginHandler = async (context: Context) => {
-  console.log("inside loginHandler");
-  const userName = await context.req.json();
-  const user = new Users();
+  const { username } = await context.req.json();
+  if (!username) context.json({ message: 'Username must be filled out' }, 400);
+  const users: Users = context.get('users');
 
-  user.createUser(userName);
+  if (!users.findByUserName(username)) {
+    users.createUser(username);
+  }
 
-  return context.json({}, 200);
+  const sessions: Session = context.get('session');
+  const sessionId = sessions.createSession(username);
+
+  setCookie(context, 'sessionId', sessionId);
+  return context.redirect('/', 302);
 };

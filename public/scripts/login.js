@@ -24,7 +24,7 @@ const handleLogin = async (username) => {
       body: JSON.stringify({ username })
     });
 
-    if (response.status !== 302) {
+    if (!response.redirected) {
       const responseData = await response.json();
       showToast(responseData.message);
       return;
@@ -46,7 +46,7 @@ const handleFormSubmit = (event) => {
     return;
   }
 
-  handleLogin();
+  handleLogin(usernameInput);
 };
 
 const initializeApp = () => {
