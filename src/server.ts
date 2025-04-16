@@ -1,10 +1,11 @@
-import { Hono } from 'hono';
-import { logger } from 'hono/logger';
-import { BlankEnv, BlankSchema } from 'hono/types';
-import { serveStatic } from 'hono/deno';
+import { Hono } from "hono";
+import { logger } from "hono/logger";
+import { BlankEnv, BlankSchema } from "hono/types";
+import { serveStatic } from "hono/deno";
+import { loginHandler } from "./handler/authHandler.ts";
 
 export default class Server {
-  app: Hono<BlankEnv, BlankSchema, '/'>;
+  app: Hono<BlankEnv, BlankSchema, "/">;
 
   constructor() {
     this.app = new Hono();
@@ -12,15 +13,16 @@ export default class Server {
   }
 
   start() {
-    console.log('Server is started');
+    console.log("Server is started");
     Deno.serve({ port: 3000 }, this.app.fetch);
   }
 
-  private appMethod(app: Hono<BlankEnv, BlankSchema, '/'>) {
+  private appMethod(app: Hono<BlankEnv, BlankSchema, "/">) {
     app.use(logger());
-    app.get('/test', (c) => {
-      return c.text('connected');
+    app.get("/test", (c) => {
+      return c.text("connected");
     });
-    app.get('*', serveStatic({ root: './public/' }));
+    app.post("/login", loginHandler);
+    app.get("*", serveStatic({ root: "./public/" }));
   }
 }

@@ -1,9 +1,5 @@
 import _ from "npm:lodash";
 
-const uniqueId = () => {
-  return Date.now().toString(36) + Math.random().toString(36);
-};
-
 export interface UserDetail {
   userName: string;
   userId: string;
@@ -35,7 +31,7 @@ export default class Users {
   findByUserName(userName: string) {
     const user = _.find(
       this.users,
-      (user: UserDetail) => user.userName === userName 
+      (user: UserDetail) => user.userName === userName
     );
 
     return user;

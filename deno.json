@@ -8,7 +8,7 @@
     "testing": "jsr:@std/testing@^1.0.11/bdd"
   },
   "tasks": {
-    "test": "rm -rf coverage && deno test --coverage && deno coverage",
+    "test": "rm -rf coverage && deno test -A --coverage && deno coverage",
     "start": "deno -A --watch src/main.ts"
   }
 }

@@ -8,5 +8,5 @@ export const loginHandler = async (context: Context) => {
 
   user.createUser(userName);
 
-  return context.json({});
+  return context.json({}, 200);
 };
