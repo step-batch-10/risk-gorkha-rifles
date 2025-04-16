@@ -17,7 +17,7 @@ export default class GameManager {
 
   public playerActiveGame(playerId: string) {
     return this.games.find(game =>
-      playerId in game.state.players
+      (game.state.players).has(playerId)
       && (game.status === GameStatus.running || game.status === GameStatus.waiting));
   }
 

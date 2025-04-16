@@ -1,5 +1,5 @@
-import Risk from "./risk.ts";
-import { GameStatus } from "../types/game.ts";
+import Risk from './risk.ts';
+import { GameStatus } from '../types/game.ts';
 
 export default class Game {
   public gameId: string;
@@ -11,7 +11,7 @@ export default class Game {
 
   constructor(
     noOfPlayers: number = 6,
-    createdBy: string = "",
+    createdBy: string = '',
     generateId = () => '1',
     createdAt = () => 1
   ) {
@@ -25,7 +25,7 @@ export default class Game {
 
   public addPlayer(playerId: string, playerName: string) {
     const game = this.state.addPlayer(playerId, playerName);
-    if (Object.keys(this.state.players).length === this.noOfPlayers) {
+    if (this.state.players.size === this.noOfPlayers) {
       this.startGame();
       return;
     }
