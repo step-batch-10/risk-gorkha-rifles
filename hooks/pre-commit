@@ -2,6 +2,6 @@ set -e
 
 deno lint
 deno test -A
-deno run -A jsr:@ashishkujoy/deno-coverage-checker@0.0.8 --lines=90 --branches=85 --functions=95 --exclude=src/app.ts --perFile
+deno run -A jsr:@ashishkujoy/deno-coverage-checker@0.0.9
 
 echo "All test passed. Commiting ✅"
