@@ -8,7 +8,7 @@
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/testing@*": "1.0.11",
     "jsr:@std/testing@^1.0.11": "1.0.11",
-    "npm:hono@^4.7.6": "4.7.7",
+    "npm:hono@^4.7.7": "4.7.7",
     "npm:lodash@^4.17.21": "4.17.21"
   },
   "jsr": {
@@ -56,7 +56,7 @@
     "dependencies": [
       "jsr:@std/assert@^1.0.12",
       "jsr:@std/testing@^1.0.11",
-      "npm:hono@^4.7.6",
+      "npm:hono@^4.7.7",
       "npm:lodash@^4.17.21"
     ]
   }

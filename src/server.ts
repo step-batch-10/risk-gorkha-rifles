@@ -13,12 +13,8 @@ export default class Server {
 
   start() {
     console.log('Server is started');
-    // Deno.serve({ port: 3000 }, this.app.fetch);
+    Deno.serve({ port: 3000 }, this.app.fetch);
   }
-
-  // stop() {
-
-  // }
 
   private appMethod(app: Hono<BlankEnv, BlankSchema, '/'>) {
     app.use(logger());

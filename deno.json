@@ -4,7 +4,7 @@
     "@std/testing": "jsr:@std/testing@^1.0.11",
     "assert": "jsr:@std/assert@^1.0.12",
     "lodash": "npm:lodash@^4.17.21",
-    "hono": "npm:hono@^4.7.6",
+    "hono": "npm:hono@^4.7.7",
     "testing": "jsr:@std/testing@^1.0.11/bdd"
   },
   "tasks": {
