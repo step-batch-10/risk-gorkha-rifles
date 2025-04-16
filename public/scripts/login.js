@@ -30,7 +30,7 @@ const handleLogin = async (username) => {
       return;
     }
 
-    window.location.href = '/';
+    globalThis.location.href = '/';
   } catch (error) {
     console.error("Login error:", error);
     showToast("An error occurred. Please try again later.");
