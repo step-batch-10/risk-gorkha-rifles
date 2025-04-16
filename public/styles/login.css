@@ -1,0 +1,74 @@
+body {
+  background-image: url('../images/risk.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+}
+
+.login {
+  width: 1100px;
+  height: 700px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  color: white;
+  padding-right: 40px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 600px;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../images/login-background.png');
+  background-size: cover;
+  background-position: center;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input {
+  height: 40px;
+  width: 55%;
+  background-color: #685434;
+  border-radius: 5px;
+  padding: 5px 1rem;
+  line-height: 40px;
+  border: none;
+  color: #fff;
+
+  &::placeholder {
+    color: #e7a44d;
+    font-size: 15px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+button {
+  height: 40px;
+  width: 150px;
+  border-radius: 5px;
+  background-color: #3e2514;
+  color: #c99147;
+}
+
+h1 {
+  color: black;
+}
