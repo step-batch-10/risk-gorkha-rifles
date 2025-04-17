@@ -115,7 +115,9 @@ globalThis.onload = () => {
       handleWaiting(resp.state);
       return;
     }
-
+    
+    const popup = document.querySelector("#waiting-popup");
+    popup.style.display = "none";
     allocateTerritories(resp.state.territories);
 
   }, 1000);
