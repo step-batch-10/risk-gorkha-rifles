@@ -7,7 +7,7 @@ describe("tests for users model", () => {
     const user = new Users();
     const actual = user.createUser("Ankita");
 
-    assertEquals(actual, [{ userName: "Ankita", userId: "1" }]);
+    assertEquals(actual, "1");
   });
 
   it("should find the user using userId", () => {
@@ -15,7 +15,7 @@ describe("tests for users model", () => {
     user.createUser("Ankita");
     const actual = user.findById("1");
 
-    assertEquals(actual, { userName: "Ankita", userId: "1" });
+    assertEquals(actual, "Ankita");
   });
 
   it("should return undefined if userId doesn't exist", () => {
@@ -30,7 +30,7 @@ describe("tests for users model", () => {
     user.createUser("Ankita");
     const actual = user.findByUserName("Ankita");
 
-    assertEquals(actual, { userName: "Ankita", userId: "1" });
+    assertEquals(actual, "1");
   });
 
   it("should return undefined if userName doesn't exist", () => {

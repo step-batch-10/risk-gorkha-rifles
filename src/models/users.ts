@@ -6,7 +6,7 @@ export interface UserDetail {
 }
 
 export default class Users {
-  public users: UserDetail[] = [];
+  public users: Map<string, string> = new Map();
   public uniqueId: () => string;
 
   constructor(uniqueId: () => string = () => "1") {
@@ -14,26 +14,19 @@ export default class Users {
   }
 
   createUser(userName: string) {
-    const newUser: UserDetail = {
-      userName,
-      userId: this.uniqueId(),
-    };
+    const userId = this.uniqueId();
+    this.users.set(userId, userName);
 
-    this.users.push(newUser);
-    return this.users;
+    return userId;
   }
 
-  findById(id: string) {
-    const user = _.find(this.users, (user: UserDetail) => user.userId === id);
-    return user;
+  findById(userId: string) {
+    return this.users.get(userId);
   }
 
   findByUserName(userName: string) {
-    const user = _.find(
-      this.users,
-      (user: UserDetail) => user.userName === userName
-    );
-
-    return user;
+    for (const [key, value] of this.users) {
+      if (userName === value) return key;
+    }
   }
 }

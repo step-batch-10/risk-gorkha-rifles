@@ -36,10 +36,7 @@ describe("tests for app dynamic routes", () => {
 
     assertEquals(response.status, 302);
     assertEquals(response.headers.get("set-cookie"), "sessionId=1; Path=/");
-    assertEquals(users.findByUserName("Ankita"), {
-      userName: "Ankita",
-      userId: "1",
-    });
+    assertEquals(users.findByUserName("Ankita"), "1");
   });
 
   it("should create a new session on each login", async () => {
@@ -53,10 +50,7 @@ describe("tests for app dynamic routes", () => {
 
     assertEquals(response.status, 302);
     assertEquals(response.headers.get("set-cookie"), "sessionId=1; Path=/");
-    assertEquals(users.findByUserName("Ankita"), {
-      userName: "Ankita",
-      userId: "1",
-    });
+    assertEquals(users.findByUserName("Ankita"), "1");
     assertEquals(session.findById("1"), "Ankita");
   });
 
