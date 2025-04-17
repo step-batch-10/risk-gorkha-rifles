@@ -10,5 +10,9 @@
   "tasks": {
     "test": "rm -rf coverage && deno test -A --coverage && deno coverage",
     "start": "deno -A --watch src/main.ts"
+  },
+  "test": {
+    "include": ["src/**/*", "tests/**/*"],
+    "exclude": ["src/main.ts"]
   }
 }

@@ -3,5 +3,5 @@
   "branches": 85,
   "functions": 95,
   "perFile": true,
-  "exclude": "src/server.ts"
+  "exclude": "src/main.ts"
 }

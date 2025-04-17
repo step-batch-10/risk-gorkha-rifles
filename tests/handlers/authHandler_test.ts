@@ -7,7 +7,10 @@ import GameManager from "../../src/models/gameManager.ts";
 
 describe("tests for app dynamic routes", () => {
   it("Should give status 400 if username not given", async () => {
-    const server = new Server();
+    const users = new Users();
+    const session = new Session();
+    const gameManager = new GameManager();
+    const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({})
@@ -17,7 +20,10 @@ describe("tests for app dynamic routes", () => {
   });
 
   it("Should set the cookies", async () => {
-    const server = new Server();
+    const users = new Users();
+    const session = new Session();
+    const gameManager = new GameManager();
+    const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Ankita" })

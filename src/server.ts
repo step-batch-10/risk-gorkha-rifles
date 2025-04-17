@@ -17,10 +17,10 @@ export default class Server {
   uniqueId: () => string;
 
   constructor(
-    users: Users = new Users(),
-    session: Session = new Session(),
-    gameManager: GameManager = new GameManager(),
-    uniqueId: () => string = () => "1",
+    users: Users,
+    session: Session,
+    gameManager: GameManager,
+    uniqueId: () => string,
   ) {
     this.app = new Hono();
     this.appMethod(this.app);
