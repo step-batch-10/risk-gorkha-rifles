@@ -6,6 +6,8 @@ import Session from "./models/session.ts";
 import { BlankEnv, BlankSchema } from "hono/types";
 import { loginHandler } from "./handler/authHandler.ts";
 import GameManager from "./models/gameManager.ts";
+import { boardDataHandler } from "./handler/gameHandler.ts";
+import { getCookie } from "hono/cookie";
 
 type App = Hono<BlankEnv, BlankSchema, "/">;
 
@@ -39,11 +41,33 @@ export default class Server {
     return await next();
   }
 
+  private async authHandler(ctx: Context, next: Next) {
+    const sessionId = getCookie(ctx, "sessionId");
+
+    const session = ctx.get("session");
+    console.log("-".repeat(40));
+    console.log(session);
+
+    if (session.sessions.has(sessionId || "0")) {
+      ctx.set("userId", session.findById(sessionId ?? "0"));
+      return await next();
+    }
+
+    return ctx.json({ message: "unauthorized", status: 401 });
+  }
+
+  private gameHandler() {
+    const app = new Hono();
+    app.use(this.authHandler);
+    app.get("/game-board", boardDataHandler);
+    return app;
+  }
+
   private appMethod(app: App) {
     app.use(logger());
     app.use(this.setContext.bind(this));
-
     app.post("/login", loginHandler);
+    app.route("/game", this.gameHandler());
     app.get("*", serveStatic({ root: "./public/" }));
   }
 }
