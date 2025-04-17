@@ -20,10 +20,17 @@ export default class Server {
     this.uniqueId = uniqueId;
   }
 
+<<<<<<< HEAD
   private async setContext(context: Context, next: Next) {
     context.set('users', this.users);
     context.set('session', this.session);
     context.set('uniqueId', this.uniqueId);
+=======
+  start() {
+    console.log('Server is started');
+    Deno.serve({ port: 3000 }, this.app.fetch);
+  }
+>>>>>>> d22de82 (#5 | renders all the territories with owner and troops | Priyankush/Jayanth)
 
     return await next();
   };
