@@ -47,10 +47,50 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: 'dineshkuniy-risk-gorkha-86'
+          entrypoint: './src/main.ts'
+          root: '.'
+
+    deploy-qa:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
           
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: 'priyanksuhp-risk-gorkha-95'
+          project: 'risk-gorkhas-qa'
+          entrypoint: './src/main.ts'
+          root: '.'
+
+    deploy-prod:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: 'risk-gorkha-66-prod'
           entrypoint: './src/main.ts'
           root: '.'
