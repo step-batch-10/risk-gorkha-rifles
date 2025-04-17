@@ -1,6 +1,6 @@
 import { assertEquals } from 'assert';
 import { describe, it } from 'testing';
-import Session from '../src/models/session.ts';
+import Session from '../../src/models/session.ts';
 
 describe('tests for session model', () => {
   it('should create sessions', () => {

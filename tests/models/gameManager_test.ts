@@ -1,8 +1,8 @@
 import { assertEquals, assert } from 'assert';
 import { describe, it } from 'testing';
-import Game from '../src/models/game.ts';
-import { GameStatus } from '../src/types/game.ts';
-import GameManager from '../src/models/gameManager.ts';
+import Game from '../../src/models/game.ts';
+import { GameStatus } from '../../src/types/game.ts';
+import GameManager from '../../src/models/gameManager.ts';
 
 describe('tests for gameManager model', () => {
   it('should create a new game', () => {

@@ -1,7 +1,7 @@
 import { assertEquals } from 'assert';
 import { describe, it } from 'testing';
-import Game from '../src/models/game.ts';
-import { GameStatus } from '../src/types/game.ts';
+import Game from '../../src/models/game.ts';
+import { GameStatus } from '../../src/types/game.ts';
 
 describe('tests for game model', () => {
   it('should add player to the game', () => {

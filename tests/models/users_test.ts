@@ -1,6 +1,6 @@
 import { assertEquals } from "assert";
 import { describe, it } from "testing";
-import Users from "../src/models/users.ts";
+import Users from "../../src/models/users.ts";
 
 describe("tests for users model", () => {
   it("should create user", () => {
