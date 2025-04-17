@@ -10,9 +10,15 @@ type App = Hono<BlankEnv, BlankSchema, "/">;
 
 export default class Server {
   readonly app: App;
-  users: Users; session: Session; uniqueId: () => string;
+  users: Users;
+  session: Session;
+  uniqueId: () => string;
 
-  constructor(users: Users = new Users(), session: Session = new Session(), uniqueId: () => string = () => "1") {
+  constructor(
+    users: Users = new Users(),
+    session: Session = new Session(),
+    uniqueId: () => string = () => "1"
+  ) {
     this.app = new Hono();
     this.appMethod(this.app);
     this.users = users;
@@ -20,20 +26,13 @@ export default class Server {
     this.uniqueId = uniqueId;
   }
 
-<<<<<<< HEAD
   private async setContext(context: Context, next: Next) {
-    context.set('users', this.users);
-    context.set('session', this.session);
-    context.set('uniqueId', this.uniqueId);
-=======
-  start() {
-    console.log('Server is started');
-    Deno.serve({ port: 3000 }, this.app.fetch);
-  }
->>>>>>> d22de82 (#5 | renders all the territories with owner and troops | Priyankush/Jayanth)
+    context.set("users", this.users);
+    context.set("session", this.session);
+    context.set("uniqueId", this.uniqueId);
 
     return await next();
-  };
+  }
 
   private appMethod(app: App) {
     app.use(logger());

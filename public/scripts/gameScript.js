@@ -319,8 +319,8 @@ const continentAnimation = () => {
 
   const territories = Array.from(document.getElementsByClassName("territory"));
   territories.forEach((territory) => {
-    territory.addEventListener("click", (e) => {
-      const map = document.getElementById("map");
+    territory.addEventListener("click", (_e) => {
+      const _map = document.getElementById("map");
       const fight = document.getElementById("fight");
       if (attacker === null) {
         fight.appendChild(territory);
