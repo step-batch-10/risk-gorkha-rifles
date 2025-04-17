@@ -16,7 +16,7 @@ const showToast = (message) => {
 
 const handleJoinGame = async (numOfPlayers) => {
   try {
-    const response = await fetch("/join", {
+    const response = await fetch("/join-game", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
