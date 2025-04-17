@@ -61,7 +61,7 @@ describe("tests for app login routes", () => {
     assertEquals(response.status, 302);
     assertEquals(response.headers.get("set-cookie"), "sessionId=1; Path=/");
     assertEquals(users.findByUserName("Ankita"), "1");
-    assertEquals(session.findById("1"), "Ankita");
+    assertEquals(session.findById("1"), "1");
   });
 
   it("should give 400 if username is not valid", async () => {

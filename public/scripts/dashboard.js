@@ -16,7 +16,7 @@ const showToast = (message) => {
 
 const handleJoinGame = async (numOfPlayers) => {
   try {
-    const response = await fetch("/join-game", {
+    const response = await fetch("/game/join-game", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ const handleJoinGame = async (numOfPlayers) => {
       body: JSON.stringify({ numOfPlayers }),
     });
 
-    if (!response.redirected) {
+    if (response.redirected) {
       // const responseData = { message: "you entered the game.....!" };
       // showToast(responseData.message);
       globalThis.location.href = "/game";
@@ -32,7 +32,7 @@ const handleJoinGame = async (numOfPlayers) => {
       return;
     }
 
-    globalThis.location.href = "/";
+    globalThis.location.href = "/";  
   } catch (error) {
     console.error("Join error:", error);
     showToast("An error occurred. Please try again later.");

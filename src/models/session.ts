@@ -7,7 +7,7 @@ export default class Session {
     this.sessions = new Map();
   }
 
-  public createSession(userId: string) {
+  public createSession(userId: string = "") {
     const sessionId = this.uniqueId();
     this.sessions.set(sessionId, userId);
 

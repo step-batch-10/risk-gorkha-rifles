@@ -42,6 +42,20 @@ export default class GameManager {
     return game;
   }
 
+  public getPlayerGameDetails(playerId: string) {    
+    const activeGame = this.playerActiveGame(playerId);
+
+    const gameDetails = {
+      status: activeGame?.status,
+      state: {
+        territories: Object.fromEntries(activeGame?.state.territoryState ?? new Map()),
+        players: activeGame?.state.players ? Object.fromEntries(activeGame.state.players) : []
+      }
+    };
+
+    return gameDetails;
+  }
+
   public allotPlayer(
     _noOfPlayers: number = 6,
     playerId: string,

@@ -5,10 +5,10 @@ import GameManager from "../models/gameManager.ts";
 const boardDataHandler = (ctx: Context) => {
   const gameManager: GameManager = ctx.get("gameManager");
   const userId: string = ctx.get("userId");
-  const game = gameManager.playerActiveGame(userId);
+  const gameDetails = gameManager.getPlayerGameDetails(userId);
 
-  return ctx.json(game);
-};
+  return ctx.json(gameDetails);
+}
 
 const joinGameHandler = (context: Context) => {
   const userId: string = context.get('userId');

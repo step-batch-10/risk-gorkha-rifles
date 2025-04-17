@@ -18,8 +18,9 @@ export const loginHandler = async (context: Context) => {
     users.createUser(username);
   }
 
+  const userId = users.findByUserName(username);
   const sessions: Session = context.get('session');
-  const sessionId = sessions.createSession(username);
+  const sessionId = sessions.createSession(userId);
 
   setCookie(context, 'sessionId', sessionId);
   return context.redirect('/', 302);

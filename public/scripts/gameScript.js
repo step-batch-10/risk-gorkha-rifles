@@ -25,259 +25,6 @@ const colors = {
   3: "red",
 };
 
-const territories = {
-  alaska: {
-    owner: 2,
-    troopsCount: 7,
-    borders: ["kamchatka", "northwestTerritory", "alberta"],
-  },
-  "north-west-territory": {
-    owner: 2,
-    troopsCount: 6,
-    borders: ["alaska", "alberta", "ontario", "greenland"],
-  },
-  greenland: {
-    owner: 1,
-    troopsCount: 3,
-    borders: ["northwestTerritory", "ontario", "quebec", "iceland"],
-  },
-  alberta: {
-    owner: 3,
-    troopsCount: 4,
-    borders: ["alaska", "northwestTerritory", "ontario", "westernUS"],
-  },
-  ontario: {
-    owner: 1,
-    troopsCount: 4,
-    borders: [
-      "northwestTerritory",
-      "alberta",
-      "westernUS",
-      "easternUS",
-      "quebec",
-      "greenland",
-    ],
-  },
-  quebec: {
-    owner: 2,
-    troopsCount: 10,
-    borders: ["ontario", "greenland", "easternUS"],
-  },
-  "western-us": {
-    owner: 1,
-    troopsCount: 9,
-    borders: ["alberta", "ontario", "easternUS", "centralAmerica"],
-  },
-  "eastern-us": {
-    owner: 1,
-    troopsCount: 1,
-    borders: ["westernUS", "ontario", "quebec", "centralAmerica"],
-  },
-  "central-america": {
-    owner: 3,
-    troopsCount: 10,
-    borders: ["westernUS", "easternUS", "venezuela"],
-  },
-  venezuela: {
-    owner: 2,
-    troopsCount: 7,
-    borders: ["centralAmerica", "brazil", "peru"],
-  },
-  brazil: {
-    owner: 2,
-    troopsCount: 1,
-    borders: ["venezuela", "peru", "argentina", "northAfrica"],
-  },
-  peru: {
-    owner: 2,
-    troopsCount: 5,
-    borders: ["venezuela", "brazil", "argentina"],
-  },
-  argentina: { owner: 3, troopsCount: 6, borders: ["peru", "brazil"] },
-  iceland: {
-    owner: 1,
-    troopsCount: 7,
-    borders: ["greenland", "greatBritain", "scandinavia"],
-  },
-  scandinavia: {
-    owner: 2,
-    troopsCount: 5,
-    borders: ["iceland", "ukraine", "northernEurope"],
-  },
-  ukraine: {
-    owner: 1,
-    troopsCount: 9,
-    borders: [
-      "scandinavia",
-      "ural",
-      "afghanistan",
-      "middleEast",
-      "southernEurope",
-      "northernEurope",
-    ],
-  },
-  "great-britain": {
-    owner: 1,
-    troopsCount: 5,
-    borders: ["iceland", "northernEurope", "westernEurope", "scandinavia"],
-  },
-  "northern-europe": {
-    owner: 1,
-    troopsCount: 5,
-    borders: [
-      "greatBritain",
-      "scandinavia",
-      "ukraine",
-      "southernEurope",
-      "westernEurope",
-    ],
-  },
-  "western-europe": {
-    owner: 3,
-    troopsCount: 9,
-    borders: [
-      "northernEurope",
-      "southernEurope",
-      "northAfrica",
-      "greatBritain",
-    ],
-  },
-  "southern-europe": {
-    owner: 2,
-    troopsCount: 1,
-    borders: [
-      "westernEurope",
-      "northernEurope",
-      "ukraine",
-      "middleEast",
-      "egypt",
-      "northAfrica",
-    ],
-  },
-  "north-africa": {
-    owner: 3,
-    troopsCount: 4,
-    borders: [
-      "brazil",
-      "westernEurope",
-      "southernEurope",
-      "egypt",
-      "eastAfrica",
-      "congo",
-    ],
-  },
-  egypt: {
-    owner: 2,
-    troopsCount: 3,
-    borders: ["southernEurope", "northAfrica", "eastAfrica", "middleEast"],
-  },
-  "east-africa": {
-    owner: 2,
-    troopsCount: 3,
-    borders: [
-      "egypt",
-      "northAfrica",
-      "congo",
-      "southAfrica",
-      "madagascar",
-      "middleEast",
-    ],
-  },
-  congo: {
-    owner: 3,
-    troopsCount: 6,
-    borders: ["northAfrica", "eastAfrica", "southAfrica"],
-  },
-  "south-africa": {
-    owner: 1,
-    troopsCount: 1,
-    borders: ["congo", "eastAfrica", "madagascar"],
-  },
-  madagascar: {
-    owner: 3,
-    troopsCount: 5,
-    borders: ["eastAfrica", "southAfrica"],
-  },
-  "middle-east": {
-    owner: 2,
-    troopsCount: 5,
-    borders: [
-      "ukraine",
-      "afghanistan",
-      "india",
-      "eastAfrica",
-      "egypt",
-      "southernEurope",
-    ],
-  },
-  afghanistan: {
-    owner: 3,
-    troopsCount: 1,
-    borders: ["ural", "ukraine", "middleEast", "india", "china"],
-  },
-  ural: {
-    owner: 3,
-    troopsCount: 2,
-    borders: ["ukraine", "siberia", "china", "afghanistan"],
-  },
-  siberia: {
-    owner: 1,
-    troopsCount: 9,
-    borders: ["ural", "yakutsk", "irkutsk", "mongolia", "china"],
-  },
-  yakutsk: {
-    owner: 2,
-    troopsCount: 7,
-    borders: ["siberia", "kamchatka", "irkutsk"],
-  },
-  kamchatka: {
-    owner: 1,
-    troopsCount: 1,
-    borders: ["yakutsk", "irkutsk", "mongolia", "japan", "alaska"],
-  },
-  irkutsk: {
-    owner: 2,
-    troopsCount: 5,
-    borders: ["siberia", "yakutsk", "kamchatka", "mongolia"],
-  },
-  mongolia: {
-    owner: 1,
-    troopsCount: 9,
-    borders: ["irkutsk", "kamchatka", "china", "japan", "siberia"],
-  },
-  china: {
-    owner: 2,
-    troopsCount: 6,
-    borders: ["mongolia", "siberia", "ural", "afghanistan", "india", "siam"],
-  },
-  india: {
-    owner: 3,
-    troopsCount: 6,
-    borders: ["middleEast", "china", "afghanistan", "siam"],
-  },
-  siam: { owner: 2, troopsCount: 7, borders: ["india", "china", "indonesia"] },
-  indonesia: {
-    owner: 1,
-    troopsCount: 6,
-    borders: ["siam", "newGuinea", "westernAustralia"],
-  },
-  "new-guinea": {
-    owner: 1,
-    troopsCount: 9,
-    borders: ["indonesia", "easternAustralia", "westernAustralia"],
-  },
-  "western-australia": {
-    owner: 1,
-    troopsCount: 4,
-    borders: ["indonesia", "newGuinea", "easternAustralia"],
-  },
-  "eastern-australia": {
-    owner: 1,
-    troopsCount: 4,
-    borders: ["newGuinea", "westernAustralia"],
-  },
-  japan: { owner: 3, troopsCount: 10, borders: ["mongolia", "kamchatka"] },
-};
 
 export const generatePlayerDetails = (player) => {
   const template = `
@@ -308,7 +55,7 @@ const allocateTerritories = (territories) => {
   Object.keys(territories).forEach((territory) => {
     const domTrr = document.getElementById(territory);
     const troops = domTrr.querySelector("tspan");
-    troops.innerHTML = territories[territory].troopsCount;
+    troops.innerHTML = territories[territory].troops;
     troops.style.fill = colors[territories[territory].owner];
   });
 };
@@ -342,34 +89,40 @@ const continentAnimation = () => {
   });
 };
 
-const handleWaiting = (resp) => {
+const handleWaiting = (state) => {
   const popup = document.querySelector("#waiting-popup");
   popup.style.display = "block";
   const ul = document.querySelector("#players");
+  ul.innerHTML = "";
 
-  Object.values(resp.players).forEach((player) => {
+  Object.values(state.players).map((playername) => {
     const list = document.createElement("li");
-    list.textContent = player.name;
+    list.textContent = playername;
     ul.appendChild(list);
   });
 };
 
-globalThis.onload = () => {
-  const resp = {
-    status: "waiting",
-    players,
-    territories,
-    colors,
-  };
+const getData = async () => {
+  const response = await fetch("/game/game-board");
 
-  if (resp.status === "waiting") {
-    handleWaiting(resp);
-    return;
-  }
+  return await response.json();
+};
+
+globalThis.onload = () => {
+  setInterval(async () => {
+    const resp = await getData();
+    if (resp.status === "waiting") {
+      handleWaiting(resp.state);
+      return;
+    }
+
+    allocateTerritories(resp.state.territories);
+
+  }, 1000);
 
   const sideBar = document.getElementById("side-bar-left");
 
   allocatePlayers(sideBar);
-  allocateTerritories(territories);
+  // allocateTerritories(territories);
   continentAnimation(); //extra
 };
