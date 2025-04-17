@@ -22,7 +22,7 @@ export default class Server {
     users: Users,
     session: Session,
     gameManager: GameManager,
-    uniqueId: () => string,
+    uniqueId: () => string
   ) {
     this.app = new Hono();
     this.appMethod(this.app);
@@ -45,15 +45,13 @@ export default class Server {
     const sessionId = getCookie(ctx, "sessionId");
 
     const session = ctx.get("session");
-    console.log("-".repeat(40));
-    console.log(session);
 
     if (session.sessions.has(sessionId || "0")) {
-      ctx.set("userId", session.findById(sessionId ?? "0"));
+      ctx.set("userId", session.findById(sessionId));
       return await next();
     }
 
-    return ctx.json({ message: "unauthorized", status: 401 });
+    return ctx.json({ message: "unauthorized" }, 401);
   }
 
   private gameHandler() {

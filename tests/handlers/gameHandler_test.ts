@@ -16,8 +16,6 @@ describe("boardDataHandler", () => {
     session.createSession("1");
     gameManager.allotPlayer(6, "1", "jayanth");
 
-    // console.log(gameManager);
-
     const server = new Server(users, session, gameManager, uniqueId);
 
     const response = await server.app.request("/game/game-board", {
@@ -26,11 +24,6 @@ describe("boardDataHandler", () => {
         Cookie: "sessionId=1",
       },
     });
-
-console.log("*".repeat(50));
-
-    console.log(await response.text());
-
     assertEquals(response.status, 200);
   });
 });
