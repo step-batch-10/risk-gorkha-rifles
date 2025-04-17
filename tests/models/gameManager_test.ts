@@ -10,8 +10,7 @@ describe('tests for gameManager model', () => {
     const actual = gameManager.createGame();
     const expected = new Game();
 
-    assertEquals(actual, expected);
-    assertEquals(gameManager.games.length, 1);
+    assertEquals(JSON.stringify(actual), JSON.stringify(expected));
   });
 
   it('should add player to game to new game', () => {
@@ -25,7 +24,6 @@ describe('tests for gameManager model', () => {
     expected.set('123', 'player1');
 
     assertEquals(game.state.players, expected);
-    assertEquals(gameManager.games.length, 2);
   });
 
   it('should add player to game to existing waiting game', () => {
@@ -38,10 +36,9 @@ describe('tests for gameManager model', () => {
     expected.set('123', 'player1');
 
     assertEquals(game.state.players, expected);
-    assertEquals(gameManager.games.length, 1);
   });
 
-  it('should find the player active game', () => {
+  it('should find the player active game (waiting)', () => {
     const gameManager = new GameManager();
     gameManager.allotPlayer(6, '123', 'player1');
 
@@ -50,6 +47,35 @@ describe('tests for gameManager model', () => {
     game.addPlayer('123', 'player1');
 
     assert(activeGame instanceof Game);
-    assertEquals(activeGame, game);
+    assertEquals(JSON.stringify(activeGame), JSON.stringify(game));
   });
+
+  it('should find the player active game (running)', () => {
+    const gameManager = new GameManager();
+    gameManager.allotPlayer(6, '123', 'player1');
+    gameManager.allotPlayer(6, '124', 'player2');
+    gameManager.allotPlayer(6, '125', 'player3');
+    gameManager.allotPlayer(6, '126', 'player4');
+    gameManager.allotPlayer(6, '127', 'player5');
+    gameManager.allotPlayer(6, '128', 'player6');
+
+    gameManager.allotPlayer(6, '129', 'player7');
+    gameManager.allotPlayer(6, '130', 'player8');
+    gameManager.allotPlayer(6, '131', 'player9');
+    gameManager.allotPlayer(6, '132', 'player10');
+    gameManager.allotPlayer(6, '133', 'player11');
+    gameManager.allotPlayer(6, '134', 'player12');
+
+    const activeGame = gameManager.playerActiveGame('130');
+
+    assert(activeGame instanceof Game);
+  });
+
+  it('should return null for no active game', () => {
+    const gameManager = new GameManager();
+
+    const activeGame = gameManager.playerActiveGame('123');
+    assertEquals(activeGame, null);
+  });
+
 });

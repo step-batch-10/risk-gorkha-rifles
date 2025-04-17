@@ -2,35 +2,47 @@ import { GameStatus } from "../types/game.ts";
 import Game from "./game.ts";
 
 export default class GameManager {
-  public games: Game[] = [];
+  public games: Map<string, Game> = new Map();
+  private waitingGame: Game | null = null;
 
   public createGame(noOfPlayers: number = 6, createdBy: string = "") {
-    const game = new Game(noOfPlayers, createdBy);
-    this.games.push(game);
+    const game = new Game(noOfPlayers, createdBy, this.clearWaiting.bind(this));
 
     return game;
   }
 
-  private isWaitingGame = (game: Game, noOfPlayers: number) => {
-    return game.noOfPlayers === noOfPlayers && game.status === "waiting";
-  };
+  public clearWaiting(game: Game) {
+    this.games.set(game.gameId, game);
+    this.waitingGame = null;
+  }
 
   public playerActiveGame(playerId: string) {
-    return this.games.find(game =>
-      (game.state.players).has(playerId)
-      && (game.status === GameStatus.running || game.status === GameStatus.waiting));
+    if (this.waitingGame?.state.players.has(playerId)) return this.waitingGame;
+
+    for (const [_key, value] of this.games) {
+      const hasPlayer = value.state.players.has(playerId);
+      const isActiveGame = value.status === GameStatus.running;
+
+      if (isActiveGame && hasPlayer) return value;
+    }
+
+    return null;
+  }
+
+  private findGame(): Game {
+    if (this.waitingGame) return this.waitingGame;
+    const game = this.createGame();
+    this.waitingGame = game;
+
+    return game;
   }
 
   public allotPlayer(
-    noOfPlayers: number = 6,
+    _noOfPlayers: number = 6,
     playerId: string,
     playerName: string
   ) {
-    const waitingGame = this.games.find((game) =>
-      this.isWaitingGame(game, noOfPlayers)
-    );
-
-    const game = waitingGame || this.createGame(noOfPlayers);
+    const game = this.findGame();
     game.addPlayer(playerId, playerName);
 
     return game;

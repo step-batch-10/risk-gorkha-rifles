@@ -2,16 +2,18 @@ import Risk from './risk.ts';
 import { GameStatus } from '../types/game.ts';
 
 export default class Game {
-  public gameId: string;
+  readonly gameId: string;
   public noOfPlayers: number;
   public createdBy: string;
   public createdAt: number;
   public status: GameStatus;
   public state: Risk;
+  private clearWaiting: (game: Game) => void;
 
   constructor(
     noOfPlayers: number = 6,
     createdBy: string = '',
+    clearWaiting: (game: Game) => void = () => {},
     generateId = () => '1',
     createdAt = () => 1
   ) {
@@ -21,6 +23,7 @@ export default class Game {
     this.createdAt = createdAt();
     this.status = GameStatus.waiting;
     this.state = new Risk();
+    this.clearWaiting = clearWaiting;
   }
 
   public addPlayer(playerId: string, playerName: string) {
@@ -36,5 +39,6 @@ export default class Game {
   private startGame() {
     this.status = GameStatus.running;
     this.state.init();
+    this.clearWaiting(this);
   }
 }
