@@ -5,6 +5,7 @@ import { Context, Hono, Next } from "hono";
 import Session from "./models/session.ts";
 import { BlankEnv, BlankSchema } from "hono/types";
 import { loginHandler } from "./handler/authHandler.ts";
+import GameManager from "./models/gameManager.ts";
 
 type App = Hono<BlankEnv, BlankSchema, "/">;
 
@@ -12,17 +13,20 @@ export default class Server {
   readonly app: App;
   users: Users;
   session: Session;
+  gameManager: GameManager;
   uniqueId: () => string;
 
   constructor(
     users: Users = new Users(),
     session: Session = new Session(),
-    uniqueId: () => string = () => "1"
+    gameManager: GameManager = new GameManager(),
+    uniqueId: () => string = () => "1",
   ) {
     this.app = new Hono();
     this.appMethod(this.app);
     this.users = users;
     this.session = session;
+    this.gameManager = gameManager;
     this.uniqueId = uniqueId;
   }
 
@@ -30,6 +34,7 @@ export default class Server {
     context.set("users", this.users);
     context.set("session", this.session);
     context.set("uniqueId", this.uniqueId);
+    context.set("gameManager", this.gameManager);
 
     return await next();
   }
@@ -38,9 +43,6 @@ export default class Server {
     app.use(logger());
     app.use(this.setContext.bind(this));
 
-    app.get("/test", (c) => {
-      return c.text("connected");
-    });
     app.post("/login", loginHandler);
     app.get("*", serveStatic({ root: "./public/" }));
   }

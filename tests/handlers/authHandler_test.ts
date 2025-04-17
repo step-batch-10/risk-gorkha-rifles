@@ -3,6 +3,7 @@ import { describe, it } from "testing";
 import Server from "../../src/server.ts";
 import Users from "../../src/models/users.ts";
 import Session from "../../src/models/session.ts";
+import GameManager from "../../src/models/gameManager.ts";
 
 describe("tests for app dynamic routes", () => {
   it("Should give status 400 if username not given", async () => {
@@ -28,7 +29,9 @@ describe("tests for app dynamic routes", () => {
 
   it("should create the user if doesn't exist", async () => {
     const users = new Users();
-    const server = new Server(users);
+    const session = new Session();
+    const gameManager = new GameManager();
+    const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Ankita" })
@@ -42,7 +45,8 @@ describe("tests for app dynamic routes", () => {
   it("should create a new session on each login", async () => {
     const users = new Users();
     const session = new Session();
-    const server = new Server(users, session, () => "1");
+    const gameManager = new GameManager();
+    const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Ankita" })
@@ -57,7 +61,8 @@ describe("tests for app dynamic routes", () => {
   it("should give 400 if username is not valid", async () => {
     const users = new Users();
     const session = new Session();
-    const server = new Server(users, session, () => "1");
+    const gameManager = new GameManager();
+    const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "*" })
@@ -69,7 +74,8 @@ describe("tests for app dynamic routes", () => {
   it("should give 400 if username starts with number", async () => {
     const users = new Users();
     const session = new Session();
-    const server = new Server(users, session, () => "1");
+    const gameManager = new GameManager();
+    const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "45dhs" })
@@ -81,7 +87,8 @@ describe("tests for app dynamic routes", () => {
   it("should give 400 if username has invalid character in between", async () => {
     const users = new Users();
     const session = new Session();
-    const server = new Server(users, session, () => "1");
+    const gameManager = new GameManager();
+    const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "hdjsk&^%6jdk" })

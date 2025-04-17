@@ -4,9 +4,14 @@ import Game from "./game.ts";
 export default class GameManager {
   public games: Map<string, Game> = new Map();
   private waitingGame: Game | null = null;
+  private uniqueId;
+
+  constructor(uniqueId: () => string = () => "1") {
+    this.uniqueId = uniqueId;
+  }
 
   public createGame(noOfPlayers: number = 6, createdBy: string = "") {
-    const game = new Game(noOfPlayers, createdBy, this.clearWaiting.bind(this));
+    const game = new Game(noOfPlayers, createdBy, this.clearWaiting.bind(this), this.uniqueId);
 
     return game;
   }
