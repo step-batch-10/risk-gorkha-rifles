@@ -347,21 +347,24 @@ const handleWaiting = (resp) => {
   popup.style.display = "block";
   const ul = document.querySelector("#players");
 
-  resp.players.forEach((player) => {
+  Object.values(resp.players).forEach((player) => {
     const list = document.createElement("li");
-    list.textContent = player;
+    list.textContent = player.name;
     ul.appendChild(list);
   });
 };
 
 globalThis.onload = () => {
   const resp = {
-    status: "running",
-    players: ["Ankita", "Sujoy", "Priyankush"],
+    status: "waisting",
+    players,
+    territories,
+    colors,
   };
 
   if (resp.status === "waiting") {
     handleWaiting(resp);
+    return;
   }
 
   const sideBar = document.getElementById("side-bar-left");

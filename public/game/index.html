@@ -149,8 +149,10 @@
         height: 90%;
         border-right: 2px solid white;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 20px;
         padding-right: 20px;
       }
 
@@ -162,12 +164,20 @@
         align-items: center;
       }
 
-      #waiting-logo {
-        width: 50px;
+      .spinner {
+        width: 40px;
         height: 40px;
-        border: 1px solid black;
+        border: 5px solid #ccc;
+        border-top-color: #333;
         border-radius: 50%;
-        background-color: white;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
@@ -268,7 +278,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">1</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Alaska
                   </tspan>
@@ -286,7 +296,7 @@
                   x="0"
                   y="2.7ex"
                 >
-                  <tspan font-weight="bold">6</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Northwest
                   </tspan>
@@ -309,7 +319,7 @@
                   x="0"
                   y="2.7ex"
                 >
-                  <tspan font-weight="bold">5</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Greenland
                   </tspan>
@@ -328,7 +338,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">2</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Alberta
                   </tspan>
@@ -347,7 +357,7 @@
                   x="0"
                   y="1.2ex"
                 >
-                  <tspan font-weight="bold">7</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Ontario
                   </tspan>
@@ -366,7 +376,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">8</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Quebec
                   </tspan>
@@ -385,7 +395,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">4</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Eastern
                   </tspan>
@@ -405,7 +415,7 @@
                   x="0"
                   y="2.7ex"
                 >
-                  <tspan font-weight="bold">9</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Western
                   </tspan>
@@ -425,7 +435,7 @@
                   x="0.5ex"
                   y="0.5ex"
                 >
-                  <tspan font-weight="bold">3</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="1.5em" dy="1em" class="territory-name-span">
                     Central
                   </tspan>
@@ -459,7 +469,7 @@
                   x="0"
                   y="1.5ex"
                 >
-                  <tspan font-weight="bold">3</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Venezuela
                   </tspan>
@@ -476,7 +486,7 @@
                   x="0"
                   y="1ex"
                 >
-                  <tspan font-weight="bold">4</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">Peru</tspan>
                 </text>
               </g>
@@ -491,7 +501,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">2</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Brazil
                   </tspan>
@@ -508,7 +518,7 @@
                   x="0"
                   y="3.7ex"
                 >
-                  <tspan font-weight="bold">1</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Argen-
                   </tspan>
@@ -539,7 +549,7 @@
                   x="0"
                   y="2.3ex"
                 >
-                  <tspan font-weight="bold">2</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Iceland
                   </tspan>
@@ -557,7 +567,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">1</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Great
                   </tspan>
@@ -577,7 +587,7 @@
                   x="0"
                   y="0.9ex"
                 >
-                  <tspan font-weight="bold">4</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Scandi-
                   </tspan>
@@ -597,7 +607,7 @@
                   x="1ex"
                   y="3.7ex"
                 >
-                  <tspan font-weight="bold">7</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="1em" dy="1em" class="territory-name-span">
                     Western
                   </tspan>
@@ -617,7 +627,7 @@
                   x="0"
                   y="2.7ex"
                 >
-                  <tspan font-weight="bold">3</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Northern
                   </tspan>
@@ -637,7 +647,7 @@
                   x="0"
                   y="0.4ex"
                 >
-                  <tspan font-weight="bold">5</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Southern
                   </tspan>
@@ -657,7 +667,7 @@
                   x="1ex"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">6</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="1em" dy="1em" class="territory-name-span">
                     Ukraine
                   </tspan>
@@ -685,7 +695,7 @@
                   x="0"
                   y="1ex"
                 >
-                  <tspan font-weight="bold">5</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     North
                   </tspan>
@@ -705,7 +715,7 @@
                   x="0"
                   y="1.5ex"
                 >
-                  <tspan font-weight="bold">3</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Egypt
                   </tspan>
@@ -722,7 +732,7 @@
                   x="0"
                   y="1.7ex"
                 >
-                  <tspan font-weight="bold">1</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Congo
                   </tspan>
@@ -739,7 +749,7 @@
                   x="0.5em"
                   y="2.7ex"
                 >
-                  <tspan font-weight="bold">2</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="2ex" dy="1em" class="territory-name-span">
                     East
                   </tspan>
@@ -759,7 +769,7 @@
                   x="0"
                   y="2.5ex"
                 >
-                  <tspan font-weight="bold">6</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     South
                   </tspan>
@@ -780,7 +790,7 @@
                   x="-1.5ex"
                   y="2ex"
                 >
-                  <tspan font-weight="bold">4</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="-1.5em" dy="1em" class="territory-name-span">
                     Mada-
                   </tspan>
@@ -813,7 +823,7 @@
                   x="0"
                   y="1.7ex"
                 >
-                  <tspan font-weight="bold">11</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">Ural</tspan>
                 </text>
               </g>
@@ -830,7 +840,7 @@
                   x="0"
                   y="1.7ex"
                 >
-                  <tspan font-weight="bold">10</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Siberia
                   </tspan>
@@ -849,7 +859,7 @@
                   x="-1ex"
                   y="2ex"
                 >
-                  <tspan font-weight="bold">12</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="-1em" dy="1em" class="territory-name-span">
                     Yakutsk
                   </tspan>
@@ -868,7 +878,7 @@
                   x="2ex"
                   y="0ex"
                 >
-                  <tspan font-weight="bold">6</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="2em" dy="1em" class="territory-name-span">
                     Kamchatka
                   </tspan>
@@ -886,7 +896,7 @@
                   x="0"
                   y="1.7ex"
                 >
-                  <tspan font-weight="bold">1</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Afgha-
                   </tspan>
@@ -907,7 +917,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">2</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     China
                   </tspan>
@@ -925,7 +935,7 @@
                   x="0"
                   y="2ex"
                 >
-                  <tspan font-weight="bold">8</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Mongolia
                   </tspan>
@@ -943,7 +953,7 @@
                   x="0"
                   y="1.7ex"
                 >
-                  <tspan font-weight="bold">4</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Irkutsk
                   </tspan>
@@ -962,7 +972,7 @@
                   x="0"
                   y="2ex"
                 >
-                  <tspan font-weight="bold">7</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Middle
                   </tspan>
@@ -981,7 +991,7 @@
                   x="0"
                   y="1.7ex"
                 >
-                  <tspan font-weight="bold">3</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     India
                   </tspan>
@@ -999,7 +1009,7 @@
                   x="0.3ex"
                   y="1.7ex"
                 >
-                  <tspan font-weight="bold">9</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0.3em" dy="1em" class="territory-name-span">
                     Siam
                   </tspan>
@@ -1018,7 +1028,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">5</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Japan
                   </tspan>
@@ -1051,7 +1061,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">3</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Indonesia
                   </tspan>
@@ -1070,7 +1080,7 @@
                   x="-1ex"
                   y="3.7ex"
                 >
-                  <tspan font-weight="bold">2</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="-1em" dy="1em" class="territory-name-span">
                     New
                   </tspan>
@@ -1092,7 +1102,7 @@
                   x="0"
                   y="0.7ex"
                 >
-                  <tspan font-weight="bold">4</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="0" dy="1em" class="territory-name-span">
                     Western
                   </tspan>
@@ -1115,7 +1125,7 @@
                   x="1.5ex"
                   y="3ex"
                 >
-                  <tspan font-weight="bold">1</tspan>
+                  <tspan font-weight="bold"></tspan>
                   <tspan x="2em" dy="1em" class="territory-name-span">
                     Eastern
                   </tspan>
@@ -1150,7 +1160,7 @@
     <div id="waiting-popup" class="popup">
       <div class="popup-content">
         <div id="waiting-heading">
-          <div id="waiting-logo"></div>
+          <div class="spinner"></div>
           <h2>waiting for players</h2>
         </div>
         <div id="waiting-list">
