@@ -342,7 +342,28 @@ const continentAnimation = () => {
   });
 };
 
+const handleWaiting = (resp) => {
+  const popup = document.querySelector("#waiting-popup");
+  popup.style.display = "block";
+  const ul = document.querySelector("#players");
+
+  resp.players.forEach((player) => {
+    const list = document.createElement("li");
+    list.textContent = player;
+    ul.appendChild(list);
+  });
+};
+
 globalThis.onload = () => {
+  const resp = {
+    status: "running",
+    players: ["Ankita", "Sujoy", "Priyankush"],
+  };
+
+  if (resp.status === "waiting") {
+    handleWaiting(resp);
+  }
+
   const sideBar = document.getElementById("side-bar-left");
 
   allocatePlayers(sideBar);

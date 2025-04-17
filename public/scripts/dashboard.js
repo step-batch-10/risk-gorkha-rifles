@@ -25,8 +25,10 @@ const handleJoinGame = async (numOfPlayers) => {
     });
 
     if (!response.redirected) {
-      const responseData = { message: "you entered the game.....!" };
-      showToast(responseData.message);
+      // const responseData = { message: "you entered the game.....!" };
+      // showToast(responseData.message);
+      globalThis.location.href = "/game";
+
       return;
     }
 

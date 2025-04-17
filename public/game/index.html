@@ -114,6 +114,61 @@
         width: 100vw;
         height: 100vh;
       }
+
+      .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+      }
+
+      .popup-content {
+        background-color: rgb(173, 125, 14);
+        width: 600px;
+        height: 400px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+      }
+
+      #waiting-heading {
+        width: 40%;
+        height: 90%;
+        border-right: 2px solid white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-right: 20px;
+      }
+
+      #waiting-list {
+        width: 40%;
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #waiting-logo {
+        width: 50px;
+        height: 40px;
+        border: 1px solid black;
+        border-radius: 50%;
+        background-color: white;
+      }
     </style>
   </head>
 
@@ -1091,6 +1146,18 @@
         ></g>
       </svg>
     </main>
+
+    <div id="waiting-popup" class="popup">
+      <div class="popup-content">
+        <div id="waiting-heading">
+          <div id="waiting-logo"></div>
+          <h2>waiting for players</h2>
+        </div>
+        <div id="waiting-list">
+          <ul id="players"></ul>
+        </div>
+      </div>
+    </div>
 
     <section id="side-bar-right"></section>
   </body>
