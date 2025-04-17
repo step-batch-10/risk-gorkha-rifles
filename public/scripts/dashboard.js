@@ -37,7 +37,7 @@ const handleJoinGame = async (numOfPlayers) => {
   }
 };
 
-const handleJoin = (event) => {
+const handleJoin = () => {
   const numOfPlayers = document.querySelector("#player-count-for-join").value;
 
   if (!numOfPlayers) {
@@ -48,7 +48,7 @@ const handleJoin = (event) => {
   handleJoinGame(numOfPlayers);
 };
 
-const handlePopup = (event) => {
+const handlePopup = () => {
   const popup = document.querySelector("#join-game");
   popup.style.display = "flex";
   const close = popup.querySelector(".close");
