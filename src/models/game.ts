@@ -27,13 +27,11 @@ export default class Game {
   }
 
   public addPlayer(playerId: string, playerName: string) {
-    const game = this.state.addPlayer(playerId, playerName);
+    this.state.addPlayer(playerId, playerName);
     if (this.state.players.size === this.noOfPlayers) {
       this.startGame();
       return;
     }
-
-    return game;
   }
 
   private startGame() {

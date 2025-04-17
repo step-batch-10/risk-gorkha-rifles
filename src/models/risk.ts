@@ -12,17 +12,14 @@ export default class Risk {
 
   public addPlayer(playerId: string, playerName: string) {
     this.players.set(playerId, playerName);
-    // console.log(this.players);
   }
 
   public init() {
-    // console.log(this.players.size);
-    if (this.players.size !== 6) return;
+    if (this.players.size !== 6) return; //no need of condition here.
 
     const continents = getContinents();
     const territories = divideTerritories(
       continents,
-      // Object.keys(this.players)
       Array.from(this.players.keys())
     );
 
