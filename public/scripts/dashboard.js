@@ -41,7 +41,7 @@ const handleJoin = () => {
   const numOfPlayers = document.querySelector("#player-count-for-join").value;
 
   if (!numOfPlayers) {
-    showToast("Select number of players");
+    showToast("Number of players must be selected");
     return;
   }
 
