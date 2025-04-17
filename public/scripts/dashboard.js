@@ -1,40 +1,69 @@
-globalThis.onload = () => {
-  const createButton = document.querySelector("#create");
-  const create = document.querySelector("#host-game");
-  const joinButton = document.querySelector("#join");
-  const joinGame = document.querySelector("#join-game");
-  const profileButton = document.querySelector("#profile-picture");
-  const profile = document.querySelector("#player-profile");
-  const leaderBoardButton = document.querySelector("#leaderboard");
-  const leaderboard = document.querySelector("#leader-board");
-  const popupDisplays = [create, joinGame, profile, leaderboard];
-  const closeButton = document.querySelectorAll(".close");
-
-  createButton.addEventListener("click", () => {
-    create.style.display = "flex";
-  });
-
-  joinButton.addEventListener("click", () => {
-    joinGame.style.display = "flex";
-  });
-
-  profileButton.addEventListener("click", () => {
-    profile.style.display = "block";
-  });
-
-  leaderBoardButton.addEventListener("click", () => {
-    leaderboard.style.display = "block";
-  });
-
-  closeButton.forEach((button) => {
-    button.addEventListener("click", () => {
-      popupDisplays.map((popup) => {
-        if (popup.style.display !== "none") {
-          popup.style.display = "none";
-        }
-
-        return popup;
-      });
-    });
-  });
+const showToast = (message) => {
+  Toastify({
+    text: message,
+    duration: 3000,
+    newWindow: true,
+    close: true,
+    gravity: "top",
+    position: "center",
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to right,rgb(20, 62, 28),rgb(37, 148, 40))",
+    },
+    onClick: function () {},
+  }).showToast();
 };
+
+const handleJoinGame = async (numOfPlayers) => {
+  try {
+    const response = await fetch("/join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ numOfPlayers }),
+    });
+
+    if (!response.redirected) {
+      const responseData = { message: "you entered the game.....!" };
+      showToast(responseData.message);
+      return;
+    }
+
+    globalThis.location.href = "/";
+  } catch (error) {
+    console.error("Join error:", error);
+    showToast("An error occurred. Please try again later.");
+  }
+};
+
+const handleJoin = (event) => {
+  const numOfPlayers = document.querySelector("#player-count-for-join").value;
+
+  if (!numOfPlayers) {
+    showToast("Select number of players");
+    return;
+  }
+
+  handleJoinGame(numOfPlayers);
+};
+
+const handlePopup = (event) => {
+  const popup = document.querySelector("#join-game");
+  popup.style.display = "flex";
+  const close = popup.querySelector(".close");
+
+  close.onclick = () => {
+    popup.style.display = "none";
+  };
+
+  const joinGame = document.querySelector("#join-game-button");
+  joinGame.addEventListener("click", handleJoin);
+};
+
+const main = () => {
+  const join = document.querySelector("#join-button");
+  join.addEventListener("click", handlePopup);
+};
+
+globalThis.onload = main;

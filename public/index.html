@@ -9,6 +9,12 @@
       rel="stylesheet"
     />
 
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
     <link rel="stylesheet" href="/styles/style.css" />
     <link rel="stylesheet" href="/styles/dashboard.css" />
 
@@ -39,7 +45,7 @@
           <button>CREATE</button>
         </div>
         <div id="join">
-          <button>JOIN</button>
+          <button id="join-button">JOIN</button>
         </div>
       </div>
     </main>
@@ -47,15 +53,15 @@
     <div id="host-game" class="popup">
       <div class="popup-content">
         <h2>Select Number of Players</h2>
-        <select id="player-count">
+        <select id="player-count-for-create">
           <option value="">--Select Players--</option>
-          <option value="1">3 Player</option>
-          <option value="2">4 Players</option>
-          <option value="3">5 Players</option>
-          <option value="3">6 Players</option>
+          <option value="3">3 Player</option>
+          <option value="4">4 Players</option>
+          <option value="5">5 Players</option>
+          <option value="6">6 Players</option>
         </select>
         <div>
-          <button class="close">Start Game</button>
+          <button class="start-game">Start Game</button>
           <button class="close">Close</button>
         </div>
       </div>
@@ -63,16 +69,16 @@
 
     <div id="join-game" class="popup">
       <div class="popup-content">
-        <h2>Enter the unique code here</h2>
-        <select id="player-count">
+        <h2>Select number of players</h2>
+        <select id="player-count-for-join">
           <option value="">--Select Players--</option>
-          <option value="1">3 Player</option>
-          <option value="2">4 Players</option>
-          <option value="3">5 Players</option>
-          <option value="3">6 Players</option>
+          <option value="3">3 Player</option>
+          <option value="4">4 Players</option>
+          <option value="5">5 Players</option>
+          <option value="6">6 Players</option>
         </select>
         <div>
-          <button class="close">Join Game</button>
+          <button id="join-game-button">Join Game</button>
           <button class="close">Close</button>
         </div>
       </div>
@@ -109,5 +115,9 @@
         </div>
       </div>
     </div>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
   </body>
 </html>
