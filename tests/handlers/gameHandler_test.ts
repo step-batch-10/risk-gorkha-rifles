@@ -27,3 +27,36 @@ describe("boardDataHandler", () => {
     assertEquals(response.status, 200);
   });
 });
+
+describe('tests for joinGame Handler', () => {
+  it('should not allot the game for unauthorized user', async () => {
+    const users = new Users();
+    const sessions = new Session();
+    const gameManager = new GameManager();
+
+    const server = new Server(users, sessions, gameManager, () => "1");
+    const response = await server.app.request("/game/join-game", { method: "POST" });
+
+    assertEquals(response.status, 401);
+  });
+
+  it('should allot the game to the user', async () => {
+    const users = new Users();
+    users.createUser("shikha");
+    const sessions = new Session();
+    sessions.createSession("1");
+    const gameManager = new GameManager();
+
+    const server = new Server(users, sessions, gameManager, () => "1");
+    const response = await server.app.request("/game/join-game",
+      {
+        method: "POST",
+        headers: {
+          Cookie: "sessionId=1",
+        },
+      });
+
+    assertEquals(response.status, 302);
+    assertEquals(response.headers.get('location'), '/game');
+  });
+});

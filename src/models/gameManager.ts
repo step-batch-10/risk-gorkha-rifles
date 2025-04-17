@@ -45,7 +45,7 @@ export default class GameManager {
   public allotPlayer(
     _noOfPlayers: number = 6,
     playerId: string,
-    playerName: string
+    playerName: string | undefined = ""
   ) {
     const game = this.findGame();
     game.addPlayer(playerId, playerName);
