@@ -40,6 +40,14 @@ jobs:
     needs: test
 
     steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
