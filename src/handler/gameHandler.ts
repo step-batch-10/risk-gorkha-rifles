@@ -1,6 +1,5 @@
 import { Context } from "hono";
 import GameManager from "../models/gameManager.ts";
-import Game from "../models/game.ts";
 
 const boardDataHandler = (ctx: Context) => {
   const gameManager: GameManager = ctx.get("gameManager");
@@ -11,8 +10,7 @@ const boardDataHandler = (ctx: Context) => {
 
   console.log("-".repeat(40));
 
-  // @ts-ignore
-  return ctx.json(Object.entries(game));
+  return ctx.json(game);
 };
 
 export { boardDataHandler };
