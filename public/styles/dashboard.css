@@ -20,7 +20,7 @@ header {
   text-align: center;
   border: 1px solid black;
   border-radius: 50%;
-  background-color: brown;
+  overflow: hidden;
 }
 
 #player-details {
@@ -95,16 +95,6 @@ main {
 
 .popup {
   display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.popups {
-  display: block;
   position: fixed;
   top: 0;
   left: 0;

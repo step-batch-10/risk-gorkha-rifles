@@ -356,7 +356,7 @@ const handleWaiting = (resp) => {
 
 globalThis.onload = () => {
   const resp = {
-    status: "waisting",
+    status: "waiting",
     players,
     territories,
     colors,
