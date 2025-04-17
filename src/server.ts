@@ -51,7 +51,7 @@ export default class Server {
       return await next();
     }
 
-    return ctx.json({ message: "unauthorized" }, 401);
+    return ctx.redirect("/login", 302);
   }
 
   private gameHandler() {
@@ -67,6 +67,7 @@ export default class Server {
     app.use(logger());
     app.use(this.setContext.bind(this));
     app.post("/login", loginHandler);
+    app.use("/", this.authHandler);
     app.route("/game", this.gameHandler());
     app.get("*", serveStatic({ root: "./public/" }));
   }

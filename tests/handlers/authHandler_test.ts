@@ -112,7 +112,7 @@ describe("tests for auth middleware", () => {
     const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/game/game-board");
 
-    assertEquals(response.status, 401);
+    assertEquals(response.status, 302);
   });
 
   it("should pass the middleware if user logged in", async () => {

@@ -37,7 +37,7 @@ describe('tests for joinGame Handler', () => {
     const server = new Server(users, sessions, gameManager, () => "1");
     const response = await server.app.request("/game/join-game", { method: "POST" });
 
-    assertEquals(response.status, 401);
+    assertEquals(response.status, 302);
   });
 
   it('should allot the game to the user', async () => {
