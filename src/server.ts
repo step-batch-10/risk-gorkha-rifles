@@ -6,7 +6,11 @@ import Session from "./models/session.ts";
 import { BlankEnv, BlankSchema } from "hono/types";
 import { loginHandler } from "./handler/authHandler.ts";
 import GameManager from "./models/gameManager.ts";
-import { boardDataHandler, joinGameHandler } from "./handler/gameHandler.ts";
+import {
+  boardDataHandler,
+  joinGameHandler,
+  updateTroops,
+} from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
 type App = Hono<BlankEnv, BlankSchema, "/">;
@@ -59,7 +63,7 @@ export default class Server {
     app.use(this.authHandler);
     app.get("/game-board", boardDataHandler);
     app.post("/join-game", joinGameHandler);
-    
+    app.post("/update-troops", updateTroops);
     return app;
   }
 

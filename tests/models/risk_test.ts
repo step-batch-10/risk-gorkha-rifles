@@ -44,7 +44,25 @@ describe("tests for risk model", () => {
     risk.addPlayer("5", "player5");
     risk.addPlayer("6", "player6");
     risk.init();
-    
+
     assertEquals(risk.territoryState.size, 42);
+  });
+
+  it("should update the troops count in the territory", () => {
+    const risk = new Risk();
+
+    risk.addPlayer("1", "player1");
+    risk.addPlayer("2", "player2");
+    risk.addPlayer("3", "player3");
+    risk.addPlayer("4", "player4");
+    risk.addPlayer("5", "player5");
+    risk.addPlayer("6", "player6");
+    risk.init();
+
+    risk.updateTroops("india", 99);
+
+    const india = risk.territoryState.get("india");
+
+    assertEquals(india?.troops, 99);
   });
 });

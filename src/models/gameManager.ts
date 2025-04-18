@@ -56,6 +56,7 @@ export default class GameManager {
 
     const gameDetails = {
       status: activeGame?.status,
+      currentPlayer: playerId,
       state: {
         territories: Object.fromEntries(
           activeGame?.state.territoryState ?? new Map()

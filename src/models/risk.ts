@@ -41,6 +41,14 @@ export default class Risk {
     this.players[playerId] = { name: playerName, colour, avatar };
   }
 
+  public updateTroops(territory: string, troopsCount: number) {
+    const territoryData = this.territoryState.get(territory);
+
+    if (territoryData) {
+      territoryData.troops = troopsCount;
+    }
+  }
+
   public init() {
     if (Object.keys(this.players).length !== 6) return; //no need of condition here.
 
