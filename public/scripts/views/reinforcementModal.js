@@ -1,13 +1,16 @@
+import ApiService from "../components/apiService.js";
+
 export default class ReinforcementModal {
   #currentPlayer;
   #territories = {};
   #clickListners = {};
+  #troopsToDeploy = 13;
 
   #verifyTerritory(territoryId) {
     return (_e) => {
       if (
         this.#territories[territoryId].owner === this.#currentPlayer) {
-        this.showTroopToast();
+        this.showTroopToast(territoryId);
       }
     };
   }
@@ -63,7 +66,7 @@ export default class ReinforcementModal {
     });
   }
 
-  showTroopToast() {
+  showTroopToast(territoryId) {
     const toastPopUp = document.getElementById("troop-toast-box");
 
     if (toastPopUp) document.removeChild(toastPopUp);
@@ -78,13 +81,34 @@ export default class ReinforcementModal {
     const decBtn = document.querySelector('#decrement');
 
     placeBtn?.addEventListener('click', () => {
-      console.log('Troops placed:', input.value);
+      if (!input.value) return;
+      ApiService.saveTroopsDeployment(territoryId, input.value);
+
+      console.log('Troops placed:', input.value, territoryId);
       toast.hideToast();
     });
 
     setTimeout(() => {
-      incBtn?.addEventListener('click', () => input.stepUp());
-      decBtn?.addEventListener('click', () => input.stepDown());
+      incBtn?.addEventListener('click', () => {
+        if (this.#troopsToDeploy <= 0) {
+          return;
+        }
+          
+        this.#troopsToDeploy--;
+        console.log(this.#troopsToDeploy);
+
+        return input.stepUp();
+      });
+      decBtn?.addEventListener('click', () => {
+        if (this.#troopsToDeploy >= 13) {
+          return;
+        }
+
+        this.#troopsToDeploy++;
+        console.log(this.#troopsToDeploy);
+
+        return input.stepDown();
+      });
     });
   }
 }

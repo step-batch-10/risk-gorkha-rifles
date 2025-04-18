@@ -8,12 +8,12 @@ export default class ApiService {
       status: "running",
       state: {
         currentPlayer: "1",
-        // action: {
-        //   name: "initialDeployment",
-        // },
         action: {
-          name: ""
+          name: "initialDeployment",
         },
+        // action: {
+        //   name: ""
+        // },
         players: {
           "1": {
             id: "1",
@@ -38,5 +38,12 @@ export default class ApiService {
         }
       }
     };
+  }
+
+  static async saveTroopsDeployment(territoryId, troopsCount) {    
+    await fetch("/game/update-troops", {
+      method: 'POST',
+      body: JSON.stringify({ territory: territoryId, troops: troopsCount })
+    });
   }
 }
