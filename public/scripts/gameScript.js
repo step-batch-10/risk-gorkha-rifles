@@ -131,6 +131,17 @@ globalThis.onload = () => {
 const turn = { currentPlayer: 1, state: 'reinforcement' };
 
 const showTroopToast = () => {
+  const input = document.getElementById('number-input');
+  const placeBtn = document.getElementById('place-troops-btn');
+  const incBtn = document.getElementById('increment');
+  const decBtn = document.getElementById('decrement');
+  
+  const playerColors = {
+    1: '#e63946',
+    2: '#457b9d',
+    3: '#6a4c93',
+    4: '#2a9d8f',
+  };
   const toastHTML = `
     <div id="troop-toast-box">
       <div class="custom-number-input">
@@ -161,17 +172,6 @@ const showTroopToast = () => {
   toast.showToast();
 
   setTimeout(() => {
-    const input = document.getElementById('number-input');
-    const placeBtn = document.getElementById('place-troops-btn');
-    const incBtn = document.getElementById('increment');
-    const decBtn = document.getElementById('decrement');
-
-    const playerColors = {
-      1: '#e63946',
-      2: '#457b9d',
-      3: '#6a4c93',
-      4: '#2a9d8f',
-    };
 
     const color = playerColors[turn.currentPlayer];
     placeBtn.style.backgroundColor = color;
@@ -187,10 +187,10 @@ const showTroopToast = () => {
   }, 100);
 };
 
-const verifyOwnerAndState = (territories) => {
+const verifyOwnerAndState = (territories, territoryId) => {
   return (e) => {
-    const territoryId = e.target.parentElement.id;
-    const { currentPlayer, state } = turn;
+    // const territoryId = e.target.parentElement.id;
+    // const { currentPlayer, state } = turn;
 
     if (
       territories[territoryId].owner === currentPlayer &&
@@ -204,6 +204,6 @@ const verifyOwnerAndState = (territories) => {
 function reinforceTroops(territories) {
   Object.keys(territories).forEach((territory) => {
     const region = document.getElementById(territory);
-    region.addEventListener('click', verifyOwnerAndState(territories));
+    region.addEventListener('click', verifyOwnerAndState(territories, territory));
   });
 }
