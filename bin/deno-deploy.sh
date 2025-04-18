@@ -3,6 +3,7 @@
 SHOULD_POP=0
 
 OUT=$(git stash)
+echo $OUT
 
 if [ $OUT = "No local changes to save" ]; then
   SHOULD_POP=1;
