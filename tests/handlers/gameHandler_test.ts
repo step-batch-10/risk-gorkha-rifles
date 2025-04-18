@@ -146,3 +146,23 @@ describe("fetchPlayerInfo", () => {
     assert("avatar" in responseBody);
   });
 });
+
+describe("fetchFullPlayerInfo", () => {
+  it("should return full profile details of the logged in user", async () => {
+    const { server, sessionId } = createServerWithLoggedInUser("Jack");
+    const response = await server.app.request("/game/player-full-profile", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=${sessionId}`,
+      },
+    });
+
+    assertEquals(response.status, 200);
+    const responseBody = await response.json();
+
+    assertEquals(responseBody.playerName, "Jack");
+    assertEquals(responseBody.matchesPlayed, 0);
+    assertEquals(responseBody.matchesWon, 0);
+    assert("avatar" in responseBody);
+  });
+});

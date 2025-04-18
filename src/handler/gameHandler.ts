@@ -46,4 +46,24 @@ const fetchPlayerInfo = (ctx: Context) => {
   });
 };
 
-export { boardDataHandler, joinGameHandler, fetchPlayerInfo, updateTroops };
+const fetchFullPlayerInfo = (ctx: Context) => {
+  const userId: string = ctx.get("userId");
+  const users: Users = ctx.get("users");
+  const username: string | undefined = users.findById(userId);
+
+  return ctx.json({
+    playerName: username,
+    avatar:
+      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+    matchesPlayed: 0,
+    matchesWon: 0,
+  });
+};
+
+export {
+  boardDataHandler,
+  joinGameHandler,
+  fetchPlayerInfo,
+  updateTroops,
+  fetchFullPlayerInfo,
+};
