@@ -116,28 +116,33 @@ describe("tests for joinGame Handler", () => {
   });
 });
 
+const createServerWithLoggedInUser = (username: string) => {
+  const session = new Session(uniqueId);
+  const users = new Users(uniqueId);
+  const gameManager = new GameManager(uniqueId);
+  const sessionId = "1";
+
+  session.createSession(sessionId);
+  users.createUser(username);
+
+  const server = new Server(users, session, gameManager, uniqueId);
+  return { server, sessionId };
+};
+
 describe("fetchPlayerInfo", () => {
   it("should return profile details of the logged in user", async () => {
-    const session = new Session(uniqueId);
-    const users = new Users(uniqueId);
-    const gameManager = new GameManager(uniqueId);
-    session.createSession("1");
-
-    users.createUser("sujoy");
-
-    const server = new Server(users, session, gameManager, uniqueId);
-
+    const { server, sessionId } = createServerWithLoggedInUser("Jack");
     const response = await server.app.request("/game/profile-details", {
       method: "GET",
       headers: {
-        Cookie: "sessionId=1",
+        Cookie: `sessionId=${sessionId}`,
       },
     });
 
     assertEquals(response.status, 200);
     const responseBody = await response.json();
 
-    assertEquals(responseBody.playerName, "sujoy");
+    assertEquals(responseBody.playerName, "Jack");
     assert("avatar" in responseBody);
   });
 });
