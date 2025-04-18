@@ -1,16 +1,16 @@
-import { GameStatus } from "../types/game.ts";
-import Game from "./game.ts";
+import { GameStatus } from '../types/game.ts';
+import Game from './game.ts';
 
 export default class GameManager {
   public games: Map<string, Game> = new Map();
   private waitingGame: Game | null = null;
   private uniqueId;
 
-  constructor(uniqueId: () => string = () => "1") {
+  constructor(uniqueId: () => string = () => '1') {
     this.uniqueId = uniqueId;
   }
 
-  public createGame(noOfPlayers: number = 6, createdBy: string = "") {
+  public createGame(noOfPlayers: number = 6, createdBy: string = '') {
     const game = new Game(
       noOfPlayers,
       createdBy,
@@ -62,7 +62,7 @@ export default class GameManager {
           activeGame?.state.territoryState ?? new Map()
         ),
         players: activeGame?.state.players,
-        action: activeGame?.state.action
+        action: activeGame?.state.action,
       },
     };
 
@@ -72,11 +72,15 @@ export default class GameManager {
   public allotPlayer(
     _noOfPlayers: number = 6,
     playerId: string,
-    playerName: string | undefined = ""
+    playerName: string | undefined = ''
   ) {
     const game = this.findGame();
     game.addPlayer(playerId, playerName);
 
     return game;
+  }
+
+  public updateTroops(game: Game, territory: string, troops: number) {
+    game.state.deployTroops(territory, troops);
   }
 }

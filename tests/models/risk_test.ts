@@ -59,7 +59,7 @@ describe("tests for risk model", () => {
     risk.addPlayer("6", "player6");
     risk.init();
 
-    risk.updateTroops("india", 99);
+    risk.deployTroops("india", 99);
 
     const india = risk.territoryState.get("india");
 

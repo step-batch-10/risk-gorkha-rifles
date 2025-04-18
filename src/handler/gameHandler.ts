@@ -29,7 +29,7 @@ const updateTroops = async (context: Context) => {
 
   if (!game) return context.json({ message: "Game not found" }, 400);
 
-  game.state.updateTroops(territory, troops);
+  gameManager.updateTroops(game,territory, troops);
 
   return context.json({ message: "successfully updated troops" });
 };

@@ -44,7 +44,7 @@ export default class Risk {
     this.players[playerId] = { name: playerName, colour, avatar };
   }
 
-  public updateTroops(territory: string, troopsCount: number) {
+  public deployTroops(territory: string, troopsCount: number) {
     const territoryData = this.territoryState.get(territory);
 
     if (territoryData) {
