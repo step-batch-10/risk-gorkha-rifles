@@ -3,7 +3,7 @@ import Game from './game.ts';
 
 export default class GameManager {
   public games: Map<string, Game> = new Map();
-  private waitingGame: Game | null = null;
+  private currentGame: Game | null = null;
   private uniqueId;
 
   constructor(uniqueId: () => string = () => '1') {
@@ -14,24 +14,18 @@ export default class GameManager {
     const game = new Game(
       noOfPlayers,
       createdBy,
-      this.clearWaiting.bind(this),
       this.uniqueId
     );
 
     return game;
   }
 
-  public clearWaiting(game: Game) {
-    this.games.set(game.gameId, game);
-    this.waitingGame = null;
-  }
-
   public playerActiveGame(playerId: string) {
     if (
-      this.waitingGame?.state.players &&
-      playerId in this.waitingGame.state.players
+      this.currentGame?.state.players &&
+      playerId in this.currentGame.state.players
     )
-      return this.waitingGame;
+      return this.currentGame;
 
     for (const [_key, value] of this.games) {
       const hasPlayer = playerId in value.state.players;
@@ -44,9 +38,13 @@ export default class GameManager {
   }
 
   private findGame(): Game {
-    if (this.waitingGame) return this.waitingGame;
+    if (this.currentGame?.status === "waiting") {
+      this.games.set(this.currentGame.gameId, this.currentGame);
+      return this.currentGame;
+    };
+
     const game = this.createGame();
-    this.waitingGame = game;
+    this.currentGame = game;
 
     return game;
   }

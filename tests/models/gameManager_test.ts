@@ -71,6 +71,27 @@ describe("tests for gameManager model", () => {
     assert(activeGame instanceof Game);
   });
 
+  it("should find the player active game (running)", () => {
+    const generatorId = () => {
+      let i = 0;
+      return () => (i++).toString();
+    };
+
+    
+    const gameManager = new GameManager(generatorId());
+    gameManager.allotPlayer(3, "129", "player7");
+    gameManager.allotPlayer(3, "130", "player8");
+    gameManager.allotPlayer(3, "131", "player9");
+
+    gameManager.allotPlayer(4, "132", "player8");
+    gameManager.allotPlayer(5, "133", "player9");
+    gameManager.allotPlayer(6, "134", "player10");
+
+    const activeGame = gameManager.playerActiveGame("129");
+
+    assert(activeGame instanceof Game);
+  });
+
   it("should return null for no active game", () => {
     const gameManager = new GameManager();
 
