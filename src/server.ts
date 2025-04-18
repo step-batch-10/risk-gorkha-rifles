@@ -10,6 +10,7 @@ import {
   boardDataHandler,
   joinGameHandler,
   updateTroops,
+  fetchPlayerInfo,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -64,6 +65,7 @@ export default class Server {
     app.get("/game-board", boardDataHandler);
     app.post("/join-game", joinGameHandler);
     app.post("/update-troops", updateTroops);
+    app.get("/profile-details", fetchPlayerInfo);
     return app;
   }
 

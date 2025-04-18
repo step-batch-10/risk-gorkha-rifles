@@ -1,4 +1,4 @@
-import { assertEquals } from "assert";
+import { assertEquals, assert } from "assert";
 import { describe, it } from "testing";
 import Server from "../../src/server.ts";
 import Users from "../../src/models/users.ts";
@@ -86,9 +86,33 @@ describe("tests for joinGame Handler", () => {
         territory: "india",
       }),
     });
+    const responseBody = await response.json();
+    assertEquals(responseBody.message, "successfully updated troops");
+  });
+});
+
+describe("fetchPlayerInfo", () => {
+  it("should return profile details of the logged in user", async () => {
+    const session = new Session(uniqueId);
+    const users = new Users(uniqueId);
+    const gameManager = new GameManager(uniqueId);
+    session.createSession("1");
+
+    users.createUser("sujoy");
+
+    const server = new Server(users, session, gameManager, uniqueId);
+
+    const response = await server.app.request("/game/profile-details", {
+      method: "GET",
+      headers: {
+        Cookie: "sessionId=1",
+      },
+    });
 
     assertEquals(response.status, 200);
     const responseBody = await response.json();
-    assertEquals(responseBody.message, "successfully updated troops");
+
+    assertEquals(responseBody.playerName, "sujoy");
+    assert("avatar" in responseBody);    
   });
 });

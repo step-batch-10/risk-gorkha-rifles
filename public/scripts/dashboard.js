@@ -64,14 +64,9 @@ const handlePopup = () => {
   joinGame.addEventListener("click", handleJoin);
 };
 
-const handleProfile = () => {
-  const response = {
-    playerName: "Jack",
-    matchesPlayed: 5,
-    matchesWon: 3,
-    avatar:
-      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-  };
+const handleProfile = async () => {
+  const response = await fetch("/game/player-full-profile");
+  const profile = await response.json();
 
   const userProfile = document.querySelector("#player-profile");
   userProfile.style.display = "flex";
@@ -82,13 +77,13 @@ const handleProfile = () => {
     userProfile.style.display = "none";
   };
 
-  userProfile.querySelector("#player-name").textContent = response.playerName;
+  userProfile.querySelector("#player-name").textContent = profile.playerName;
   userProfile.querySelector("#matches-played").textContent =
-    response.matchesPlayed;
-  userProfile.querySelector("#matches-won").textContent = response.matchesWon;
+    profile.matchesPlayed;
+  userProfile.querySelector("#matches-won").textContent = profile.matchesWon;
   userProfile.querySelector(
     "#picture"
-  ).innerHTML = `<img src=${response.avatar} width=100% height=100%/>`;
+  ).innerHTML = `<img src=${profile.avatar} width=100% height=100%/>`;
 };
 
 const renderDashBoard = ({ playerName, avatar }) => {
@@ -99,14 +94,11 @@ const renderDashBoard = ({ playerName, avatar }) => {
   ).innerHTML = `<img src=${avatar} alt="user avatar" width=100% height=100% />`;
 };
 
-const main = () => {
-  const response = {
-    playerName: "Jack",
-    avatar:
-      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-  };
+const main = async () => {
+  const response = await fetch("/game/profile-details");
+  const playerDetails = await response.json();
 
-  renderDashBoard(response);
+  renderDashBoard(playerDetails);
   const join = document.querySelector("#join-button");
   const profile = document.querySelector("#profile");
 
