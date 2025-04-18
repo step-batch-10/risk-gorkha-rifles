@@ -1,26 +1,53 @@
-import { Territory } from '../types/game.ts';
-import { divideTerritories, getContinents } from '../utils/territory.ts';
+import { Territory } from "../types/game.ts";
+import { divideTerritories, getContinents } from "../utils/territory.ts";
+
+interface PlayerDetails {
+  name: string;
+  colour: string;
+  avatar: string;
+}
+
+interface PlayerProfile {
+  colour: string;
+  avatar: string;
+}
+
+const playerProfileData: PlayerProfile[] = [
+  { colour: "red", avatar: "url" },
+  { colour: "yellow", avatar: "url" },
+  { colour: "blue", avatar: "url" },
+  { colour: "violet", avatar: "url" },
+  { colour: "orange", avatar: "url" },
+  { colour: "pink", avatar: "url" },
+];
 
 export default class Risk {
-  public players: Map<string, string>;
+  public players: { [key: string]: PlayerDetails };
   public territoryState: Map<string, Territory>;
+  private playerProfile;
 
-  constructor() {
-    this.players = new Map<string, string>();
+  constructor(playerProfile = playerProfileData) {
+    this.players = {};
     this.territoryState = new Map();
+    this.playerProfile = playerProfile;
   }
 
   public addPlayer(playerId: string, playerName: string) {
-    this.players.set(playerId, playerName);
+    const index = Object.keys(this.players).length;
+    const profile = this.playerProfile.at(index);
+
+    const { colour, avatar } = profile || { colour: "gold", avatar: "url" };
+
+    this.players[playerId] = { name: playerName, colour, avatar };
   }
 
   public init() {
-    if (this.players.size !== 6) return; //no need of condition here.
+    if (Object.keys(this.players).length !== 6) return; //no need of condition here.
 
     const continents = getContinents();
     const territories = divideTerritories(
       continents,
-      Array.from(this.players.keys())
+      Object.keys(this.players)
     );
 
     this.territoryState = territories;

@@ -11,7 +11,12 @@ export default class GameManager {
   }
 
   public createGame(noOfPlayers: number = 6, createdBy: string = "") {
-    const game = new Game(noOfPlayers, createdBy, this.clearWaiting.bind(this), this.uniqueId);
+    const game = new Game(
+      noOfPlayers,
+      createdBy,
+      this.clearWaiting.bind(this),
+      this.uniqueId
+    );
 
     return game;
   }
@@ -22,10 +27,14 @@ export default class GameManager {
   }
 
   public playerActiveGame(playerId: string) {
-    if (this.waitingGame?.state.players.has(playerId)) return this.waitingGame;
+    if (
+      this.waitingGame?.state.players &&
+      playerId in this.waitingGame.state.players
+    )
+      return this.waitingGame;
 
     for (const [_key, value] of this.games) {
-      const hasPlayer = value.state.players.has(playerId);
+      const hasPlayer = playerId in value.state.players;
       const isActiveGame = value.status === GameStatus.running;
 
       if (isActiveGame && hasPlayer) return value;
@@ -42,15 +51,19 @@ export default class GameManager {
     return game;
   }
 
-  public getPlayerGameDetails(playerId: string) {    
+  public getPlayerGameDetails(playerId: string) {
     const activeGame = this.playerActiveGame(playerId);
 
     const gameDetails = {
       status: activeGame?.status,
       state: {
-        territories: Object.fromEntries(activeGame?.state.territoryState ?? new Map()),
-        players: activeGame?.state.players ? Object.fromEntries(activeGame.state.players) : []
-      }
+        territories: Object.fromEntries(
+          activeGame?.state.territoryState ?? new Map()
+        ),
+        players: activeGame?.state.players
+          ? Object.entries(activeGame.state.players)
+          : [],
+      },
     };
 
     return gameDetails;
