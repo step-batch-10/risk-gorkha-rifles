@@ -13,12 +13,12 @@ interface PlayerProfile {
 }
 
 const playerProfileData: PlayerProfile[] = [
-  { colour: "red", avatar: "url" },
-  { colour: "yellow", avatar: "url" },
-  { colour: "blue", avatar: "url" },
-  { colour: "violet", avatar: "url" },
-  { colour: "orange", avatar: "url" },
-  { colour: "pink", avatar: "url" },
+  { colour: "red", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+  { colour: "yellow", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+  { colour: "blue", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+  { colour: "violet", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+  { colour: "orange", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+  { colour: "pink", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
 ];
 
 export default class Risk {
@@ -39,7 +39,7 @@ export default class Risk {
     const index = Object.keys(this.players).length;
     const profile = this.playerProfile.at(index);
 
-    const { colour, avatar } = profile || { colour: "gold", avatar: "url" };
+    const { colour, avatar } = profile || { colour: "gold", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" };
 
     this.players[playerId] = { name: playerName, colour, avatar };
   }

@@ -3,7 +3,6 @@ export default class ApiService {
     const response = await fetch('/game/game-board');
 
     return await response.json();
-
     // return {
     //   status: "running",
     //   currentPlayer: "1",

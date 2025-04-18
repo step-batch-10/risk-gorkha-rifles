@@ -3,23 +3,26 @@ import ApiService from "../components/apiService.js";
 export default class ReinforcementModal {
   #currentPlayer;
   #territories = {};
-  #clickListners = {};
-  #troopsToDeploy = 13;
+  #clickListeners = {};
+  #remainingTroops = 13;
 
-  #verifyTerritory(territoryId) {
-    return (_e) => {
-      if (
-        this.#territories[territoryId].owner === this.#currentPlayer) {
-        this.showTroopToast(territoryId);
+  #isOwnedByCurrentPlayer(territoryId) {
+    return this.#territories[territoryId].owner === this.#currentPlayer;
+  }
+
+  #handleTerritoryClick(territoryId) {
+    return (_event) => {
+      if (this.#isOwnedByCurrentPlayer(territoryId)) {
+        this.#showTroopDeploymentToast(territoryId);
       }
     };
   }
 
-  removeListners() {
-    Object.keys(this.#territories).forEach((territory) => {
-      const region = document.getElementById(territory);
-      const listner = this.#clickListners[territory];
-      region.removeEventListener("click", listner);
+  removeListeners() {
+    Object.keys(this.#territories).forEach((territoryId) => {
+      const territoryElement = document.getElementById(territoryId);
+      const listener = this.#clickListeners[territoryId];
+      territoryElement.removeEventListener("click", listener);
     });
   }
 
@@ -27,88 +30,90 @@ export default class ReinforcementModal {
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
 
-    Object.keys(territories).forEach((territory) => {
-      const region = document.getElementById(territory);
-      const listner = this.#verifyTerritory(territory).bind(this);
-      this.#clickListners[territory] = listner;
-      region.addEventListener('click', listner);
+    Object.keys(territories).forEach((territoryId) => {
+      const territoryElement = document.getElementById(territoryId);
+      const listener = this.#handleTerritoryClick(territoryId).bind(this);
+      this.#clickListeners[territoryId] = listener;
+      territoryElement.addEventListener("click", listener);
     });
   }
 
-  #getToastHtml() {
+  #createToastHtml() {
     return `
-    <div id="troop-toast-box">
-      <div class="custom-number-input">
-        <button id="decrement">-</button>
-        <input type="number" id="number-input" value="0" min="0" max="100" />
-        <button id="increment">+</button>
+      <div id="troop-toast-box">
+        <div class="custom-number-input">
+          <button id="decrement">-</button>
+          <input type="number" id="number-input" value="0" min="0" max="100" />
+          <button id="increment">+</button>
+        </div>
+        <button id="place-troops-btn">Place</button>
       </div>
-      <button id="place-troops-btn">Place</button>
-    </div>
-  `;
+    `;
   }
 
-  #getToast(toastHTML) {
+  #createToast(toastHTML) {
     return Toastify({
       text: toastHTML,
       duration: 10000,
       escapeMarkup: false,
       close: false,
-      gravity: 'bottom',
-      position: 'right',
+      gravity: "bottom",
+      position: "right",
       style: {
-        height: '20%',
-        width: '40%',
-        background: 'rgba(200,170,140,0.5)',
-        color: '#000',
-        padding: '26px',
+        height: "20%",
+        width: "40%",
+        background: "rgba(200,170,140,0.5)",
+        color: "#000",
+        padding: "26px",
       },
     });
   }
 
-  showTroopToast(territoryId) {
-    const toastPopUp = document.getElementById("troop-toast-box");
+  #attachToastEventListeners(territoryId, toast) {
+    const inputField = document.querySelector("#number-input");
+    const placeButton = document.querySelector("#place-troops-btn");
+    const incrementButton = document.querySelector("#increment");
+    const decrementButton = document.querySelector("#decrement");
 
-    if (toastPopUp) document.removeChild(toastPopUp);
+    placeButton?.addEventListener("click", () => this.#handlePlaceButtonClick(territoryId, inputField, toast));
+    incrementButton?.addEventListener("click", () => this.#handleIncrementButtonClick(inputField));
+    decrementButton?.addEventListener("click", () => this.#handleDecrementButtonClick(inputField));
+  }
 
-    const toastHTML = this.#getToastHtml();
-    const toast = this.#getToast(toastHTML);
+  #handlePlaceButtonClick(territoryId, inputField, toast) {
+    if (!inputField.value) return;
+    ApiService.saveTroopsDeployment(territoryId, inputField.value);
+
+    console.log("Troops placed:", inputField.value, territoryId);
+    toast.hideToast();
+  }
+
+  #handleIncrementButtonClick(inputField) {
+    if (this.#remainingTroops <= 0) return;
+
+    this.#remainingTroops--;
+    console.log("Remaining troops:", this.#remainingTroops);
+    inputField.stepUp();
+  }
+
+  #handleDecrementButtonClick(inputField) {
+    if (this.#remainingTroops >= 13) return;
+
+    this.#remainingTroops++;
+    console.log("Remaining troops:", this.#remainingTroops);
+    inputField.stepDown();
+  }
+
+  #showTroopDeploymentToast(territoryId) {
+    const existingToast = document.getElementById("troop-toast-box");
+    if (existingToast) document.body.removeChild(existingToast);
+
+    const toastHTML = this.#createToastHtml();
+    const toast = this.#createToast(toastHTML);
     toast.showToast();
 
-    const input = document.querySelector('#number-input');
-    const placeBtn = document.querySelector('#place-troops-btn');
-    const incBtn = document.querySelector('#increment');
-    const decBtn = document.querySelector('#decrement');
-
-    placeBtn?.addEventListener('click', () => {
-      if (!input.value) return;
-      ApiService.saveTroopsDeployment(territoryId, input.value);
-
-      console.log('Troops placed:', input.value, territoryId);
-      toast.hideToast();
-    });
-
     setTimeout(() => {
-      incBtn?.addEventListener('click', () => {
-        if (this.#troopsToDeploy <= 0) {
-          return;
-        }
-          
-        this.#troopsToDeploy--;
-        console.log(this.#troopsToDeploy);
-
-        return input.stepUp();
-      });
-      decBtn?.addEventListener('click', () => {
-        if (this.#troopsToDeploy >= 13) {
-          return;
-        }
-
-        this.#troopsToDeploy++;
-        console.log(this.#troopsToDeploy);
-
-        return input.stepDown();
-      });
+      this.#attachToastEventListeners(territoryId, toast);
     });
   }
 }
