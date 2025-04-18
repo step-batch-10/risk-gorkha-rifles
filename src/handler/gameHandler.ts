@@ -16,7 +16,7 @@ const joinGameHandler = (context: Context) => {
   const users: Users = context.get("users");
 
   const username: string | undefined = users.findById(userId);
-  gameManager.allotPlayer(6, userId, username);
+  gameManager.allotPlayer(3, userId, username);
 
   return context.redirect("/game");
 };

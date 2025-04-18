@@ -53,7 +53,7 @@ export default class Risk {
   }
 
   public init() {
-    if (Object.keys(this.players).length !== 6) return; //no need of condition here.
+    if (Object.keys(this.players).length !== 3) return; //no need of condition here.
 
     const continents = getContinents();
     const territories = divideTerritories(

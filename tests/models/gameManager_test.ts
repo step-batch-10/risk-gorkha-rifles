@@ -18,7 +18,7 @@ describe("tests for gameManager model", () => {
     const newGame = gameManager.createGame();
     newGame.status = GameStatus.running;
 
-    const game = gameManager.allotPlayer(6, "123", "player1");
+    const game = gameManager.allotPlayer(3, "123", "player1");
 
     const expected = {
       "123": {
@@ -50,7 +50,7 @@ describe("tests for gameManager model", () => {
 
   it("should find the player active game (waiting)", () => {
     const gameManager = new GameManager();
-    gameManager.allotPlayer(6, "123", "player1");
+    gameManager.allotPlayer(3, "123", "player1");
 
     const activeGame = gameManager.playerActiveGame("123");
     const game = new Game();
@@ -62,19 +62,9 @@ describe("tests for gameManager model", () => {
 
   it("should find the player active game (running)", () => {
     const gameManager = new GameManager();
-    gameManager.allotPlayer(6, "123", "player1");
-    gameManager.allotPlayer(6, "124", "player2");
-    gameManager.allotPlayer(6, "125", "player3");
-    gameManager.allotPlayer(6, "126", "player4");
-    gameManager.allotPlayer(6, "127", "player5");
-    gameManager.allotPlayer(6, "128", "player6");
-
-    gameManager.allotPlayer(6, "129", "player7");
-    gameManager.allotPlayer(6, "130", "player8");
-    gameManager.allotPlayer(6, "131", "player9");
-    gameManager.allotPlayer(6, "132", "player10");
-    gameManager.allotPlayer(6, "133", "player11");
-    gameManager.allotPlayer(6, "134", "player12");
+    gameManager.allotPlayer(3, "129", "player7");
+    gameManager.allotPlayer(3, "130", "player8");
+    gameManager.allotPlayer(3, "131", "player9");
 
     const activeGame = gameManager.playerActiveGame("130");
 

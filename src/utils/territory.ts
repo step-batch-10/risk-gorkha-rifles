@@ -10,7 +10,7 @@ export const divideTerritories = (
   Object.values(continents).forEach((group) => {
     const shuffled: string[] = lodash.shuffle([...group]);
     shuffled.forEach((territory, i) => {
-      territories.set(territory, { owner: players[i % 6], troops: 1 });
+      territories.set(territory, { owner: players[i % 3], troops: 1 });
     });
   });
 

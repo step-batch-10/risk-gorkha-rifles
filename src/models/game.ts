@@ -11,7 +11,7 @@ export default class Game {
   private clearWaiting: (game: Game) => void;
 
   constructor(
-    noOfPlayers: number = 6,
+    noOfPlayers: number = 3,
     createdBy: string = "",
     clearWaiting: (game: Game) => void = () => {},
     generateId = () => "1",

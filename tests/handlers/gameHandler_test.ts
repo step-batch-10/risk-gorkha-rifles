@@ -14,7 +14,7 @@ describe("boardDataHandler", () => {
     const gameManager = new GameManager(uniqueId);
     users.createUser("hello");
     session.createSession("1");
-    gameManager.allotPlayer(6, "1", "jayanth");
+    gameManager.allotPlayer(3, "1", "jayanth");
 
     const server = new Server(users, session, gameManager, uniqueId);
 
@@ -67,12 +67,9 @@ describe("tests for joinGame Handler", () => {
     const sessions = new Session();
     sessions.createSession("1");
     const gameManager = new GameManager();
-    gameManager.allotPlayer(6, "1", "A");
-    gameManager.allotPlayer(6, "2", "B");
-    gameManager.allotPlayer(6, "3", "C");
-    gameManager.allotPlayer(6, "4", "D");
-    gameManager.allotPlayer(6, "5", "E");
-    gameManager.allotPlayer(6, "6", "F");
+    gameManager.allotPlayer(3, "1", "A");
+    gameManager.allotPlayer(3, "2", "B");
+    gameManager.allotPlayer(3, "3", "C");
 
     const server = new Server(users, sessions, gameManager, () => "1");
     const response = await server.app.request("/game/update-troops", {

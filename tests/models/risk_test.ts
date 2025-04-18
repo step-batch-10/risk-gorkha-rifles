@@ -8,9 +8,6 @@ describe("tests for risk model", () => {
     risk.addPlayer("1", "player1");
     risk.addPlayer("2", "player2");
     risk.addPlayer("3", "player3");
-    risk.addPlayer("4", "player4");
-    risk.addPlayer("5", "player5");
-    risk.addPlayer("6", "player6");
     risk.init();
 
     assertEquals(risk.territoryState.size, 42);
@@ -31,18 +28,12 @@ describe("tests for risk model", () => {
     const playerProfileData = [
       { colour: "red", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
       { colour: "yellow", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
-      { colour: "blue", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
-      { colour: "violet", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
-      { colour: "orange", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
     ];
 
     const risk = new Risk(playerProfileData);
     risk.addPlayer("1", "player1");
     risk.addPlayer("2", "player2");
     risk.addPlayer("3", "player3");
-    risk.addPlayer("4", "player4");
-    risk.addPlayer("5", "player5");
-    risk.addPlayer("6", "player6");
     risk.init();
 
     assertEquals(risk.territoryState.size, 42);
@@ -54,9 +45,6 @@ describe("tests for risk model", () => {
     risk.addPlayer("1", "player1");
     risk.addPlayer("2", "player2");
     risk.addPlayer("3", "player3");
-    risk.addPlayer("4", "player4");
-    risk.addPlayer("5", "player5");
-    risk.addPlayer("6", "player6");
     risk.init();
 
     risk.deployTroops("india", 99);

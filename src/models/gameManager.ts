@@ -10,7 +10,7 @@ export default class GameManager {
     this.uniqueId = uniqueId;
   }
 
-  public createGame(noOfPlayers: number = 6, createdBy: string = '') {
+  public createGame(noOfPlayers: number = 3, createdBy: string = '') {
     const game = new Game(
       noOfPlayers,
       createdBy,
@@ -70,7 +70,7 @@ export default class GameManager {
   }
 
   public allotPlayer(
-    _noOfPlayers: number = 6,
+    _noOfPlayers: number = 3,
     playerId: string,
     playerName: string | undefined = ''
   ) {
