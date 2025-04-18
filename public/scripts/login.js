@@ -45,6 +45,11 @@ const handleFormSubmit = (event) => {
     showToast("Username must be filled out");
     return;
   }
+  const usernameRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+
+  if (!usernameRegex.test(usernameInput)) {
+    showToast("Username must contain only letters, numbers, and underscores, and cannot start with a number")
+  }
 
   handleLogin(usernameInput);
 };
