@@ -10,7 +10,7 @@ describe("tests for game model", () => {
 
     const expected = {
       "12": {
-        avatar: "url",
+        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "red",
         name: "john",
       },
@@ -24,12 +24,12 @@ describe("tests for game model", () => {
     game.addPlayer("12", "john");
     const expected = {
       "1": {
-        avatar: "url",
+        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "red",
         name: "doe",
       },
       "12": {
-        avatar: "url",
+        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "yellow",
         name: "john",
       },

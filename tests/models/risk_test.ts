@@ -29,11 +29,11 @@ describe("tests for risk model", () => {
 
   it("should return a dummy player profile when player is not there in the players list", () => {
     const playerProfileData = [
-      { colour: "red", avatar: "url" },
-      { colour: "yellow", avatar: "url" },
-      { colour: "blue", avatar: "url" },
-      { colour: "violet", avatar: "url" },
-      { colour: "orange", avatar: "url" },
+      { colour: "red", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+      { colour: "yellow", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+      { colour: "blue", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+      { colour: "violet", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+      { colour: "orange", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
     ];
 
     const risk = new Risk(playerProfileData);

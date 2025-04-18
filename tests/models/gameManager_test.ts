@@ -22,7 +22,7 @@ describe("tests for gameManager model", () => {
 
     const expected = {
       "123": {
-        avatar: "url",
+        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "red",
         name: "player1",
       },
@@ -39,7 +39,7 @@ describe("tests for gameManager model", () => {
 
     const expected = {
       "123": {
-        avatar: "url",
+        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "red",
         name: "player1",
       },
