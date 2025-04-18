@@ -61,7 +61,8 @@ export default class GameManager {
         territories: Object.fromEntries(
           activeGame?.state.territoryState ?? new Map()
         ),
-        players: activeGame?.state.players
+        players: activeGame?.state.players,
+        action: activeGame?.state.action
       },
     };
 

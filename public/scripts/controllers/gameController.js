@@ -17,10 +17,10 @@ export default class GameController {
   #startPolling() {
     setInterval(async () => {
       const gameData = await this.#apiService.getGameDetails();
-      const { status, state } = gameData;
+      const { status, state, currentPlayer } = gameData;
 
       if (state?.action?.name === "initialDeployment") {
-        this.#reinforceModal.addTerritoryListners(state.currentPlayer, state.territories);
+        this.#reinforceModal.addTerritoryListners(currentPlayer, state.territories);
       } else {
         this.#reinforceModal.removeListners();
       }

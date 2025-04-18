@@ -22,9 +22,12 @@ const playerProfileData: PlayerProfile[] = [
 ];
 
 export default class Risk {
-  public players: { [key: string]: PlayerDetails };
+  public players: { [key: string]: PlayerDetails; };
   public territoryState: Map<string, Territory>;
   private playerProfile;
+  public action = {
+    name: ""
+  };
 
   constructor(playerProfile = playerProfileData) {
     this.players = {};
@@ -58,6 +61,7 @@ export default class Risk {
       Object.keys(this.players)
     );
 
+    this.action.name = "initialDeployment";
     this.territoryState = territories;
   }
 }
