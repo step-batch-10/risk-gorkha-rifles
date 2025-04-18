@@ -1,19 +1,12 @@
 export default class ReinforcementModal {
-  #container;
   #currentPlayer;
   #territories = [];
-
-  constructor(containerId) {
-    this.#container = document.getElementById(containerId);
-  }
 
   #verifyTerritory(territoryId) {
     return (_e) => {
       if (
-        this.#territories[territoryId].owner === this.#currentPlayer &&
-        state === 'reinforcement'
-      ) {
-        showTroopToast();
+        this.#territories[territoryId].owner === this.#currentPlayer) {
+        this.showTroopToast();
       }
     };
   }
@@ -38,7 +31,7 @@ export default class ReinforcementModal {
       </div>
       <button id="place-troops-btn">Place</button>
     </div>
-  `
+  `;
   }
 
   #getToast(toastHTML) {
@@ -60,21 +53,28 @@ export default class ReinforcementModal {
   }
 
   showTroopToast() {
-    const input = container.querySelector('#number-input');
-    const placeBtn = container.querySelector('#place-troops-btn');
-    const incBtn = container.querySelector('#increment');
-    const decBtn = container.querySelector('#decrement');
+    const toastPopUp = document.getElementById("troop-toast-box");
+    console.log(toastPopUp);
+    
+    if (toastPopUp) document.removeChild(toastPopUp);
 
     const toastHTML = this.#getToastHtml();
     const toast = this.#getToast(toastHTML);
     toast.showToast();
+
+    const input = document.querySelector('#number-input');
+    const placeBtn = document.querySelector('#place-troops-btn');
+    const incBtn = document.querySelector('#increment');
+    const decBtn = document.querySelector('#decrement');
 
     placeBtn?.addEventListener('click', () => {
       console.log('Troops placed:', input.value);
       toast.hideToast();
     });
 
-    incBtn?.addEventListener('click', () => input.stepUp());
-    decBtn?.addEventListener('click', () => input.stepDown());
+    setTimeout(() => {
+      incBtn?.addEventListener('click', () => input.stepUp());
+      decBtn?.addEventListener('click', () => input.stepDown());
+    });
   }
 }
