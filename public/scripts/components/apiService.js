@@ -7,8 +7,29 @@ export default class ApiService {
     return {
       status: "running",
       state: {
-        players: []
+        players: {
+          "1": {
+            id: "1",
+            name: "siya",
+            color: "#fff"
+          },
+          "2": {
+            id: "2",
+            name: "shikha",
+            color: "#000"
+          }
+        },
+        territories: {
+          "india": {
+            troops: 23,
+            owner: "1"
+          },
+          "china": {
+            troops: 99,
+            owner: "2"
+          }
+        }
       }
-    }
+    };
   }
 }

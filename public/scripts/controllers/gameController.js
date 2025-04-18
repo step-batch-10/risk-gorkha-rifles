@@ -1,10 +1,12 @@
 export default class GameController {
   #waitingModal;
   #apiService;
+  #mapModal;
 
-  constructor(waitingModal, dataService) {
+  constructor(waitingModal, mapModal, dataService) {
     this.#waitingModal = waitingModal;
     this.#apiService = dataService;
+    this.#mapModal = mapModal;
   }
 
   #startPolling() {
@@ -12,6 +14,7 @@ export default class GameController {
       const gameData = await this.#apiService.getGameDetails();
       const { status, state } = gameData;
       this.#waitingModal.render(status, state.players);
+      this.#mapModal.render(state);
 
     }, 1000);
   }
