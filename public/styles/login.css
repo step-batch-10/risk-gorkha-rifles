@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  font-family: 'yatra one';
+  box-sizing: border-box;
+}
+
 body {
   background-image: url('../images/risk.png');
   background-repeat: no-repeat;
