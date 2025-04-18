@@ -9,7 +9,9 @@
   },
   "tasks": {
     "test": "rm -rf coverage && deno test -A --coverage && deno coverage",
-    "start": "deno -A --watch src/main.ts"
+    "start": "deno -A --watch src/main.ts",
+    "deploy-qa": "./bin/deno-deploy.sh risk-gorkhas-qa",
+    "deploy-prod": "./bin/deno-deploy.sh risk-gorkha-rifles-prod"
   },
   "test": {
     "include": [
