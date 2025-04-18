@@ -8,7 +8,8 @@ const showToast = (message) => {
     position: "center",
     stopOnFocus: true,
     style: {
-      background: "linear-gradient(to right,rgb(20, 62, 28),rgb(37, 148, 40))",
+      background:
+        "linear-gradient(to right,rgb(251, 196, 85),rgb(255, 166, 0))",
     },
     onClick: function () {},
   }).showToast();
@@ -16,7 +17,7 @@ const showToast = (message) => {
 
 const handleJoinGame = async (numOfPlayers) => {
   try {
-    const response = await fetch("/game/join-game", {
+    const response = await fetch("/join", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +25,7 @@ const handleJoinGame = async (numOfPlayers) => {
       body: JSON.stringify({ numOfPlayers }),
     });
 
-    if (response.redirected) {
+    if (!response.redirected) {
       // const responseData = { message: "you entered the game.....!" };
       // showToast(responseData.message);
       globalThis.location.href = "/game";
@@ -32,7 +33,7 @@ const handleJoinGame = async (numOfPlayers) => {
       return;
     }
 
-    globalThis.location.href = "/";  
+    globalThis.location.href = "/";
   } catch (error) {
     console.error("Join error:", error);
     showToast("An error occurred. Please try again later.");
@@ -81,8 +82,7 @@ const handleProfile = () => {
     userProfile.style.display = "none";
   };
 
-  userProfile.querySelector("#player-name-in-popup").textContent =
-    response.playerName;
+  userProfile.querySelector("#player-name").textContent = response.playerName;
   userProfile.querySelector("#matches-played").textContent =
     response.matchesPlayed;
   userProfile.querySelector("#matches-won").textContent = response.matchesWon;

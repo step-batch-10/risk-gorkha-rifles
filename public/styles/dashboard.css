@@ -1,24 +1,36 @@
+* {
+  margin: 0;
+  font-family: 'yatra one';
+  box-sizing: border-box;
+}
+
+body{
+  background-image: url('../images/risk-home.png');
+}
+
 header {
   height: 10vh;
   width: 100vw;
-  background-color: aliceblue;
+  color: rgb(201, 175, 79);
   display: flex;
   justify-content: space-between;
 }
 
 #profile {
   height: 10vh;
-  background-color: antiquewhite;
+  text-decoration: none;
   display: flex;
   gap: 10px;
+  color: white;
   align-items: center;
+  padding-left: 20px;
 }
 
 #profile-picture {
   height: 60px;
   width: 60px;
   text-align: center;
-  border: 1px solid black;
+  border: 1px solid rgb(255, 255, 255);
   border-radius: 50%;
   overflow: hidden;
 }
@@ -62,7 +74,6 @@ h1 {
 main {
   height: 90vh;
   width: 100vw;
-  background-color: rgb(91, 101, 50);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -73,21 +84,13 @@ main {
   gap: 20px;
 }
 
-#create {
+#create, #join {
   width: 200px;
   height: 200px;
   border-radius: 10px;
-  background-color: blue;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#join {
-  width: 200px;
-  height: 200px;
-  border-radius: 10px;
-  background-color: yellow;
+  box-shadow: 2px 2px 15px black;
+  background-color: #c19a6ba1;
+  border: 1px solid #8B5A2B;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,7 +107,7 @@ main {
 }
 
 .popup-content {
-  background-color: rgb(124, 243, 124);
+  background-color: #E9B35D;
   width: 330px;
   height: 500px;
   position: absolute;
@@ -122,8 +125,8 @@ main {
   text-align: center;
 }
 
-.vertical-rectangle {
-  background-color: rgb(120, 122, 38);
+.horizontal-rectangle {
+  background-color:#C19A6B;
   height: 40%;
   width: 40%;
   position: absolute;
@@ -131,15 +134,22 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border: 2px solid #8B5A2B;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
 }
 
-#picture {
-  height: 50%;
+#picture-and-name {
+  height: 70%;
   width: 25%;
+  color: #2E1A0F;
+}
+
+#picture {
+  height: 80%;
+  width: 100%;
   background-color: aquamarine;
   border: 1px solid black;
 }
@@ -148,7 +158,8 @@ main {
   padding-left: 10px;
   height: 80%;
   width: 70%;
-  background-color: white;
+  background-color: #FDF7E3;
+  color: #2E1A0F;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -179,4 +190,23 @@ main {
   flex-direction: column;
   justify-content: flex-start;
   gap: 10px;
+}
+
+button {
+  background-color: #2E1A0F;
+  color: #FDF7E3;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background-color: #5C4033;
+}
+
+#player-name {
+  text-align: center;
 }
