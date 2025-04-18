@@ -4,7 +4,7 @@ export default class ReinforcementModal {
   #currentPlayer;
   #territories = {};
   #clickListeners = {};
-  #remainingTroops = 13;
+  #remainingTroops = 35;
 
   #isOwnedByCurrentPlayer(territoryId) {
     return this.#territories[territoryId].owner === this.#currentPlayer;
@@ -97,7 +97,7 @@ export default class ReinforcementModal {
   }
 
   #handleDecrementButtonClick(inputField) {
-    if (this.#remainingTroops >= 13) return;
+    if (this.#remainingTroops >= 35) return;
 
     this.#remainingTroops++;
     console.log("Remaining troops:", this.#remainingTroops);
