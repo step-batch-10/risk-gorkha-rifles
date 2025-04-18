@@ -2,6 +2,7 @@
 
 Welcome to the official repository of **Risk**, developed by the **Gorkha Rifles** team.. This is a game where players battle for global domination through strategic planning, diplomacy, and tactical warfare.
 
+
 ## 🎮 About the Game
 
 This is a digital adaptation of the classic **Risk** board game — a turn-based strategy game where 3 to 6 players compete to dominate the world map through tactical troop deployment, territorial conquest, and smart alliances.
