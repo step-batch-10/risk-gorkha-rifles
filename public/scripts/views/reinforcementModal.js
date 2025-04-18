@@ -1,6 +1,7 @@
 export default class ReinforcementModal {
   #currentPlayer;
-  #territories = [];
+  #territories = {};
+  #clickListners = {};
 
   #verifyTerritory(territoryId) {
     return (_e) => {
@@ -11,13 +12,23 @@ export default class ReinforcementModal {
     };
   }
 
+  removeListners() {
+    Object.keys(this.#territories).forEach((territory) => {
+      const region = document.getElementById(territory);
+      const listner = this.#clickListners[territory];
+      region.removeEventListener("click", listner);
+    });
+  }
+
   addTerritoryListners(currentPlayer, territories) {
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
 
     Object.keys(territories).forEach((territory) => {
       const region = document.getElementById(territory);
-      region.addEventListener('click', this.#verifyTerritory(territory).bind(this));
+      const listner = this.#verifyTerritory(territory).bind(this);
+      this.#clickListners[territory] = listner;
+      region.addEventListener('click', listner);
     });
   }
 
@@ -54,7 +65,7 @@ export default class ReinforcementModal {
 
   showTroopToast() {
     const toastPopUp = document.getElementById("troop-toast-box");
-    
+
     if (toastPopUp) document.removeChild(toastPopUp);
 
     const toastHTML = this.#getToastHtml();

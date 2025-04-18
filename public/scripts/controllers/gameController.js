@@ -3,6 +3,7 @@ export default class GameController {
   #apiService;
   #mapModal;
   #reinforceModal;
+  #actions;
 
   constructor(waitingModal, mapModal, dataService, reinforcementModal) {
     this.#waitingModal = waitingModal;
@@ -11,13 +12,35 @@ export default class GameController {
     this.#reinforceModal = reinforcementModal;
   }
 
+
+
   #startPolling() {
     setInterval(async () => {
-      const gameData = await this.#apiService.getGameDetails();      
+      const gameData = await this.#apiService.getGameDetails();
       const { status, state } = gameData;
+
+      if (state?.action?.name === "initialDeployment") {
+        this.#reinforceModal.addTerritoryListners(state.currentPlayer, state.territories);
+      } else {
+        this.#reinforceModal.removeListners();
+      }
+
+      if (state.action.name === "startGame") {
+        Toastify({
+          text: "Game has been started now",
+          duration: 3000,
+          escapeMarkup: false,
+          close: false,
+          gravity: 'top',
+          position: 'center',
+          style: {
+            background: "linear-gradient(to right, #3e2514, #c99147)",
+          },
+        }).showToast();
+      }
+
       this.#waitingModal.render(status, state.players);
       this.#mapModal.render(state);
-      this.#reinforceModal.addTerritoryListners(state.currentPlayer, state.territories);
 
     }, 1000);
   }
