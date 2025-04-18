@@ -18,7 +18,7 @@ export default class WaitingModal {
   }
 
   #renderPlayers(players = [], playersElem) {
-    players.map(({ name }) => {
+    Object.values(players).map(({ name }) => {
       const list = document.createElement('li');
       list.textContent = name;
       playersElem.appendChild(list);

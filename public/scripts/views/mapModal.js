@@ -1,6 +1,6 @@
 export default class MapModal {
   #findPlayerColor(playerId, players) {
-    return players[playerId].color;
+    return players[playerId].colour;
   }
 
   #renderTerritories(territories, players) {

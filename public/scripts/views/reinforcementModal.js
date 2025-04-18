@@ -54,7 +54,6 @@ export default class ReinforcementModal {
 
   showTroopToast() {
     const toastPopUp = document.getElementById("troop-toast-box");
-    console.log(toastPopUp);
     
     if (toastPopUp) document.removeChild(toastPopUp);
 

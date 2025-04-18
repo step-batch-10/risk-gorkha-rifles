@@ -13,7 +13,7 @@ export default class GameController {
 
   #startPolling() {
     setInterval(async () => {
-      const gameData = await this.#apiService.getGameDetails();
+      const gameData = await this.#apiService.getGameDetails();      
       const { status, state } = gameData;
       this.#waitingModal.render(status, state.players);
       this.#mapModal.render(state);
