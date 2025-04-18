@@ -23,7 +23,7 @@ export default class ReinforcementModal {
     });
   }
 
-  addTerritoryListners(currentPlayer, territories) {
+  addTerritoryListeners(currentPlayer, territories) {
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
 

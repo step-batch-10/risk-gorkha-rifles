@@ -11,19 +11,18 @@ export default class ApiService {
     //     action: {
     //       name: "initialDeployment",
     //     },
-    //     // action: {
-    //     //   name: ""
-    //     // },
     //     players: {
     //       "1": {
     //         id: "1",
     //         name: "siya",
-    //         colour: "#fff"
+    //         colour: "red",
+    //         avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740"
     //       },
     //       "2": {
     //         id: "2",
     //         name: "shikha",
-    //         colour: "#000"
+    //         colour: "green",
+    //         avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740"
     //       }
     //     },
     //     territories: {
