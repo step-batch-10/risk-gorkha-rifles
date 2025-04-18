@@ -26,7 +26,10 @@ const updateTroops = async (context: Context) => {
   const gameManager: GameManager = context.get("gameManager");
   const game = gameManager.playerActiveGame(userId);
   const { territory, troops } = await context.req.json();
-  game?.state.updateTroops(territory, troops);
+
+  if (!game) return context.json({ message: "Game not found" }, 400);
+
+  game.state.updateTroops(territory, troops);
 
   return context.json({ message: "successfully updated troops" });
 };
@@ -43,10 +46,4 @@ const fetchPlayerInfo = (ctx: Context) => {
   });
 };
 
-
-export {
-  boardDataHandler,
-  joinGameHandler,
-  fetchPlayerInfo,
-  updateTroops
-};
+export { boardDataHandler, joinGameHandler, fetchPlayerInfo, updateTroops };

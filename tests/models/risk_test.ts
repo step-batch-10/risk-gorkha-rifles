@@ -63,6 +63,6 @@ describe("tests for risk model", () => {
 
     const india = risk.territoryState.get("india");
 
-    assertEquals(india?.troops, 99);
+    assertEquals(india?.troops, 100);
   });
 });

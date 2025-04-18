@@ -89,6 +89,31 @@ describe("tests for joinGame Handler", () => {
     const responseBody = await response.json();
     assertEquals(responseBody.message, "successfully updated troops");
   });
+
+  it("should update the troops for an unauthorized user", async () => {
+    const users = new Users();
+    users.createUser("shikha");
+    const sessions = new Session();
+    sessions.createSession("1");
+    const gameManager = new GameManager();
+
+    const server = new Server(users, sessions, gameManager, () => "1");
+    const response = await server.app.request("/game/update-troops", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: "sessionId=1",
+      },
+      body: JSON.stringify({
+        troops: 10,
+        territory: "india",
+      }),
+    });
+    const responseBody = await response.json();
+
+    assertEquals(responseBody.message, "Game not found");
+    assertEquals(response.status, 400);
+  });
 });
 
 describe("fetchPlayerInfo", () => {
@@ -113,6 +138,6 @@ describe("fetchPlayerInfo", () => {
     const responseBody = await response.json();
 
     assertEquals(responseBody.playerName, "sujoy");
-    assert("avatar" in responseBody);    
+    assert("avatar" in responseBody);
   });
 });

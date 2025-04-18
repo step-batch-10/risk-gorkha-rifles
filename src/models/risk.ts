@@ -48,7 +48,7 @@ export default class Risk {
     const territoryData = this.territoryState.get(territory);
 
     if (territoryData) {
-      territoryData.troops = troopsCount;
+      territoryData.troops += troopsCount;
     }
   }
 
