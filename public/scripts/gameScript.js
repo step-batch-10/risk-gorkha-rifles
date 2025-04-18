@@ -188,7 +188,7 @@ const showTroopToast = () => {
 };
 
 const verifyOwnerAndState = (territories, territoryId) => {
-  return (e) => {
+  return (_e) => {
     // const territoryId = e.target.parentElement.id;
     // const { currentPlayer, state } = turn;
 

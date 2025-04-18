@@ -8,7 +8,7 @@ export default class ReinforcementModal {
   }
 
   #verifyTerritory(territoryId) {
-    return (e) => {
+    return (_e) => {
       if (
         this.#territories[territoryId].owner === this.#currentPlayer &&
         state === 'reinforcement'
@@ -20,11 +20,11 @@ export default class ReinforcementModal {
 
   addTerritoryListners(currentPlayer, territories) {
     this.#currentPlayer = currentPlayer;
-    this.#territories = this.#territories;
+    this.#territories = territories;
 
     Object.keys(territories).forEach((territory) => {
       const region = document.getElementById(territory);
-      region.addEventListener('click', verifyOwnerAndState(territory).bind(this));
+      region.addEventListener('click', this.#verifyTerritory(territory).bind(this));
     });
   }
 
