@@ -59,7 +59,7 @@ cd risk-gorkha-rifles
 
 ## 🕹️ Play the game
 
-Hosted version: 🔗[Tap to play](https://priyanksuhp-risk-gorkha-95.deno.dev/)
+Hosted version: 🔗[Tap to play](https://risk-gorkha-rifles-prod.deno.dev/)
 
 ## 🧠 Contributors
 
