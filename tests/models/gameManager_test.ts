@@ -3,6 +3,7 @@ import { describe, it } from "testing";
 import Game from "../../src/models/game.ts";
 import { GameStatus } from "../../src/types/game.ts";
 import GameManager from "../../src/models/gameManager.ts";
+import Users from "../../src/models/users.ts";
 
 describe("tests for gameManager model", () => {
   it("should create a new game", () => {
@@ -97,5 +98,15 @@ describe("tests for gameManager model", () => {
 
     const activeGame = gameManager.playerActiveGame("123");
     assertEquals(activeGame, null);
+  });
+
+  it("should not allot new game to player already in a active game", () => {
+    const users: Users = new Users();
+    const playerId = users.createUser("john");
+    const gameManager = new GameManager();
+    const expected = gameManager.allotPlayer(3, playerId, "john");
+    const actual = gameManager.allotPlayer(3, "1", "john");
+
+    assertEquals(expected, actual);
   });
 });

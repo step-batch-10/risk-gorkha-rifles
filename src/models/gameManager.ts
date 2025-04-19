@@ -72,6 +72,9 @@ export default class GameManager {
     playerId: string,
     playerName: string | undefined = ''
   ) {
+    const activeGame: Game  | null = this.playerActiveGame(playerId);
+    if (activeGame) return activeGame;
+
     const game = this.findGame();
     game.addPlayer(playerId, playerName);
 
