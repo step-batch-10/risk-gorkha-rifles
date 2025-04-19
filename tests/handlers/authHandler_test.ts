@@ -1,16 +1,10 @@
 import { assertEquals } from "assert";
 import { describe, it } from "testing";
-import Server from "../../src/server.ts";
-import Users from "../../src/models/users.ts";
-import Session from "../../src/models/session.ts";
-import GameManager from "../../src/models/gameManager.ts";
+import { createServerWithLoggedInUser } from "./gameHandler_test.ts";
 
 describe("tests for app login routes", () => {
   it("Should give status 400 if username not given", async () => {
-    const users = new Users();
-    const session = new Session();
-    const gameManager = new GameManager();
-    const server = new Server(users, session, gameManager, () => "1");
+    const { server } = createServerWithLoggedInUser("Jack");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({}),
@@ -20,13 +14,10 @@ describe("tests for app login routes", () => {
   });
 
   it("Should set the cookies", async () => {
-    const users = new Users();
-    const session = new Session();
-    const gameManager = new GameManager();
-    const server = new Server(users, session, gameManager, () => "1");
+    const { server } = createServerWithLoggedInUser("Rose");
     const response = await server.app.request("/login", {
       method: "POST",
-      body: JSON.stringify({ username: "Ankita" }),
+      body: JSON.stringify({ username: "Rose" }),
     });
 
     assertEquals(response.status, 302);
@@ -34,10 +25,7 @@ describe("tests for app login routes", () => {
   });
 
   it("should create the user if doesn't exist", async () => {
-    const users = new Users();
-    const session = new Session();
-    const gameManager = new GameManager();
-    const server = new Server(users, session, gameManager, () => "1");
+    const { server, users } = createServerWithLoggedInUser("Ankita");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Ankita" }),
@@ -49,10 +37,7 @@ describe("tests for app login routes", () => {
   });
 
   it("should create a new session on each login", async () => {
-    const users = new Users();
-    const session = new Session();
-    const gameManager = new GameManager();
-    const server = new Server(users, session, gameManager, () => "1");
+    const { server, users, session } = createServerWithLoggedInUser("Jack");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Ankita" }),
@@ -65,10 +50,7 @@ describe("tests for app login routes", () => {
   });
 
   it("should give 400 if username is not valid", async () => {
-    const users = new Users();
-    const session = new Session();
-    const gameManager = new GameManager();
-    const server = new Server(users, session, gameManager, () => "1");
+    const { server } = createServerWithLoggedInUser("Jack");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "*" }),
@@ -78,10 +60,7 @@ describe("tests for app login routes", () => {
   });
 
   it("should give 400 if username starts with number", async () => {
-    const users = new Users();
-    const session = new Session();
-    const gameManager = new GameManager();
-    const server = new Server(users, session, gameManager, () => "1");
+    const { server } = createServerWithLoggedInUser("");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "45dhs" }),
@@ -91,10 +70,7 @@ describe("tests for app login routes", () => {
   });
 
   it("should give 400 if username has invalid character in between", async () => {
-    const users = new Users();
-    const session = new Session();
-    const gameManager = new GameManager();
-    const server = new Server(users, session, gameManager, () => "1");
+    const { server } = createServerWithLoggedInUser("");
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "hdjsk&^%6jdk" }),
@@ -106,27 +82,19 @@ describe("tests for app login routes", () => {
 
 describe("tests for auth middleware", () => {
   it("should return 401 unauthorized if user logged in", async () => {
-    const users = new Users();
-    const session = new Session();
-    const gameManager = new GameManager();
-    const server = new Server(users, session, gameManager, () => "1");
+    const { server } = createServerWithLoggedInUser("");
     const response = await server.app.request("/game/game-board");
 
     assertEquals(response.status, 302);
   });
 
   it("should pass the middleware if user logged in", async () => {
-    const users = new Users();
-    users.createUser("john");
-    const session = new Session();
-    session.createSession("1");
-    const gameManager = new GameManager();
+    const { server, sessionId } = createServerWithLoggedInUser("John");
 
-    const server = new Server(users, session, gameManager, () => "1");
     const response = await server.app.request("/game/game-board", {
       method: "GET",
       headers: {
-        Cookie: "sessionId=1",
+        Cookie: `sessionId=${sessionId}`,
       },
     });
 

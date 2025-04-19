@@ -127,7 +127,7 @@ describe("fetchFullPlayerInfo", () => {
   });
 });
 
-const createServerWithLoggedInUser = (username: string) => {
+export const createServerWithLoggedInUser = (username: string) => {
   const session = new Session(uniqueId);
   const users = new Users(uniqueId);
   const gameManager = new GameManager(uniqueId);
@@ -137,5 +137,11 @@ const createServerWithLoggedInUser = (username: string) => {
   users.createUser(username);
 
   const server = new Server(users, session, gameManager, uniqueId);
-  return { server, sessionId, gameManager };
+  return {
+    server,
+    sessionId,
+    gameManager,
+    users,
+    session,
+  };
 };
