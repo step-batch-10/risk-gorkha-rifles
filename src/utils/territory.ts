@@ -6,12 +6,13 @@ export const divideTerritories = (
   players: string[]
 ): Map<string, Territory> => {
   const territories = new Map<string, Territory>();
+  const totalPlayers = players.length;
 
-  Object.values(continents).forEach((group) => {
-    const shuffled: string[] = lodash.shuffle([...group]);
-    shuffled.forEach((territory, i) => {
-      territories.set(territory, { owner: players[i % 3], troops: 1 });
-    });
+  const territoriesList = Object.values(continents).flatMap(x => x);
+  const shuffled: string[] = lodash.shuffle(territoriesList);
+
+  shuffled.forEach((territory, i) => {
+    territories.set(territory, { owner: players[i % totalPlayers], troops: 1 });
   });
 
   return territories;

@@ -16,6 +16,7 @@ export default class GameManager {
       createdBy,
       this.uniqueId
     );
+    this.games.set(game.gameId, game);
 
     return game;
   }
@@ -39,7 +40,6 @@ export default class GameManager {
 
   private findGame(): Game {
     if (this.currentGame?.status === "waiting") {
-      this.games.set(this.currentGame.gameId, this.currentGame);
       return this.currentGame;
     };
 
