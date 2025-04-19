@@ -43,7 +43,7 @@ export default class ReinforcementModal {
       <div id="troop-toast-box">
         <div class="custom-number-input">
           <button id="decrement">-</button>
-          <input type="number" id="number-input" value="0" min="0" max="100" />
+          <input type="number" id="number-input" disabled value="0" min="0" max="100" />
           <button id="increment">+</button>
         </div>
         <button id="place-troops-btn">Place</button>

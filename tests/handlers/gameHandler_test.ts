@@ -9,19 +9,14 @@ const uniqueId = () => "1";
 
 describe("boardDataHandler", () => {
   it("should return game instance and status 200", async () => {
-    const session = new Session(uniqueId);
-    const users = new Users(uniqueId);
-    const gameManager = new GameManager(uniqueId);
-    users.createUser("hello");
-    session.createSession("1");
+    const { server, sessionId, gameManager } =
+      createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer(3, "1", "jayanth");
-
-    const server = new Server(users, session, gameManager, uniqueId);
 
     const response = await server.app.request("/game/game-board", {
       method: "GET",
       headers: {
-        Cookie: "sessionId=1",
+        Cookie: `sessionId=${sessionId}`,
       },
     });
     assertEquals(response.status, 200);
@@ -30,11 +25,7 @@ describe("boardDataHandler", () => {
 
 describe("tests for joinGame Handler", () => {
   it("should not allot the game for unauthorized user", async () => {
-    const users = new Users();
-    const sessions = new Session();
-    const gameManager = new GameManager();
-
-    const server = new Server(users, sessions, gameManager, () => "1");
+    const { server } = createServerWithLoggedInUser("Rose");
     const response = await server.app.request("/game/join-game", {
       method: "POST",
     });
@@ -43,17 +34,12 @@ describe("tests for joinGame Handler", () => {
   });
 
   it("should allot the game to the user", async () => {
-    const users = new Users();
-    users.createUser("shikha");
-    const sessions = new Session();
-    sessions.createSession("1");
-    const gameManager = new GameManager();
+    const { server, sessionId } = createServerWithLoggedInUser("Jack");
 
-    const server = new Server(users, sessions, gameManager, () => "1");
     const response = await server.app.request("/game/join-game", {
       method: "POST",
       headers: {
-        Cookie: "sessionId=1",
+        Cookie: `sessionId=${sessionId}`,
       },
     });
 
@@ -62,21 +48,17 @@ describe("tests for joinGame Handler", () => {
   });
 
   it("should update the troops for an authorized user", async () => {
-    const users = new Users();
-    users.createUser("shikha");
-    const sessions = new Session();
-    sessions.createSession("1");
-    const gameManager = new GameManager();
+    const { server, sessionId, gameManager } =
+      createServerWithLoggedInUser("John");
     gameManager.allotPlayer(3, "1", "A");
     gameManager.allotPlayer(3, "2", "B");
     gameManager.allotPlayer(3, "3", "C");
 
-    const server = new Server(users, sessions, gameManager, () => "1");
     const response = await server.app.request("/game/update-troops", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Cookie: "sessionId=1",
+        Cookie: `sessionId=${sessionId}`,
       },
       body: JSON.stringify({
         troops: 10,
@@ -88,18 +70,12 @@ describe("tests for joinGame Handler", () => {
   });
 
   it("should update the troops for an unauthorized user", async () => {
-    const users = new Users();
-    users.createUser("shikha");
-    const sessions = new Session();
-    sessions.createSession("1");
-    const gameManager = new GameManager();
-
-    const server = new Server(users, sessions, gameManager, () => "1");
+    const { server, sessionId } = createServerWithLoggedInUser("Jack");
     const response = await server.app.request("/game/update-troops", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Cookie: "sessionId=1",
+        Cookie: `sessionId=${sessionId}`,
       },
       body: JSON.stringify({
         troops: 10,
@@ -112,19 +88,6 @@ describe("tests for joinGame Handler", () => {
     assertEquals(response.status, 400);
   });
 });
-
-const createServerWithLoggedInUser = (username: string) => {
-  const session = new Session(uniqueId);
-  const users = new Users(uniqueId);
-  const gameManager = new GameManager(uniqueId);
-  const sessionId = "1";
-
-  session.createSession(sessionId);
-  users.createUser(username);
-
-  const server = new Server(users, session, gameManager, uniqueId);
-  return { server, sessionId };
-};
 
 describe("fetchPlayerInfo", () => {
   it("should return profile details of the logged in user", async () => {
@@ -163,3 +126,16 @@ describe("fetchFullPlayerInfo", () => {
     assert("avatar" in responseBody);
   });
 });
+
+const createServerWithLoggedInUser = (username: string) => {
+  const session = new Session(uniqueId);
+  const users = new Users(uniqueId);
+  const gameManager = new GameManager(uniqueId);
+  const sessionId = "1";
+
+  session.createSession(sessionId);
+  users.createUser(username);
+
+  const server = new Server(users, session, gameManager, uniqueId);
+  return { server, sessionId, gameManager };
+};
