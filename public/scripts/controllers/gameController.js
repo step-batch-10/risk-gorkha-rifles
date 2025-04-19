@@ -11,6 +11,12 @@ export default class GameController {
     this.#mapModal = mapModal;
     this.#reinforcementModal = reinforcementModal;
     this.#playerSidebarView = playerSidebarView;
+    this.#playMusic();
+  }
+
+  #playMusic() {
+    const audio = new Audio('../../assets/risk_music.mp3');
+    audio.play();
   }
 
   #pollGameData() {
