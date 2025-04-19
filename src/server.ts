@@ -49,10 +49,9 @@ export default class Server {
 
   private async authHandler(ctx: Context, next: Next) {
     const sessionId = getCookie(ctx, "sessionId");
-
     const session = ctx.get("session");
 
-    if (session.sessions.has(sessionId || "0")) {
+    if (session.sessions.has(sessionId)) {
       ctx.set("userId", session.findById(sessionId));
       return await next();
     }
