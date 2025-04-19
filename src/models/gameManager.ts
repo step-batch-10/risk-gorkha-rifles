@@ -4,7 +4,7 @@ import Game from './game.ts';
 export default class GameManager {
   public games: Map<string, Game> = new Map();
   private currentGame: Game | null = null;
-  private uniqueId;
+  private uniqueId: () => string;
 
   constructor(uniqueId: () => string = () => '1') {
     this.uniqueId = uniqueId;
