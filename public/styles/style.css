@@ -230,3 +230,7 @@ input::-webkit-inner-spin-button {
     transform: rotate(360deg);
   }
 }
+
+.highlight-territory {
+  filter: brightness(100%) !important;
+}

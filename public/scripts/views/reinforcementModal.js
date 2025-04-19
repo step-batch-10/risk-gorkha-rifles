@@ -10,9 +10,24 @@ export default class ReinforcementModal {
     return this.#territories[territoryId].owner === this.#currentPlayer;
   }
 
+  #removeTerritoryHighlight() {
+    Object.keys(this.#territories).forEach((territoryId) => {
+      const territoryElement = document.getElementById(territoryId);
+      const path = territoryElement.querySelector("path");
+
+      path.classList.remove("highlight-territory");
+    });
+  }
+
   #handleTerritoryClick(territoryId) {
     return (_event) => {
+      this.#removeTerritoryHighlight();
+
       if (this.#isOwnedByCurrentPlayer(territoryId)) {
+        const territory = document.getElementById(territoryId);
+        const path = territory.querySelector("path");
+        path.classList.add("highlight-territory");
+
         this.#showTroopDeploymentToast(territoryId);
       }
     };
@@ -86,6 +101,7 @@ export default class ReinforcementModal {
 
     console.log("Troops placed:", inputField.value, territoryId);
     toast.hideToast();
+    this.#removeTerritoryHighlight();
   }
 
   #handleIncrementButtonClick(inputField) {

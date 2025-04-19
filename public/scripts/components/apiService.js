@@ -31,7 +31,7 @@ export default class ApiService {
     //       },
     //       "china": {
     //         troops: 99,
-    //         owner: "2"
+    //         owner: "1"
     //       }
     //     }
     //   }
