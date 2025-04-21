@@ -13,21 +13,43 @@ interface PlayerProfile {
 }
 
 const playerProfileData: PlayerProfile[] = [
-  { colour: "red", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
-  { colour: "yellow", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
-  { colour: "blue", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
-  { colour: "violet", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
-  { colour: "orange", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
-  { colour: "pink", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" },
+  {
+    colour: "red",
+    avatar:
+      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+  },
+  {
+    colour: "yellow",
+    avatar:
+      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+  },
+  {
+    colour: "blue",
+    avatar:
+      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+  },
+  {
+    colour: "violet",
+    avatar:
+      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+  },
+  {
+    colour: "orange",
+    avatar:
+      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+  },
+  {
+    colour: "pink",
+    avatar:
+      "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+  },
 ];
 
 export default class Risk {
   public players: { [key: string]: PlayerDetails };
   public territoryState: Map<string, Territory>;
   private playerProfile;
-  public action = {
-    name: "",
-  };
+  public action = [{}];
 
   constructor(playerProfile = playerProfileData) {
     this.players = {};
@@ -39,7 +61,11 @@ export default class Risk {
     const index = Object.keys(this.players).length;
     const profile = this.playerProfile.at(index);
 
-    const { colour, avatar } = profile || { colour: "gold", avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740" };
+    const { colour, avatar } = profile || {
+      colour: "gold",
+      avatar:
+        "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+    };
 
     this.players[playerId] = { name: playerName, colour, avatar };
   }
@@ -61,7 +87,18 @@ export default class Risk {
       Object.keys(this.players)
     );
 
-    this.action.name = "initialDeployment";
     this.territoryState = territories;
+
+    this.action.push({
+      id: "1",
+      name: "intialDeploymentStart",
+      playerId: null,
+      currentPlayerTurn: null,
+      data: {
+        troopsCount: 21,
+      },
+      timestamp: Date.now(),
+      territoryState: this.territoryState,
+    });
   }
 }
