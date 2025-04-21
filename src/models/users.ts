@@ -1,32 +1,34 @@
 import _ from "npm:lodash";
 
-export interface UserDetail {
+export interface User {
   userName: string;
-  userId: string;
+  avatar: string;
 }
 
 export default class Users {
-  public users: Map<string, string> = new Map();
-  public uniqueId: () => string;
+  private users: Record<string, User> = {};
+  private uniqueId: () => string;
 
   constructor(uniqueId: () => string = () => "1") {
     this.uniqueId = uniqueId;
   }
 
-  createUser(userName: string) {
+  createUser(userName: string, avatar: string) {
     const userId = this.uniqueId();
-    this.users.set(userId, userName);
+    this.users[userId] = { userName, avatar };
 
-    return userId;
+    return this.users[userId];
   }
 
   findById(userId: string) {
-    return this.users.get(userId);
+    return this.users[userId];
   }
 
-  findByUserName(userName: string) {
-    for (const [key, value] of this.users) {
-      if (userName === value) return key;
-    }
+  findIdByUsername(name: string) {
+    const userDetails = Object.entries(this.users).find(
+      ([_, { userName }]) => userName === name
+    );
+
+    return userDetails ? userDetails[0] : undefined;
   }
 }

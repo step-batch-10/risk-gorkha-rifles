@@ -5,6 +5,8 @@ import { createServerWithLoggedInUser } from "./gameHandler_test.ts";
 describe("tests for app login routes", () => {
   it("Should give status 400 if username not given", async () => {
     const { server } = createServerWithLoggedInUser("Jack");
+    console.log(server);
+
     const response = await server.app.request("/login", {
       method: "POST",
       body: JSON.stringify({}),
@@ -33,7 +35,7 @@ describe("tests for app login routes", () => {
 
     assertEquals(response.status, 302);
     assertEquals(response.headers.get("set-cookie"), "sessionId=1; Path=/");
-    assertEquals(users.findByUserName("Ankita"), "1");
+    assertEquals(users.findIdByUsername("Ankita"), "1");
   });
 
   it("should create a new session on each login", async () => {
@@ -45,7 +47,7 @@ describe("tests for app login routes", () => {
 
     assertEquals(response.status, 302);
     assertEquals(response.headers.get("set-cookie"), "sessionId=1; Path=/");
-    assertEquals(users.findByUserName("Ankita"), "1");
+    assertEquals(users.findIdByUsername("Ankita"), "1");
     assertEquals(session.findById("1"), "1");
   });
 
@@ -79,4 +81,3 @@ describe("tests for app login routes", () => {
     assertEquals(response.status, 400);
   });
 });
-

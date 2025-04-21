@@ -1,23 +1,21 @@
-import Users from './models/users.ts';
-import { logger } from 'hono/logger';
-import { serveStatic } from 'hono/deno';
-import { Context, Hono, Next } from 'hono';
-import Session from './models/session.ts';
-import { BlankEnv, BlankSchema } from 'hono/types';
-import { loginHandler } from './handler/authHandler.ts';
-import GameManager from './models/gameManager.ts';
+import Users from "./models/users.ts";
+import { logger } from "hono/logger";
+import { serveStatic } from "hono/deno";
+import { Context, Hono, Next } from "hono";
+import Session from "./models/session.ts";
+import { BlankEnv, BlankSchema } from "hono/types";
+import { loginHandler } from "./handler/authHandler.ts";
+import GameManager from "./models/gameManager.ts";
 import {
   gameActionsHandler,
   // boardDataHandler,
   joinGameHandler,
-  updateTroops,
   fetchPlayerInfo,
   fetchFullPlayerInfo,
-  reinforcementRequestHandler,
-} from './handler/gameHandler.ts';
-import { getCookie } from 'hono/cookie';
+} from "./handler/gameHandler.ts";
+import { getCookie } from "hono/cookie";
 
-type App = Hono<BlankEnv, BlankSchema, '/'>;
+type App = Hono<BlankEnv, BlankSchema, "/">;
 
 export default class Server {
   readonly app: App;
@@ -40,49 +38,48 @@ export default class Server {
   }
 
   private async setContext(context: Context, next: Next) {
-    context.set('users', this.users);
-    context.set('session', this.session);
-    context.set('uniqueId', this.uniqueId);
-    context.set('gameManager', this.gameManager);
+    context.set("users", this.users);
+    context.set("session", this.session);
+    context.set("uniqueId", this.uniqueId);
+    context.set("gameManager", this.gameManager);
 
     return await next();
   }
 
   private async authHandler(ctx: Context, next: Next) {
-    const sessionId = getCookie(ctx, 'sessionId');
-    const session = ctx.get('session');
+    const sessionId = getCookie(ctx, "sessionId") || "0";
+    const session = ctx.get("session");
 
-    if (session.sessions.has(sessionId)) {
-      ctx.set('userId', session.findById(sessionId));
+    if (sessionId in session.allSessions) {
+      ctx.set("userId", session.findById(sessionId));
       return await next();
     }
 
-    return ctx.redirect('/login', 302);
+    return ctx.redirect("/login", 302);
   }
 
   private gameHandler() {
     const app = new Hono();
     app.use(this.authHandler);
-    app.get('/actions', gameActionsHandler);
+    app.get("/actions", gameActionsHandler);
 
     // app.get("/start-reinforce", reinforceHandler)//request-reinforce, reinforcement, end
-    app.get('/request-reinforce', reinforcementRequestHandler);
-    app.post('/join-game', joinGameHandler);
-    app.post('/update-troops', updateTroops);
-    app.get('/profile-details', fetchPlayerInfo);//unchanged
-    app.get('/player-full-profile', fetchFullPlayerInfo);
+    // app.get("/request-reinforce", reinforcementRequestHandler);
+    app.post("/join-game", joinGameHandler);
+    // app.post("/update-troops", updateTroops);
+    app.get("/profile-details", fetchPlayerInfo); //unchanged
+    app.get("/player-full-profile", fetchFullPlayerInfo);
     return app;
   }
 
   private appMethod(app: App) {
     app.use(logger());
     app.use(this.setContext.bind(this));
-    app.post('/login', loginHandler);
-    app.use('/', this.authHandler);
-    app.route('/game', this.gameHandler());
-    app.get('*', serveStatic({ root: './public/' }));
+    app.post("/login", loginHandler);
+    app.use("/", this.authHandler);
+    app.route("/game", this.gameHandler());
+    app.get("*", serveStatic({ root: "./public/" }));
   }
-
 
   public serve() {
     this.appMethod(this.app);

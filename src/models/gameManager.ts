@@ -1,106 +1,78 @@
-import { GameStatus } from "../types/game.ts";
 import Game from "./game.ts";
-import { Action } from "./risk.ts";
+import { Continent, GameStatus } from "../types/game.ts";
+import lodash from "npm:lodash";
+import { Action } from "./game.ts";
 
 export default class GameManager {
-  public games: Map<string, Game> = new Map();
-  private currentGame: Game | null = null;
+  private gameSessions: Record<string, string> = {};
+  private games: Game[] = [];
+  private waitingLobbies: Record<string, Set<string>> = { "3": new Set() };
   private uniqueId: () => string;
+  private getContinents: () => Continent;
+  private timeStamp: () => number = Date.now;
 
-  constructor(uniqueId: () => string = () => "1") {
+  constructor(
+    uniqueId: () => string,
+    getContinents: () => Continent,
+    timeStamp: () => number
+  ) {
     this.uniqueId = uniqueId;
+    this.getContinents = getContinents;
+    this.timeStamp = timeStamp;
   }
 
-  public createGame(noOfPlayers: number = 3, createdBy: string = "") {
-    const game = new Game(noOfPlayers, createdBy, this.uniqueId);
-    this.games.set(game.gameId, game);
+  private createGame(players: Set<string>) {
+    const gameId = this.uniqueId();
+    const continents = this.getContinents();
+    const game = new Game(
+      players,
+      continents,
+      this.uniqueId,
+      lodash.shuffle,
+      this.timeStamp
+    );
+    this.games.push(game);
+    players.forEach((playerId) => (this.gameSessions[playerId] = gameId));
 
-    return game;
+    return gameId;
   }
 
-  public hasPlayer(playerId: string, players: { playerId: string }[]) {
-    for (const player of players) {
-      if (player.playerId === playerId) {
-        return true;
-      }
+  public allotPlayer(playerId: string, noOfPlayers: string) {
+    const currentLobby = this.waitingLobbies[noOfPlayers];
+    currentLobby.add(playerId);
+
+    if (currentLobby.size === parseInt(noOfPlayers)) {
+      this.createGame(currentLobby);
+      this.waitingLobbies[noOfPlayers] = new Set();
     }
 
-    return false;
+    return this.waitingLobbies[noOfPlayers];
   }
 
-  public reinforcementDetails(game: Game, userId: string) {
-    return game.state.reinforceRequest(userId)
-  }
+  private getRecentActions(actions: Action[] = [], timeStamp: number) {
+    const index = actions.findIndex((action) => {
+      action.timeStamp > timeStamp;
+    });
 
-  public playerActiveGame(playerId: string) {
-    if (
-      this.currentGame?.state.players &&
-      this.hasPlayer(playerId, this.currentGame.state.players)
-    )
-      return this.currentGame;
-
-    for (const [_key, value] of this.games) {
-      const isActiveGame = value.status === GameStatus.running;
-      const hasPlayer = this.hasPlayer(playerId, value.state.players);
-
-      if (isActiveGame && hasPlayer) return value;
-    }
-
-    return null;
-  }
-
-  private findGame(): Game {
-    if (this.currentGame?.status === "waiting") {
-      return this.currentGame;
-    }
-
-    const game = this.createGame();
-    this.currentGame = game;
-
-    return game;
-  }
-
-  private getRecentActions(actions: Action[], lastActionat: number) {
-    return actions.filter((action) => action.timeStamp > lastActionat);
+    return actions.slice(index);
   }
 
   public getGameActions(playerId: string, lastActionat: number) {
-    const activeGame = this.playerActiveGame(playerId);
-    const allActions = activeGame?.state.actions;
-    const gameActionsBuffer = this.getRecentActions(
-      allActions ?? [],
-      lastActionat
-    );
+    const activeGame = this.findPlayerActiveGame(playerId);
+    const allActions = activeGame?.gameActions;
+    const recentActions = this.getRecentActions(allActions, lastActionat);
 
     return {
       status: activeGame?.status,
       currentPlayer: playerId,
-      actions: gameActionsBuffer,
-      players: activeGame?.state.players,
+      actions: recentActions,
+      players: activeGame?.allPlayers,
     };
   }
 
-  public allotPlayer(
-    _noOfPlayers: number = 3,
-    playerId: string,
-    playerName: string | undefined = ""
-  ) {
-    const activeGame: Game | null = this.playerActiveGame(playerId);
-    if (activeGame) return activeGame;
-
-    const game = this.findGame();
-    game.addPlayer(playerId, playerName);
-
-    return game;
-  }
-
- 
-  public updateTroops(
-    game: Game,
-    userId: string,
-    territory: string,
-    troops: number
-  ) {
-    game.state.deployTroops(userId, territory, troops);
+  public findPlayerActiveGame(playerId: string) {
+    return this.games.find(
+      (game) => game.hasPlayer(playerId) && game.status === GameStatus.running
+    );
   }
 }

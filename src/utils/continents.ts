@@ -1,23 +1,3 @@
-import { Territory } from "../types/game.ts";
-import lodash from "lodash";
-
-export const divideTerritories = (
-  continents: Record<string, string[]>,
-  players: string[]
-): Record<string, Territory> => {
-  const territories: Record<string, Territory> = {};
-  const totalPlayers = players.length;
-
-  const territoriesList = Object.values(continents).flatMap((x) => x);
-  const shuffled: string[] = lodash.shuffle(territoriesList);
-
-  shuffled.forEach((territory, i) => {
-    territories[territory] = { owner: players[i % totalPlayers], troops: 1 };
-  });
-
-  return territories;
-};
-
 export const getContinents = () => {
   return {
     NorthAmerica: [

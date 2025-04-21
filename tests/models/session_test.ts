@@ -1,72 +1,46 @@
-import { assertEquals } from 'assert';
-import { describe, it } from 'testing';
-import Session from '../../src/models/session.ts';
+import { assertEquals } from "assert";
+import { describe, it } from "testing";
+import Session from "../../src/models/session.ts";
 
-describe('tests for session model', () => {
-  it('should create sessions', () => {
+describe("tests for session model", () => {
+  it("should create sessions", () => {
     const session = new Session();
-    const actual = session.createSession("john");
-    const expected = new Map();
-    expected.set('1', 'john');
+    const actual = session.createSession("123");
+    const expected = "1";
 
-    assertEquals(actual, "1");
-    assertEquals(session.sessions, expected);
+    assertEquals(actual, expected);
   });
 
-  it('should delete session', () => {
+  it("should find the user by id", () => {
+    const uniqueId = () => {
+      let i = 0;
+
+      return () => (i++).toString();
+    };
+
+    const session = new Session(uniqueId());
+    session.createSession("123");
+    session.createSession("456");
+
+    assertEquals(session.findById("0"), "123");
+    assertEquals(session.findById("1"), "456");
+  });
+
+  it("should return undefined if session is not valid", () => {
     const session = new Session();
-    session.createSession("john");
-    const actual = session.deleteSession("1");
-
-    const expected = new Map();
-
-    assertEquals(actual, true);
-    assertEquals(session.sessions, expected);
-  });
-
-  it('should delete all the sessions of user', () => {
-    const uniqueId = () => {
-      let i = 0;
-
-      return () => (i++).toString();
-    };
-
-    const session = new Session(uniqueId());
-    session.createSession("ankita");
-    session.createSession("john");
-    const sessions = session.deleteUsersSession("ankita");
-
-    const expected = new Map();
-    expected.set('1', 'john');
-
-    assertEquals(sessions, expected);
-  });
-
-  it('should find the user by id', () => {
-    const uniqueId = () => {
-      let i = 0;
-
-      return () => (i++).toString();
-    };
-
-    const session = new Session(uniqueId());
-    session.createSession("ankita");
-    session.createSession("john");
-
-    const actual = session.findById("1");
-    assertEquals(actual, "john");
-  });
-
-  it('should return undefined if session is not valid', () => {
-    const uniqueId = () => {
-      let i = 0;
-
-      return () => (i++).toString();
-    };
-
-    const session = new Session(uniqueId());
 
     const actual = session.findById("1");
     assertEquals(actual, undefined);
+  });
+});
+
+describe("get allSessions", () => {
+  it("should return all sesions", () => {
+    const session = new Session();
+    session.createSession("2");
+
+    const result = session.allSessions;
+
+    assertEquals(result, { "1": "2" });
   });
 });
