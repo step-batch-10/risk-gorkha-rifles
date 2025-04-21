@@ -1,10 +1,11 @@
 import { Territory } from "../types/game.ts";
 import { divideTerritories, getContinents } from "../utils/territory.ts";
 
-interface PlayerDetails {
+export interface PlayerDetails {
   name: string;
   colour: string;
   avatar: string;
+  playerId: string;
 }
 
 interface PlayerProfile {
@@ -45,15 +46,68 @@ const playerProfileData: PlayerProfile[] = [
   },
 ];
 
+//
+//   initialDeploymentStart: {
+//     status: "running",
+//     userId: "1",
+//     players: [
+//       {
+//         id: "1",
+//         name: "siya",
+//         colour: "red",
+//         avatar:
+//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+//       },
+//       {
+//         id: "2",
+//         name: "shikha",
+//         colour: "green",
+//         avatar:
+//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+//       },
+//     ],
+//     actions: [
+//       {
+//         id: "1",
+//         name: "intialDeploymentStart",
+//         playerId: null,
+//         currentPlayerTurn: "2",
+//         data: null,
+//         timestamp: Date.now(),
+//         territoryState: {
+//           india: {
+//             troops: 23,
+//             owner: "2",
+//           },
+//           china: {
+//             troops: 99,
+//             owner: "1",
+//           },
+//         },
+//       },
+//     ],
+//   },
+// };
+
+export interface Action {
+  id: string;
+  name: string;
+  playerId: string | null;
+  data: unknown;
+  currentPlayer: string;
+  territoryState: Map<string, Territory>;
+  timeStamp: number;
+}
+
 export default class Risk {
   private uniqueId: () => string;
-  public players: { [key: string]: PlayerDetails };
+  public players: PlayerDetails[];
   public territoryState: Map<string, Territory>;
   private playerProfile;
-  public action = [{}];
+  public actions: Action[] = [];
 
   constructor(generateId: () => string, playerProfile = playerProfileData) {
-    this.players = {};
+    this.players = [];
     this.territoryState = new Map();
     this.playerProfile = playerProfile;
     this.uniqueId = generateId;
@@ -69,7 +123,12 @@ export default class Risk {
         "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
     };
 
-    this.players[playerId] = { name: playerName, colour, avatar };
+    this.players.push({
+      name: playerName,
+      colour,
+      avatar,
+      playerId: playerId,
+    });
   }
 
   public deployTroops(
@@ -82,15 +141,15 @@ export default class Risk {
     if (territoryData) {
       territoryData.troops += troopsCount;
 
-      this.action.push({
+      this.actions.push({
         id: this.uniqueId(),
         name: "troopsDeployed",
         playerId: null,
-        currentPlayerTurn: playerId,
+        currentPlayer: playerId,
         data: {
           troopsDeployed: troopsCount,
         },
-        timestamp: Date.now(),
+        timeStamp: Date.now(),
         territoryState: this.territoryState,
       });
     }
@@ -107,15 +166,15 @@ export default class Risk {
 
     this.territoryState = territories;
 
-    this.action.push({
+    this.actions.push({
       id: this.uniqueId(),
       name: "intialDeploymentStart",
       playerId: null,
-      currentPlayerTurn: null,
+      currentPlayer: "2",
       data: {
         troopsCount: 21,
       },
-      timestamp: Date.now(),
+      timeStamp: Date.now(),
       territoryState: this.territoryState,
     });
   }

@@ -1,5 +1,6 @@
 import { GameStatus } from "../types/game.ts";
 import Game from "./game.ts";
+import { Action } from "./risk.ts";
 
 export default class GameManager {
   public games: Map<string, Game> = new Map();
@@ -17,16 +18,26 @@ export default class GameManager {
     return game;
   }
 
+  public hasPlayer(playerId: string, players: { playerId: string }[]) {
+    for (const player of players) {
+      if (player.playerId === playerId) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public playerActiveGame(playerId: string) {
     if (
       this.currentGame?.state.players &&
-      playerId in this.currentGame.state.players
+      this.hasPlayer(playerId, this.currentGame.state.players)
     )
       return this.currentGame;
 
     for (const [_key, value] of this.games) {
-      const hasPlayer = playerId in value.state.players;
       const isActiveGame = value.status === GameStatus.running;
+      const hasPlayer = this.hasPlayer(playerId, value.state.players);
 
       if (isActiveGame && hasPlayer) return value;
     }
@@ -45,22 +56,24 @@ export default class GameManager {
     return game;
   }
 
-  public getPlayerGameDetails(playerId: string) {
-    const activeGame = this.playerActiveGame(playerId);
+  private getRecentActions(actions: Action[], lastActionat: number) {
+    return actions.filter((action) => action.timeStamp > lastActionat);
+  }
 
-    const gameDetails = {
+  public getGameActions(playerId: string, lastActionat: number) {
+    const activeGame = this.playerActiveGame(playerId);
+    const allActions = activeGame?.state.actions;
+    const gameActionsBuffer = this.getRecentActions(
+      allActions ?? [],
+      lastActionat
+    );
+
+    return {
       status: activeGame?.status,
       currentPlayer: playerId,
-      state: {
-        territories: Object.fromEntries(
-          activeGame?.state.territoryState ?? new Map()
-        ),
-        players: activeGame?.state.players,
-        action: activeGame?.state.action,
-      },
+      buffer: gameActionsBuffer,
+      players: activeGame?.state.players,
     };
-
-    return gameDetails;
   }
 
   public allotPlayer(

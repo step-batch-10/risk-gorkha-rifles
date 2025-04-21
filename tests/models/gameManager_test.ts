@@ -21,13 +21,15 @@ describe("tests for gameManager model", () => {
 
     const game = gameManager.allotPlayer(3, "123", "player1");
 
-    const expected = {
-      "123": {
-        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+    const expected = [
+      {
+        playerId: "123",
+        avatar:
+          "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "red",
         name: "player1",
       },
-    };
+    ];
 
     assertEquals(game.state.players, expected);
   });
@@ -38,13 +40,15 @@ describe("tests for gameManager model", () => {
 
     const game = gameManager.allotPlayer(6, "123", "player1");
 
-    const expected = {
-      "123": {
-        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+    const expected = [
+      {
+        playerId: "123",
+        avatar:
+          "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "red",
         name: "player1",
       },
-    };
+    ];
 
     assertEquals(game.state.players, expected);
   });
@@ -54,6 +58,7 @@ describe("tests for gameManager model", () => {
     gameManager.allotPlayer(3, "123", "player1");
 
     const activeGame = gameManager.playerActiveGame("123");
+
     const game = new Game();
     game.addPlayer("123", "player1");
 
@@ -78,7 +83,6 @@ describe("tests for gameManager model", () => {
       return () => (i++).toString();
     };
 
-    
     const gameManager = new GameManager(generatorId());
     gameManager.allotPlayer(3, "129", "player7");
     gameManager.allotPlayer(3, "130", "player8");
@@ -108,5 +112,198 @@ describe("tests for gameManager model", () => {
     const actual = gameManager.allotPlayer(3, "1", "john");
 
     assertEquals(expected, actual);
+  });
+});
+
+describe("tests for hasPlayer function", () => {
+  it("should return true if player is present in the players array", () => {
+    const gameManager = new GameManager();
+    const players = [
+      { playerId: "123" },
+      { playerId: "456" },
+      { playerId: "789" },
+    ];
+
+    const result = gameManager.hasPlayer("456", players);
+
+    assertEquals(result, true);
+  });
+
+  it("should return false if player is not present in the players array", () => {
+    const gameManager = new GameManager();
+    const players = [
+      { playerId: "123" },
+      { playerId: "456" },
+      { playerId: "789" },
+    ];
+
+    const result = gameManager.hasPlayer("999", players);
+
+    assertEquals(result, false);
+  });
+
+  it("should return false if the players array is empty", () => {
+    const gameManager = new GameManager();
+    const players: { playerId: string }[] = [];
+
+    const result = gameManager.hasPlayer("123", players);
+
+    assertEquals(result, false);
+  });
+
+  it("should return false if playerId is an empty string", () => {
+    const gameManager = new GameManager();
+    const players = [{ playerId: "123" }, { playerId: "456" }];
+
+    const result = gameManager.hasPlayer("", players);
+
+    assertEquals(result, false);
+  });
+});
+
+describe("tests for getGameActions function", () => {
+  it("should return recent actions after the given timestamp", () => {
+    const gameManager = new GameManager();
+    const playerId = "123";
+    const lastActionAt = 1000;
+
+    const game = new Game();
+    game.state.actions = [
+      {
+        name: "move",
+        id: "123",
+        playerId: "123",
+        currentPlayer: "123",
+        data: {},
+        territoryState: new Map(),
+        timeStamp: 900,
+      },
+      {
+        name: "attack",
+        id: "123",
+        playerId: "123",
+        currentPlayer: "123",
+        data: {},
+        territoryState: new Map(),
+        timeStamp: 1100,
+      },
+      {
+        name: "defend",
+        id: "123",
+        playerId: "123",
+        currentPlayer: "123",
+        data: {},
+        territoryState: new Map(),
+        timeStamp: 1200,
+      },
+    ];
+    gameManager.allotPlayer(3, playerId, "player1");
+    gameManager.playerActiveGame = () => game;
+
+    const result = gameManager.getGameActions(playerId, lastActionAt);
+
+    const expected = {
+      status: GameStatus.waiting,
+      currentPlayer: "123",
+      buffer: [
+        {
+          name: "attack",
+          id: "123",
+          playerId: "123",
+          currentPlayer: "123",
+          data: {},
+          territoryState: new Map(),
+          timeStamp: 1100,
+        },
+        {
+          name: "defend",
+          id: "123",
+          playerId: "123",
+          currentPlayer: "123",
+          data: {},
+          territoryState: new Map(),
+          timeStamp: 1200,
+        },
+      ],
+      players: [],
+    };
+
+    assertEquals(result, expected);
+  });
+
+  it("should return an empty array if no actions are after the given timestamp", () => {
+    const gameManager = new GameManager();
+    const playerId = "123";
+    const lastActionAt = 2000;
+
+    const game = new Game();
+    game.state.actions = [
+      {
+        name: "move",
+        id: "123",
+        playerId: "123",
+        currentPlayer: "123",
+        data: {},
+        territoryState: new Map(),
+        timeStamp: 900,
+      },
+      {
+        name: "attack",
+        id: "123",
+        playerId: "123",
+        currentPlayer: "123",
+        data: {},
+        territoryState: new Map(),
+        timeStamp: 1100,
+      },
+      {
+        name: "defend",
+        id: "123",
+        playerId: "123",
+        currentPlayer: "123",
+        data: {},
+        territoryState: new Map(),
+        timeStamp: 1200,
+      },
+    ];
+    gameManager.allotPlayer(3, playerId, "player1");
+    gameManager.playerActiveGame = () => game;
+
+    const result = gameManager.getGameActions(playerId, lastActionAt);
+
+    const expected = {
+      status: GameStatus.waiting,
+      currentPlayer: "123",
+      buffer: [],
+      players: [],
+    };
+    assertEquals(result, expected);
+  });
+
+  it("should return an empty array if there are no actions in the game", () => {
+    const gameManager = new GameManager();
+    const playerId = "123";
+    const lastActionAt = 1000;
+
+    const game = new Game();
+    game.state.actions = [];
+    gameManager.allotPlayer(3, playerId, "player1");
+    gameManager.playerActiveGame = () => game;
+
+    const result = gameManager.getGameActions(playerId, lastActionAt);
+
+    assertEquals(result.buffer, []);
+  });
+
+  it("should return an empty array if the player has no active game", () => {
+    const gameManager = new GameManager();
+    const playerId = "123";
+    const lastActionAt = 1000;
+
+    gameManager.playerActiveGame = () => null;
+
+    const result = gameManager.getGameActions(playerId, lastActionAt);
+
+    assertEquals(result.buffer, []);
   });
 });

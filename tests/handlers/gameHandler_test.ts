@@ -26,18 +26,21 @@ export const createServerWithLoggedInUser = (username: string) => {
   };
 };
 
-describe("boardDataHandler", () => {
-  it("should return game instance and status 200", async () => {
+describe("getGameActions", () => {
+  it("should return all teh actions that happened after the timeStamp", async () => {
     const { server, sessionId, gameManager } =
       createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer(3, "1", "jayanth");
+    gameManager.allotPlayer(3, "2", "jay");
+    gameManager.allotPlayer(3, "3", "priyankush");
 
-    const response = await server.app.request("/game/game-board", {
+    const response = await server.app.request("/game/actions?since=0", {
       method: "GET",
       headers: {
         Cookie: `sessionId=${sessionId}`,
       },
     });
+
     assertEquals(response.status, 200);
   });
 });

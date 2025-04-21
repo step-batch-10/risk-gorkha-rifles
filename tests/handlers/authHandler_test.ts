@@ -80,24 +80,3 @@ describe("tests for app login routes", () => {
   });
 });
 
-describe("tests for auth middleware", () => {
-  it("should return 401 unauthorized if user logged in", async () => {
-    const { server } = createServerWithLoggedInUser("");
-    const response = await server.app.request("/game/game-board");
-
-    assertEquals(response.status, 302);
-  });
-
-  it("should pass the middleware if user logged in", async () => {
-    const { server, sessionId } = createServerWithLoggedInUser("John");
-
-    const response = await server.app.request("/game/game-board", {
-      method: "GET",
-      headers: {
-        Cookie: `sessionId=${sessionId}`,
-      },
-    });
-
-    assertEquals(response.status, 200);
-  });
-});

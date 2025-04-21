@@ -8,13 +8,15 @@ describe("tests for game model", () => {
     const game = new Game(2);
     game.addPlayer("12", "john");
 
-    const expected = {
-      "12": {
-        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+    const expected = [
+      {
+        playerId: "12",
+        avatar:
+          "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "red",
         name: "john",
       },
-    };
+    ];
     assertEquals(game.state.players, expected);
   });
 
@@ -22,18 +24,22 @@ describe("tests for game model", () => {
     const game = new Game(2);
     game.addPlayer("1", "doe");
     game.addPlayer("12", "john");
-    const expected = {
-      "1": {
-        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+    const expected = [
+      {
+        playerId: "1",
+        avatar:
+          "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "red",
         name: "doe",
       },
-      "12": {
-        avatar: "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+      {
+        playerId: "12",
+        avatar:
+          "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
         colour: "yellow",
         name: "john",
       },
-    };
+    ];
 
     assertEquals(game.state.players, expected);
     assertEquals(game.status, GameStatus.running);

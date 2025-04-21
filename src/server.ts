@@ -7,11 +7,12 @@ import { BlankEnv, BlankSchema } from "hono/types";
 import { loginHandler } from "./handler/authHandler.ts";
 import GameManager from "./models/gameManager.ts";
 import {
-  boardDataHandler,
+  gameActionsHandler,
+  // boardDataHandler,
   joinGameHandler,
   updateTroops,
   fetchPlayerInfo,
-  fetchFullPlayerInfo
+  fetchFullPlayerInfo,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -62,7 +63,8 @@ export default class Server {
   private gameHandler() {
     const app = new Hono();
     app.use(this.authHandler);
-    app.get("/game-board", boardDataHandler);
+    app.get("/actions", gameActionsHandler);
+    // app.get("/game-board", boardDataHandler);
     app.post("/join-game", joinGameHandler);
     app.post("/update-troops", updateTroops);
     app.get("/profile-details", fetchPlayerInfo);

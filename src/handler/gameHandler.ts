@@ -2,12 +2,21 @@ import { Context } from "hono";
 import Users from "../models/users.ts";
 import GameManager from "../models/gameManager.ts";
 
-const boardDataHandler = (ctx: Context) => {
-  const gameManager: GameManager = ctx.get("gameManager");
-  const userId: string = ctx.get("userId");
-  const gameDetails = gameManager.getPlayerGameDetails(userId);
+const gameActionsHandler = (context: Context) => {
+  const lastActionat = Number(context.req.query("since"));
+  console.log("*".repeat(50));
+  console.log(lastActionat);
+  console.log("*".repeat(50));
 
-  return ctx.json(gameDetails);
+  const gameManager: GameManager = context.get("gameManager");
+  const userId: string = context.get("userId");
+  const gameActions = gameManager.getGameActions(userId, lastActionat);
+
+  console.log("*".repeat(50));
+  console.log(gameActions);
+  console.log("*".repeat(50));
+
+  return context.json(gameActions);
 };
 
 const joinGameHandler = (context: Context) => {
@@ -61,9 +70,9 @@ const fetchFullPlayerInfo = (ctx: Context) => {
 };
 
 export {
-  boardDataHandler,
   joinGameHandler,
   fetchPlayerInfo,
   updateTroops,
   fetchFullPlayerInfo,
+  gameActionsHandler,
 };
