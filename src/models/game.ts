@@ -20,7 +20,7 @@ export default class Game {
     this.createdBy = createdBy;
     this.createdAt = createdAt();
     this.status = GameStatus.waiting;
-    this.state = new Risk(generateId);
+    this.state = new Risk(noOfPlayers, generateId);
   }
 
   public addPlayer(playerId: string, playerName: string) {
