@@ -1,10 +1,9 @@
 export default class GameController {
-  #waitingModal;
+  #modalManager;
   #apiService;
-  #mapModal;
-  #reinforcementModal;
-  #playerSidebarView;
-  #gameStartModal;
+  #viewManager;
+  #audio;
+
   #actionMap = {
     intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
     troopDeployment: this.#handleTroopDeployment.bind(this),
@@ -17,38 +16,18 @@ export default class GameController {
     userId: "1",
     players: []
   };
+
   #actionsLog = [];
 
-  constructor(
-    waitingModal,
-    mapModal,
-    apiService,
-    reinforcementModal,
-    playerSidebarView,
-    gameStartModal
-  ) {
-    this.#waitingModal = waitingModal;
+  constructor(modalManager, viewManager, apiService, audio) {
+    this.#modalManager = modalManager;
+    this.#viewManager = viewManager;
     this.#apiService = apiService;
-    this.#mapModal = mapModal;
-    this.#reinforcementModal = reinforcementModal;
-    this.#playerSidebarView = playerSidebarView;
-    this.#gameStartModal = gameStartModal;
-
-    this.#playMusic();
+    this.#audio = audio;
   }
 
   #startGame() {
-    this.#gameStartModal.show();
-    
-
-    setTimeout(() => {
-      this.#gameStartModal.hide();
-    }, 4500);
-  }
-
-  #playMusic() {
-    const audio = new Audio("../../assets/risk_music.mp3");
-    audio.play();
+    this.#modalManager.showGameStartNotificationModal();
   }
 
   #updateLocalState(gameDetails) {
@@ -75,7 +54,7 @@ export default class GameController {
 
   #handleTroopDeployment(gameDetails) {
     const { action: { data, playerId }, players } = gameDetails;
-    this.#mapModal.updateTerritory(data);
+    this.#viewManager.updateTerritoryDetails(data);
 
     const player = players.find(player => player.id === playerId);
     const actionerName = player ? player.name : "Unknown Player";
@@ -93,13 +72,13 @@ export default class GameController {
   }
 
   #intialDeploymentStop() {
-    this.#reinforcementModal.removeListeners();
+    this.#modalManager.endReinforcementPhase();
   }
 
   #handleIntialDeploymentStart(gameDetails) {
     const { action, userId } = gameDetails;
 
-    this.#reinforcementModal.addTerritoryListeners(userId, action.territoryState, action.data);
+    this.#modalManager.startReinforcementPhase(userId, action.territoryState, action.data);
     this.#updateUI(gameDetails);
   }
 
@@ -109,8 +88,8 @@ export default class GameController {
 
   #handleGameData(gameData) {
     const { status, actions, userId, players } = gameData;
-    if (status === "waiting") return this.#waitingModal.render(players);
-    this.#waitingModal.hide();
+    if (status === "waiting") return this.#modalManager.renderWaitingPlayers(players);
+    this.#modalManager.hideWaitingPlayersModal();
 
     for (const action of actions) {
       const gameDetails = { action, status, userId, players };
@@ -121,11 +100,12 @@ export default class GameController {
   }
 
   #updateUI({ action, players }) {
-    this.#mapModal.render(action.territoryState, players);
-    this.#playerSidebarView.render(players);
+    this.#viewManager.renderAllTerritories(action.territoryState, players);
+    this.#viewManager.renderPlayerSidebar(players);
   }
 
   init() {
     this.#pollGameData();
+    this.#audio.play();
   }
 }

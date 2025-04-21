@@ -29,7 +29,7 @@ text {
 
 tspan {
   text-shadow: 1px 1px 2px #000;
-  fill: #f0e68c;
+  fill: #fff;
   font-size: 12px;
   letter-spacing: 0.5px;
 }
@@ -272,4 +272,42 @@ input::-webkit-inner-spin-button {
   100% {
     opacity: 0;
   }
+}
+
+#phaseDetails-box {
+  width: 450px;
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  background-color: #a1651b;
+  border: 1px solid snow;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+#phaseDetails-box>h2 {
+  color: #fff;
+  text-align: center;
+}
+
+#phaseDetails-box>hr {
+  border: 0.2px solid #ccc;
+  margin: 6px 0px;
+}
+
+.phaseBtn {
+  width: 100%;
+  height: 50px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0px;
+  margin-bottom: 0px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.phaseBtn:hover {
+  opacity: .8;
 }
