@@ -21,7 +21,7 @@ const reinforcementRequestHandler = (context: Context) => {
   }
 
   const troopsAvailable = gameManager.reinforcementDetails(game, userId);
-
+  console.log(troopsAvailable);
   return context.json({ troopsAvailable });
 };
 

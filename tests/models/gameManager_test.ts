@@ -174,8 +174,13 @@ describe("tests for getGameActions function", () => {
         id: "123",
         playerId: "123",
         currentPlayer: "123",
-        data: {},
-        territoryState: new Map(),
+        data: {
+          name: "hello",
+        },
+        territoryState: {
+          india: { owner: "1", troops: 2 },
+          pak: { owner: "2", troops: 3 },
+        },
         timeStamp: 900,
       },
       {
@@ -183,8 +188,13 @@ describe("tests for getGameActions function", () => {
         id: "123",
         playerId: "123",
         currentPlayer: "123",
-        data: {},
-        territoryState: new Map(),
+        data: {
+          name: "dice",
+        },
+        territoryState: {
+          india: { owner: "1", troops: 2 },
+          pak: { owner: "2", troops: 3 },
+        },
         timeStamp: 1100,
       },
       {
@@ -192,8 +202,13 @@ describe("tests for getGameActions function", () => {
         id: "123",
         playerId: "123",
         currentPlayer: "123",
-        data: {},
-        territoryState: new Map(),
+        data: {
+          name: "initial deployment",
+        },
+        territoryState: {
+          india: { owner: "1", troops: 2 },
+          pak: { owner: "2", troops: 3 },
+        },
         timeStamp: 1200,
       },
     ];
@@ -205,14 +220,19 @@ describe("tests for getGameActions function", () => {
     const expected = {
       status: GameStatus.waiting,
       currentPlayer: "123",
-      buffer: [
+      actions: [
         {
           name: "attack",
           id: "123",
           playerId: "123",
           currentPlayer: "123",
-          data: {},
-          territoryState: new Map(),
+          data: {
+            name: "dice",
+          },
+          territoryState: {
+            india: { owner: "1", troops: 2 },
+            pak: { owner: "2", troops: 3 },
+          },
           timeStamp: 1100,
         },
         {
@@ -220,12 +240,17 @@ describe("tests for getGameActions function", () => {
           id: "123",
           playerId: "123",
           currentPlayer: "123",
-          data: {},
-          territoryState: new Map(),
+          data: {
+            name: "initial deployment",
+          },
+          territoryState: {
+            india: { owner: "1", troops: 2 },
+            pak: { owner: "2", troops: 3 },
+          },
           timeStamp: 1200,
         },
       ],
-      players: [],
+      players: game.state.players || [],
     };
 
     assertEquals(result, expected);
@@ -244,7 +269,7 @@ describe("tests for getGameActions function", () => {
         playerId: "123",
         currentPlayer: "123",
         data: {},
-        territoryState: new Map(),
+        territoryState: {},
         timeStamp: 900,
       },
       {
@@ -253,7 +278,7 @@ describe("tests for getGameActions function", () => {
         playerId: "123",
         currentPlayer: "123",
         data: {},
-        territoryState: new Map(),
+        territoryState: {},
         timeStamp: 1100,
       },
       {
@@ -262,7 +287,7 @@ describe("tests for getGameActions function", () => {
         playerId: "123",
         currentPlayer: "123",
         data: {},
-        territoryState: new Map(),
+        territoryState: {},
         timeStamp: 1200,
       },
     ];
@@ -274,7 +299,7 @@ describe("tests for getGameActions function", () => {
     const expected = {
       status: GameStatus.waiting,
       currentPlayer: "123",
-      buffer: [],
+      actions: [],
       players: [],
     };
     assertEquals(result, expected);
@@ -292,7 +317,7 @@ describe("tests for getGameActions function", () => {
 
     const result = gameManager.getGameActions(playerId, lastActionAt);
 
-    assertEquals(result.buffer, []);
+    assertEquals(result.actions, []);
   });
 
   it("should return an empty array if the player has no active game", () => {
@@ -304,6 +329,6 @@ describe("tests for getGameActions function", () => {
 
     const result = gameManager.getGameActions(playerId, lastActionAt);
 
-    assertEquals(result.buffer, []);
+    assertEquals(result.actions, []);
   });
 });

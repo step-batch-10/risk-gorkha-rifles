@@ -75,7 +75,7 @@ export default class GameManager {
     return {
       status: activeGame?.status,
       currentPlayer: playerId,
-      buffer: gameActionsBuffer,
+      actions: gameActionsBuffer,
       players: activeGame?.state.players,
     };
   }

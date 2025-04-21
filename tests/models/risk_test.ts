@@ -10,7 +10,7 @@ describe("tests for risk model", () => {
     risk.addPlayer("3", "player3");
     risk.init();
 
-    assertEquals(risk.territoryState.size, 42);
+    assertEquals(Object.keys(risk.territoryState).length, 42);
   });
 
   it("should not initialize risk instance if not 6 players joined", () => {
@@ -21,7 +21,7 @@ describe("tests for risk model", () => {
     risk.addPlayer("4", "player4");
     risk.init();
 
-    assertEquals(risk.territoryState.size, 0);
+    assertEquals(Object.keys(risk.territoryState).length, 0);
   });
 
   it("should return a dummy player profile when player is not there in the players list", () => {
@@ -44,7 +44,7 @@ describe("tests for risk model", () => {
     risk.addPlayer("3", "player3");
     risk.init();
 
-    assertEquals(risk.territoryState.size, 42);
+    assertEquals(Object.keys(risk.territoryState).length, 42);
   });
 
   it("should update the troops count in the territory", () => {
@@ -57,7 +57,7 @@ describe("tests for risk model", () => {
 
     risk.deployTroops("1", "india", 99);
 
-    const india = risk.territoryState.get("india");
+    const india = risk.territoryState["india"];
 
     assertEquals(india?.troops, 100);
   });
@@ -72,7 +72,7 @@ describe("tests for risk model", () => {
 
     risk.deployTroops("1", "invalid territory", 99);
 
-    const actual = risk.territoryState.get("invalid territory");
+    const actual = risk.territoryState["invalid territory"];
     assertEquals(actual, undefined);
   });
 
@@ -133,7 +133,7 @@ describe("tests for risk model", () => {
 
 describe("tests for reinforceRequest method", () => {
   it("should return a minimum of 3 troops if user owns less than 9 territories", () => {
-    const risk = new Risk(4,() => "1");
+    const risk = new Risk(4, () => "1");
 
     risk.addPlayer("1", "player1");
     risk.addPlayer("2", "player2");
@@ -146,7 +146,7 @@ describe("tests for reinforceRequest method", () => {
   });
 
   it("should calculate reinforcement troops correctly based on owned territories", () => {
-    const risk = new Risk(3,() => "1");
+    const risk = new Risk(3, () => "1");
 
     risk.addPlayer("1", "player1");
     risk.addPlayer("2", "player2");
@@ -154,9 +154,9 @@ describe("tests for reinforceRequest method", () => {
     risk.init();
 
     let count = 0;
-    for (const [_, state] of risk.territoryState.entries()) {
+    for (const territory of Object.values(risk.territoryState)) {
       if (count < 12) {
-        state.owner = "1";
+        territory.owner = "1";
         count++;
       } else {
         break;

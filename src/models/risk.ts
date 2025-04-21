@@ -48,56 +48,13 @@ const playerProfileData: PlayerProfile[] = [
   },
 ];
 
-//
-//   initialDeploymentStart: {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         name: "siya",
-//         colour: "red",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//       {
-//         id: "2",
-//         name: "shikha",
-//         colour: "green",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "1",
-//         name: "intialDeploymentStart",
-//         playerId: null,
-//         currentPlayerTurn: "2",
-//         data: null,
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "2",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "1",
-//           },
-//         },
-//       },
-//     ],
-//   },
-// };
-
 export interface Action {
   id: string;
   name: string;
   playerId: string | null;
   data: unknown;
   currentPlayer: string;
-  territoryState: Map<string, Territory>;
+  territoryState: Record<string, Territory>;
   timeStamp: number;
 }
 
@@ -105,7 +62,7 @@ export default class Risk {
   private troopsDeployed: Array<number>;
   private uniqueId: () => string;
   public players: PlayerDetails[];
-  public territoryState: Map<string, Territory>;
+  public territoryState: Record<string, Territory>;
   private playerProfile;
   public actions: Action[] = [];
   private noOfPlayers: number;
@@ -117,7 +74,7 @@ export default class Risk {
   ) {
     this.troopsDeployed = [];
     this.players = [];
-    this.territoryState = new Map();
+    this.territoryState = {};
     this.playerProfile = playerProfile;
     this.uniqueId = generateId;
     this.noOfPlayers = noOfPlayers;
@@ -165,13 +122,14 @@ export default class Risk {
       territoryState: this.territoryState,
     };
   }
-  
+
   public reinforceRequest(userId: string) {
-    const userTerritories = Array.from(this.territoryState.entries()).filter(
-      ([_, territory]) => territory.owner === userId
+    const userTerritories = Object.values(this.territoryState).filter(
+      (territory) => territory.owner === userId
     );
+
     const troops = Math.floor(userTerritories.length / 3);
-    return troops < 3 ? 3 : troops;
+    return troops <= 3 ? 3 : troops;
   }
 
   public deployTroops(
@@ -179,7 +137,7 @@ export default class Risk {
     territory: string,
     troopsCount: number
   ) {
-    const territoryData = this.territoryState.get(territory) ?? { troops: 0 };
+    const territoryData = this.territoryState[territory] ?? { troops: 0 };
 
     territoryData.troops += troopsCount;
     this.troopsDeployed.push(troopsCount);
