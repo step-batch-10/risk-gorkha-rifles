@@ -18,16 +18,14 @@ export default class WaitingModal {
   }
 
   #renderPlayers(players = [], playersElem) {
-    Object.values(players).map(({ name }) => {
+    players.map(({ name }) => {
       const list = document.createElement('li');
       list.textContent = name;
       playersElem.appendChild(list);
     });
   }
 
-  render(status, players) {
-    if (status !== "waiting") return this.hide();
-
+  render(players) {
     this.show();
     const playersElem = this.#modal.querySelector("#players");
     this.#clear(playersElem);

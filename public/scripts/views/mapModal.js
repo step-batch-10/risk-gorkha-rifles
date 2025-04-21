@@ -1,6 +1,7 @@
 export default class MapModal {
   #findPlayerColor(playerId, players) {
-    return players[playerId].colour;
+    const player = players.find(player => player.id === playerId);
+    return player.colour;
   }
 
   #renderTerritories(territories, players) {
@@ -14,8 +15,7 @@ export default class MapModal {
     });
   }
 
-  render(gameDetails) {
-    const { players, territories } = gameDetails;
+  render(territories, players) {
     this.#renderTerritories(territories, players);
   }
 }

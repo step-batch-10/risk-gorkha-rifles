@@ -4,8 +4,23 @@ export default class GameController {
   #mapModal;
   #reinforcementModal;
   #playerSidebarView;
+  #actionMap = {
+    intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
+  };
+  #gameMetaData = {
+    status: "waiting",
+    userId: "1",
+    players: []
+  };
+  #actionsLog = [];
 
-  constructor(waitingModal, mapModal, apiService, reinforcementModal, playerSidebarView) {
+  constructor(
+    waitingModal,
+    mapModal,
+    apiService,
+    reinforcementModal,
+    playerSidebarView
+  ) {
     this.#waitingModal = waitingModal;
     this.#apiService = apiService;
     this.#mapModal = mapModal;
@@ -15,57 +30,53 @@ export default class GameController {
   }
 
   #playMusic() {
-    const audio = new Audio('../../assets/risk_music.mp3');
+    const audio = new Audio("../../assets/risk_music.mp3");
     audio.play();
   }
 
-  #pollGameData() {
-    setInterval(async () => {
-      const gameData = await this.#apiService.getGameDetails();
-      this.#handleGameData(gameData);
-    }, 1000);
+  #updateLocalState(gameDetails) {
+    const { players, status, userId, actions } = gameDetails;
+    this.#gameMetaData = { players, status, userId };
+    this.#actionsLog = [...this.#actionsLog, ...actions];
+
+    console.log(this.#actionsLog);
+  }
+
+  #getLastTimestamp() {
+    return this.#actionsLog.length ? this.#actionsLog.at(-1).timestamp : 0;
+  }
+
+  async #pollGameData() {
+    // setInterval(async () => {
+    const lastTimestamp = this.#getLastTimestamp();
+
+    const gameData = await this.#apiService.getGameDetails(lastTimestamp);
+    this.#updateLocalState(gameData);
+    this.#handleGameData(gameData);
+    // }, 1000);
+  }
+
+  #handleIntialDeploymentStart(gameDetails) {
+    const { action, userId } = gameDetails;
+
+    this.#reinforcementModal.addTerritoryListeners(userId, action.territoryState, action.data);
+    this.#updateUI(gameDetails);
   }
 
   #handleGameData(gameData) {
-    const { status, state, currentPlayer } = gameData;
+    const { status, actions, userId, players } = gameData;
+    if (status === "waiting") return this.#waitingModal.render(players);
+    this.#waitingModal.hide();
 
-    this.#handleReinforcementPhase(state, currentPlayer);
-    this.#handleGameStartNotification(state);
-    this.#updateUI(status, state);
-  }
-
-  #handleReinforcementPhase(state, currentPlayer) {
-    if (state?.action?.name === "initialDeployment") {
-      this.#reinforcementModal.addTerritoryListeners(currentPlayer, state.territories);
-    } else {
-      this.#reinforcementModal.removeListeners();
+    for (const action of actions) {
+      const gameDetails = { action, status, userId, players };
+      this.#actionMap[action.name](gameDetails);
     }
   }
 
-  #handleGameStartNotification(state) {
-    if (state?.action?.name === "startGame") {
-      this.#showToast("Game has been started now");
-    }
-  }
-
-  #showToast(message) {
-    Toastify({
-      text: message,
-      duration: 3000,
-      escapeMarkup: false,
-      close: false,
-      gravity: 'top',
-      position: 'center',
-      style: {
-        background: "linear-gradient(to right, #3e2514, #c99147)",
-      },
-    }).showToast();
-  }
-
-  #updateUI(status, state) {
-    this.#waitingModal.render(status, state.players);
-    this.#mapModal.render(state);
-    this.#playerSidebarView.render(state?.players);
+  #updateUI({ action, players }) {
+    this.#mapModal.render(action.territoryState, players);
+    this.#playerSidebarView.render(players);
   }
 
   init() {

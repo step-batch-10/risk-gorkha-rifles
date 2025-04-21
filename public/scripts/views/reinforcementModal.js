@@ -4,7 +4,8 @@ export default class ReinforcementModal {
   #currentPlayer;
   #territories = {};
   #clickListeners = {};
-  #remainingTroops = 21;
+  #remainingTroops = null;
+  #totalTroops = null;
 
   #isOwnedByCurrentPlayer(territoryId) {
     return this.#territories[territoryId].owner === this.#currentPlayer;
@@ -21,8 +22,6 @@ export default class ReinforcementModal {
 
   #handleTerritoryClick(territoryId) {
     return (_event) => {
-      this.#removeTerritoryHighlight();
-
       if (this.#isOwnedByCurrentPlayer(territoryId)) {
         const territory = document.getElementById(territoryId);
         const path = territory.querySelector("path");
@@ -41,7 +40,10 @@ export default class ReinforcementModal {
     });
   }
 
-  addTerritoryListeners(currentPlayer, territories) {
+  addTerritoryListeners(currentPlayer, territories, actionData) {
+    this.#totalTroops = actionData.troopsCount;
+    this.#remainingTroops = actionData.troopsCount;
+
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
 
@@ -113,7 +115,7 @@ export default class ReinforcementModal {
   }
 
   #handleDecrementButtonClick(inputField) {
-    if (this.#remainingTroops >= 21) return;
+    if (this.#remainingTroops >= this.#totalTroops) return;
 
     this.#remainingTroops++;
     console.log("Remaining troops:", this.#remainingTroops);
@@ -122,7 +124,7 @@ export default class ReinforcementModal {
 
   #showTroopDeploymentToast(territoryId) {
     const existingToast = document.getElementById("troop-toast-box");
-    if (existingToast) document.body.removeChild(existingToast);
+    if (existingToast) return;
 
     const toastHTML = this.#createToastHtml();
     const toast = this.#createToast(toastHTML);
