@@ -6,8 +6,10 @@ export default class GameController {
   #playerSidebarView;
   #actionMap = {
     intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
-    troopDeployment: this.#handleTroopDeployment.bind(this)
+    troopDeployment: this.#handleTroopDeployment.bind(this),
+    intialDeploymentStop: this.#intialDeploymentStop.bind(this)
   };
+
   #gameMetaData = {
     status: "waiting",
     userId: "1",
@@ -74,6 +76,10 @@ export default class GameController {
         background: "linear-gradient(to right, #3e2514, #c99147)",
       },
     }).showToast();
+  }
+
+  #intialDeploymentStop() {
+    this.#reinforcementModal.removeListeners();
   }
 
   #handleIntialDeploymentStart(gameDetails) {
