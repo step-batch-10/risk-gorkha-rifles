@@ -13,6 +13,8 @@ import {
   updateTroops,
   fetchPlayerInfo,
   fetchFullPlayerInfo,
+  reinforcementRequestHandler
+
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -65,6 +67,8 @@ export default class Server {
     app.use(this.authHandler);
     app.get("/actions", gameActionsHandler);
     // app.get("/game-board", boardDataHandler);
+    // app.get("/start-reinforce", reinforceHandler)//request-reinforce, reinforcement, end
+    app.get('/request-reinforce', reinforcementRequestHandler)
     app.post("/join-game", joinGameHandler);
     app.post("/update-troops", updateTroops);
     app.get("/profile-details", fetchPlayerInfo);

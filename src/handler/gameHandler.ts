@@ -4,19 +4,25 @@ import GameManager from "../models/gameManager.ts";
 
 const gameActionsHandler = (context: Context) => {
   const lastActionat = Number(context.req.query("since"));
-  console.log("*".repeat(50));
-  console.log(lastActionat);
-  console.log("*".repeat(50));
-
   const gameManager: GameManager = context.get("gameManager");
   const userId: string = context.get("userId");
   const gameActions = gameManager.getGameActions(userId, lastActionat);
 
-  console.log("*".repeat(50));
-  console.log(gameActions);
-  console.log("*".repeat(50));
-
   return context.json(gameActions);
+};
+
+const reinforcementRequestHandler = (context: Context) => {
+  const gameManager: GameManager = context.get("gameManager");
+  const userId: string = context.get("userId");
+  const game = gameManager.playerActiveGame(userId);
+
+  if (!game) {
+    return context.json({ message: "Game not found" }, 400);
+  }
+
+  const troopsAvailable = gameManager.reinforcementDetails(game, userId);
+
+  return context.json({ troopsAvailable });
 };
 
 const joinGameHandler = (context: Context) => {
@@ -75,4 +81,5 @@ export {
   updateTroops,
   fetchFullPlayerInfo,
   gameActionsHandler,
+  reinforcementRequestHandler,
 };

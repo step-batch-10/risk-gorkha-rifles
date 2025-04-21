@@ -148,3 +148,42 @@ describe("fetchFullPlayerInfo", () => {
     assert("avatar" in responseBody);
   });
 });
+
+describe("reinforecementRequestHandler", () => {
+  it("should return the troops the player can place", async () => {
+    const { server, sessionId, gameManager } =
+      createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer(3, "1", "jayanth");
+    gameManager.allotPlayer(3, "2", "jay");
+    gameManager.allotPlayer(3, "3", "priyankush");
+
+    const response = await server.app.request("/game/request-reinforce", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=${sessionId}`,
+      },
+    });
+
+    const body = await response.json();
+
+    assertEquals(body.troopsAvailable, 4);
+    assertEquals(response.status, 200);
+  });
+
+  it("should return the game is not found", async () => {
+    const { server, sessionId } = createServerWithLoggedInUser("Jack");
+
+    const response = await server.app.request("/game/request-reinforce", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=${sessionId}`,
+      },
+    });
+
+    const responseBody = await response.json();
+
+    assertEquals(responseBody.message, "Game not found");
+    assertEquals(response.status, 400);
+  });
+});
+

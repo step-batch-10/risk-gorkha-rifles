@@ -28,6 +28,10 @@ export default class GameManager {
     return false;
   }
 
+  public reinforcementDetails(game: Game, userId: string) {
+    return game.state.reinforceRequest(userId)
+  }
+
   public playerActiveGame(playerId: string) {
     if (
       this.currentGame?.state.players &&
@@ -90,6 +94,7 @@ export default class GameManager {
     return game;
   }
 
+ 
   public updateTroops(
     game: Game,
     userId: string,

@@ -165,6 +165,14 @@ export default class Risk {
       territoryState: this.territoryState,
     };
   }
+  
+  public reinforceRequest(userId: string) {
+    const userTerritories = Array.from(this.territoryState.entries()).filter(
+      ([_, territory]) => territory.owner === userId
+    );
+    const troops = Math.floor(userTerritories.length / 3);
+    return troops < 3 ? 3 : troops;
+  }
 
   public deployTroops(
     playerId: string,

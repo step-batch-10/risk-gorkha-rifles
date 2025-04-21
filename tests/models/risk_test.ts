@@ -130,3 +130,40 @@ describe("tests for risk model", () => {
     assertEquals(actual?.name, "intialDeploymentStart");
   });
 });
+
+describe("tests for reinforceRequest method", () => {
+  it("should return a minimum of 3 troops if user owns less than 9 territories", () => {
+    const risk = new Risk(4,() => "1");
+
+    risk.addPlayer("1", "player1");
+    risk.addPlayer("2", "player2");
+    risk.addPlayer("3", "player3");
+    risk.addPlayer("4", "player4");
+    risk.init();
+
+    const troops = risk.reinforceRequest("4");
+    assertEquals(troops, 3);
+  });
+
+  it("should calculate reinforcement troops correctly based on owned territories", () => {
+    const risk = new Risk(3,() => "1");
+
+    risk.addPlayer("1", "player1");
+    risk.addPlayer("2", "player2");
+    risk.addPlayer("3", "player3");
+    risk.init();
+
+    let count = 0;
+    for (const [_, state] of risk.territoryState.entries()) {
+      if (count < 12) {
+        state.owner = "1";
+        count++;
+      } else {
+        break;
+      }
+    }
+
+    const troops = risk.reinforceRequest("1");
+    assertEquals(troops, 7);
+  });
+});
