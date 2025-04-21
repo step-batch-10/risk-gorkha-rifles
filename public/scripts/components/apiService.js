@@ -580,7 +580,7 @@ export default class ApiService {
     });
   }
 
-  static async requestReinforcement() {
+  static requestReinforcement() {
     return 20;
     // const reinforcementResponse = await fetch('/game/request-reinforcement');
     // const responseData = await reinforcementResponse.json();
