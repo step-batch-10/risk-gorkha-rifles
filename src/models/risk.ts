@@ -46,15 +46,17 @@ const playerProfileData: PlayerProfile[] = [
 ];
 
 export default class Risk {
+  private uniqueId: () => string;
   public players: { [key: string]: PlayerDetails };
   public territoryState: Map<string, Territory>;
   private playerProfile;
   public action = [{}];
 
-  constructor(playerProfile = playerProfileData) {
+  constructor(generateId: () => string, playerProfile = playerProfileData) {
     this.players = {};
     this.territoryState = new Map();
     this.playerProfile = playerProfile;
+    this.uniqueId = generateId;
   }
 
   public addPlayer(playerId: string, playerName: string) {
@@ -70,11 +72,27 @@ export default class Risk {
     this.players[playerId] = { name: playerName, colour, avatar };
   }
 
-  public deployTroops(territory: string, troopsCount: number) {
+  public deployTroops(
+    playerId: string,
+    territory: string,
+    troopsCount: number
+  ) {
     const territoryData = this.territoryState.get(territory);
 
     if (territoryData) {
       territoryData.troops += troopsCount;
+
+      this.action.push({
+        id: this.uniqueId(),
+        name: "troopsDeployed",
+        playerId: null,
+        currentPlayerTurn: playerId,
+        data: {
+          troopsDeployed: troopsCount,
+        },
+        timestamp: Date.now(),
+        territoryState: this.territoryState,
+      });
     }
   }
 
@@ -90,7 +108,7 @@ export default class Risk {
     this.territoryState = territories;
 
     this.action.push({
-      id: "1",
+      id: this.uniqueId(),
       name: "intialDeploymentStart",
       playerId: null,
       currentPlayerTurn: null,

@@ -1,7 +1,7 @@
 import GameManager from "./models/gameManager.ts";
 import Session from "./models/session.ts";
 import Users from "./models/users.ts";
-import Server from './server.ts';
+import Server from "./server.ts";
 
 export const uniqueId = () => {
   return Date.now().toString(36) + Math.random().toString(36);

@@ -7,6 +7,25 @@ import GameManager from "../../src/models/gameManager.ts";
 
 const uniqueId = () => "1";
 
+export const createServerWithLoggedInUser = (username: string) => {
+  const session = new Session(uniqueId);
+  const users = new Users(uniqueId);
+  const gameManager = new GameManager(uniqueId);
+  const sessionId = "1";
+
+  session.createSession(sessionId);
+  users.createUser(username);
+
+  const server = new Server(users, session, gameManager, uniqueId);
+  return {
+    server,
+    sessionId,
+    gameManager,
+    users,
+    session,
+  };
+};
+
 describe("boardDataHandler", () => {
   it("should return game instance and status 200", async () => {
     const { server, sessionId, gameManager } =
@@ -126,22 +145,3 @@ describe("fetchFullPlayerInfo", () => {
     assert("avatar" in responseBody);
   });
 });
-
-export const createServerWithLoggedInUser = (username: string) => {
-  const session = new Session(uniqueId);
-  const users = new Users(uniqueId);
-  const gameManager = new GameManager(uniqueId);
-  const sessionId = "1";
-
-  session.createSession(sessionId);
-  users.createUser(username);
-
-  const server = new Server(users, session, gameManager, uniqueId);
-  return {
-    server,
-    sessionId,
-    gameManager,
-    users,
-    session,
-  };
-};

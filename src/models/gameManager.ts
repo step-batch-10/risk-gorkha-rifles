@@ -1,21 +1,17 @@
-import { GameStatus } from '../types/game.ts';
-import Game from './game.ts';
+import { GameStatus } from "../types/game.ts";
+import Game from "./game.ts";
 
 export default class GameManager {
   public games: Map<string, Game> = new Map();
   private currentGame: Game | null = null;
   private uniqueId: () => string;
 
-  constructor(uniqueId: () => string = () => '1') {
+  constructor(uniqueId: () => string = () => "1") {
     this.uniqueId = uniqueId;
   }
 
-  public createGame(noOfPlayers: number = 3, createdBy: string = '') {
-    const game = new Game(
-      noOfPlayers,
-      createdBy,
-      this.uniqueId
-    );
+  public createGame(noOfPlayers: number = 3, createdBy: string = "") {
+    const game = new Game(noOfPlayers, createdBy, this.uniqueId);
     this.games.set(game.gameId, game);
 
     return game;
@@ -41,7 +37,7 @@ export default class GameManager {
   private findGame(): Game {
     if (this.currentGame?.status === "waiting") {
       return this.currentGame;
-    };
+    }
 
     const game = this.createGame();
     this.currentGame = game;
@@ -70,9 +66,9 @@ export default class GameManager {
   public allotPlayer(
     _noOfPlayers: number = 3,
     playerId: string,
-    playerName: string | undefined = ''
+    playerName: string | undefined = ""
   ) {
-    const activeGame: Game  | null = this.playerActiveGame(playerId);
+    const activeGame: Game | null = this.playerActiveGame(playerId);
     if (activeGame) return activeGame;
 
     const game = this.findGame();
@@ -81,7 +77,12 @@ export default class GameManager {
     return game;
   }
 
-  public updateTroops(game: Game, territory: string, troops: number) {
-    game.state.deployTroops(territory, troops);
+  public updateTroops(
+    game: Game,
+    userId: string,
+    territory: string,
+    troops: number
+  ) {
+    game.state.deployTroops(userId, territory, troops);
   }
 }
