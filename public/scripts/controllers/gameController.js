@@ -4,10 +4,12 @@ export default class GameController {
   #mapModal;
   #reinforcementModal;
   #playerSidebarView;
+  #gameStartModal;
   #actionMap = {
     intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
     troopDeployment: this.#handleTroopDeployment.bind(this),
-    intialDeploymentStop: this.#intialDeploymentStop.bind(this)
+    intialDeploymentStop: this.#intialDeploymentStop.bind(this),
+    startGame: this.#startGame.bind(this)
   };
 
   #gameMetaData = {
@@ -22,14 +24,26 @@ export default class GameController {
     mapModal,
     apiService,
     reinforcementModal,
-    playerSidebarView
+    playerSidebarView,
+    gameStartModal
   ) {
     this.#waitingModal = waitingModal;
     this.#apiService = apiService;
     this.#mapModal = mapModal;
     this.#reinforcementModal = reinforcementModal;
     this.#playerSidebarView = playerSidebarView;
+    this.#gameStartModal = gameStartModal;
+
     this.#playMusic();
+  }
+
+  #startGame() {
+    this.#gameStartModal.show();
+    
+
+    setTimeout(() => {
+      this.#gameStartModal.hide();
+    }, 4500);
   }
 
   #playMusic() {

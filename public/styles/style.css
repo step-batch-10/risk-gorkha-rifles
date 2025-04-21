@@ -14,7 +14,7 @@ body {
   height: 100vh;
   background-image: url('../images/game-background.png');
   background-size: cover;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 svg {
@@ -233,4 +233,43 @@ input::-webkit-inner-spin-button {
 
 .highlight-territory {
   filter: brightness(100%) !important;
+}
+
+#startGame-popup {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index: 9;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+
+#startGame-popup>img {
+  width: 1000px;
+  opacity: 0;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+@keyframes blink {
+  10% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
