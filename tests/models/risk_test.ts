@@ -76,7 +76,7 @@ describe("tests for risk model", () => {
     assertEquals(actual, undefined);
   });
 
-  it("should respond with stopInitialDeployment in actions when deployment is over", () => {
+  it("should respond with startGame in actions when deployment is over", () => {
     const risk = new Risk(3, () => "1");
 
     risk.addPlayer("1", "player1");
@@ -87,6 +87,20 @@ describe("tests for risk model", () => {
     risk.deployTroops("1", "india", 105);
 
     const actual = risk.actions.at(-1);
+    assertEquals(actual?.name, "startGame");
+  });
+
+  it("should respond with stopInitialDeployment in actions when deployment is over", () => {
+    const risk = new Risk(3, () => "1");
+
+    risk.addPlayer("1", "player1");
+    risk.addPlayer("2", "player2");
+    risk.addPlayer("3", "player3");
+    risk.init();
+
+    risk.deployTroops("1", "india", 105);
+
+    const actual = risk.actions.at(-2);
     assertEquals(actual?.name, "stopInitialDeployment");
   });
 

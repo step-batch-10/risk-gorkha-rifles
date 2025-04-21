@@ -124,7 +124,7 @@ export default class Risk {
   }
 
   public addPlayer(playerId: string, playerName: string) {
-    const index = Object.keys(this.players).length;
+    const index = this.players.length;
     const profile = this.playerProfile.at(index);
 
     const { colour, avatar } = profile || {
@@ -194,6 +194,8 @@ export default class Risk {
           null
         )
       );
+
+      this.actions.push(this.updateAction("", {}, "startGame", null));
     }
   }
 
