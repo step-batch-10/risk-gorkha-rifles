@@ -23,7 +23,7 @@ const mockedData = {
         id: "1",
         name: "intialDeploymentStart",
         playerId: null,
-        currentPlayerTurn: "2",
+        currentPlayerTurn: null,
         data: {
           troopsCount: 11
         },
@@ -83,11 +83,95 @@ const mockedData = {
       },
     ],
   },
+  troopDeployment: {
+    status: "running",
+    userId: "1",
+    players: [
+      {
+        id: "1",
+        name: "siya",
+        colour: "red",
+        avatar:
+          "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+      },
+      {
+        id: "2",
+        name: "shikha",
+        colour: "green",
+        avatar:
+          "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
+      },
+    ],
+    actions: [
+      {
+        id: "1",
+        name: "intialDeploymentStart",
+        playerId: null,
+        currentPlayerTurn: null,
+        data: {
+          troopsCount: 11
+        },
+        timestamp: Date.now(),
+        territoryState: {
+          india: {
+            troops: 23,
+            owner: "1",
+          },
+          china: {
+            troops: 99,
+            owner: "2",
+          },
+        },
+      },
+      {
+        id: "2",
+        name: "troopDeployment",
+        playerId: "1",
+        currentPlayerTurn: null,
+        data: {
+          territory: "india",
+          troopsCount: 5
+        },
+        timestamp: Date.now(),
+        territoryState: {
+          india: {
+            troops: 23,
+            owner: "1",
+          },
+          china: {
+            troops: 99,
+            owner: "2",
+          },
+        },
+      },
+      {
+        id: "3",
+        name: "troopDeployment",
+        playerId: "2",
+        currentPlayerTurn: null,
+        data: {
+          territory: "china",
+          troopsCount: 10
+        },
+        timestamp: Date.now(),
+        territoryState: {
+          india: {
+            troops: 23,
+            owner: "1",
+          },
+          china: {
+            troops: 99,
+            owner: "2",
+          },
+        },
+      },
+    ],
+  },
 };
 
 export default class ApiService {
   static getGameDetails() {
-    return mockedData.waiting;
+    return mockedData.troopDeployment;
     // const response = await fetch("/game/game-board?since=");
 
     // return await response.json();

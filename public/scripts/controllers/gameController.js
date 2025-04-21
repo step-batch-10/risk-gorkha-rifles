@@ -6,6 +6,7 @@ export default class GameController {
   #playerSidebarView;
   #actionMap = {
     intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
+    troopDeployment: this.#handleTroopDeployment.bind(this)
   };
   #gameMetaData = {
     status: "waiting",
@@ -56,11 +57,34 @@ export default class GameController {
     // }, 1000);
   }
 
+  #handleTroopDeployment(gameDetails) {
+    const { action: { data, playerId }, players } = gameDetails;
+    this.#mapModal.updateTerritory(data);
+
+    const player = players.find(player => player.id === playerId);
+    const actionerName = player ? player.name : "Unknown Player";
+
+    Toastify({
+      text: `${actionerName} placed ${data.troopsCount} in ${data.territory}`,
+      duration: 3000,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #3e2514, #c99147)",
+      },
+    }).showToast();
+  }
+
   #handleIntialDeploymentStart(gameDetails) {
     const { action, userId } = gameDetails;
 
     this.#reinforcementModal.addTerritoryListeners(userId, action.territoryState, action.data);
     this.#updateUI(gameDetails);
+  }
+
+  #isValidAction(action) {
+    return action in this.#actionMap;
   }
 
   #handleGameData(gameData) {
@@ -70,6 +94,8 @@ export default class GameController {
 
     for (const action of actions) {
       const gameDetails = { action, status, userId, players };
+      if (!this.#isValidAction(action.name)) continue;
+
       this.#actionMap[action.name](gameDetails);
     }
   }
