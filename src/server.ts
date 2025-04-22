@@ -13,8 +13,7 @@ import {
   updateTroops,
   fetchPlayerInfo,
   fetchFullPlayerInfo,
-  reinforcementRequestHandler
-
+  reinforcementRequestHandler,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -34,7 +33,6 @@ export default class Server {
     uniqueId: () => string
   ) {
     this.app = new Hono();
-    this.appMethod(this.app);
     this.users = users;
     this.session = session;
     this.gameManager = gameManager;
@@ -42,6 +40,8 @@ export default class Server {
   }
 
   private async setContext(context: Context, next: Next) {
+    // myContext = {users:this.users,session:this.session,uniqueId:this.uniqueId,gameManager:this.gameManager}
+    // context.set("myContext",myContext)
     context.set("users", this.users);
     context.set("session", this.session);
     context.set("uniqueId", this.uniqueId);
@@ -62,26 +62,33 @@ export default class Server {
     return ctx.redirect("/login", 302);
   }
 
-  private gameHandler() {
+  private gameRoutes() {
     const app = new Hono();
     app.use(this.authHandler);
     app.get("/actions", gameActionsHandler);
     // app.get("/game-board", boardDataHandler);
     // app.get("/start-reinforce", reinforceHandler)//request-reinforce, reinforcement, end
-    app.get('/request-reinforce', reinforcementRequestHandler)
+    app.get("/request-reinforce", reinforcementRequestHandler);
     app.post("/join-game", joinGameHandler);
     app.post("/update-troops", updateTroops);
     app.get("/profile-details", fetchPlayerInfo);
     app.get("/player-full-profile", fetchFullPlayerInfo);
+    
     return app;
   }
 
-  private appMethod(app: App) {
+  private routeHandler(app: App) {
     app.use(logger());
+
     app.use(this.setContext.bind(this));
     app.post("/login", loginHandler);
     app.use("/", this.authHandler);
-    app.route("/game", this.gameHandler());
+    app.route("/game", this.gameRoutes());
     app.get("*", serveStatic({ root: "./public/" }));
+  }
+
+  serve() {
+    this.routeHandler(this.app);
+    return this.app.fetch;
   }
 }

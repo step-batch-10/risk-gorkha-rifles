@@ -13,7 +13,7 @@ const main = () => {
   const gameManager = new GameManager(uniqueId);
 
   const server = new Server(users, session, gameManager, uniqueId);
-  Deno.serve({ port: 3000 }, server.app.fetch);
+  Deno.serve({ port: 8000 }, server.serve());
 };
 
 main();
