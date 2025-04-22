@@ -283,6 +283,7 @@ input::-webkit-inner-spin-button {
   border: 1px solid snow;
   border-radius: 1rem;
   padding: 1rem;
+  display: none;
 }
 
 #phaseDetails-box>h2 {
@@ -310,4 +311,10 @@ input::-webkit-inner-spin-button {
 
 .phaseBtn:hover {
   opacity: .8;
+}
+
+.nextPhaseBtn {
+  display: none;
+  background-color: #f8ab4d;
+  color: #fff;
 }

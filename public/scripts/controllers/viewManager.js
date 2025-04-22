@@ -1,10 +1,12 @@
 export default class ViewManager {
   #territoryRenderer;
   #playerSidebarRenderer;
+  #phaseView;
 
-  constructor(territoryRenderer, playerSidebarRenderer) {
+  constructor(territoryRenderer, playerSidebarRenderer, phaseView) {
     this.#territoryRenderer = territoryRenderer;
     this.#playerSidebarRenderer = playerSidebarRenderer;
+    this.#phaseView = phaseView;
   }
 
   updateTerritoryDetails(territoryDetails) {
@@ -17,5 +19,13 @@ export default class ViewManager {
 
   renderPlayerSidebar(players) {
     this.#playerSidebarRenderer.render(players);
+  }
+
+  registerReinforcementClick(callback) {
+    this.#phaseView.onReinforcementRequest(callback);
+  }
+
+  startPlayerTurn() {
+    this.#phaseView.showDraftPhaseUI();
   }
 }

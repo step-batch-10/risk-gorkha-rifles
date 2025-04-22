@@ -26,6 +26,8 @@ export default class ModalManager {
   }
 
   startReinforcementPhase(userId, territoryState, data) {
+    console.log(data);
+    
     this.#reinforcementPhaseModal.addTerritoryListeners(userId, territoryState, data);
   }
 

@@ -8,7 +8,8 @@ export default class GameController {
     intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
     troopDeployment: this.#handleTroopDeployment.bind(this),
     intialDeploymentStop: this.#intialDeploymentStop.bind(this),
-    startGame: this.#startGame.bind(this)
+    startGame: this.#startGame.bind(this),
+    reinforcementPhase: this.#handleReinforcementPhase.bind(this)
   };
 
   #gameMetaData = {
@@ -104,8 +105,33 @@ export default class GameController {
     this.#viewManager.renderPlayerSidebar(players);
   }
 
+  #handleReinforcementPhase() {
+    this.#viewManager.startPlayerTurn();
+  }
+
+  async #requestReinforcement() {
+    const troopsCount = await this.#apiService.requestReinforcement();
+    Toastify({
+      text: `You received ${troopsCount} troops.`,
+      duration: 3000,
+      gravity: "top",
+      position: "left",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #303824, #874637)",
+      },
+    }).showToast();
+
+    const userId = this.#gameMetaData.userId;
+    const lastAction = this.#actionsLog.at(-1);
+    const territoryState = lastAction.territoryState;
+
+    this.#modalManager.startReinforcementPhase(userId, territoryState, { troopsCount });
+  }
+
   init() {
     this.#pollGameData();
+    this.#viewManager.registerReinforcementClick(this.#requestReinforcement.bind(this));
     this.#audio.play();
   }
 }
