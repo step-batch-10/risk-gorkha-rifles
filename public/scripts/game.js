@@ -7,7 +7,6 @@ import PlayerSidebarView from "./views/playersSidebarView.js";
 import GameStartModal from "./views/gameStartModal.js";
 import ModalManager from "./controllers/modalManager.js";
 import ViewManager from "./controllers/viewManager.js";
-import PhaseView from "./views/phaseView.js";
 
 const initModalManager = () => {
   const waitingModal = new WaitingModal("waiting-popup");
@@ -19,10 +18,9 @@ const initModalManager = () => {
 
 const initViewManager = () => {
   const mapView = new MapView();
-  const phaseView = new PhaseView();
   const playerSidebarView = new PlayerSidebarView('side-bar-left');
 
-  return new ViewManager(mapView, playerSidebarView, phaseView);
+  return new ViewManager(mapView, playerSidebarView);
 };
 
 const initalizeApp = () => {
