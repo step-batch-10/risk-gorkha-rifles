@@ -8,13 +8,14 @@ export default class GameController {
     intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
     troopDeployment: this.#handleTroopDeployment.bind(this),
     intialDeploymentStop: this.#intialDeploymentStop.bind(this),
-    startGame: this.#startGame.bind(this)
+    startGame: this.#startGame.bind(this),
+    reinforcementPhase: this.#handleReinforcementPhase.bind(this),
   };
 
   #gameMetaData = {
     status: "waiting",
     userId: "1",
-    players: []
+    players: [],
   };
 
   #actionsLog = [];
@@ -53,10 +54,13 @@ export default class GameController {
   }
 
   #handleTroopDeployment(gameDetails) {
-    const { action: { data, playerId }, players } = gameDetails;
+    const {
+      action: { data, playerId },
+      players,
+    } = gameDetails;
     this.#viewManager.updateTerritoryDetails(data);
 
-    const player = players.find(player => player.id === playerId);
+    const player = players.find((player) => player.id === playerId);
     const actionerName = player ? player.name : "Unknown Player";
 
     Toastify({
@@ -78,7 +82,11 @@ export default class GameController {
   #handleIntialDeploymentStart(gameDetails) {
     const { action, userId } = gameDetails;
 
-    this.#modalManager.startReinforcementPhase(userId, action.territoryState, action.data);
+    this.#modalManager.startReinforcementPhase(
+      userId,
+      action.territoryState,
+      action.data
+    );
     this.#updateUI(gameDetails);
   }
 
@@ -88,7 +96,8 @@ export default class GameController {
 
   #handleGameData(gameData) {
     const { status, actions, userId, players } = gameData;
-    if (status === "waiting") return this.#modalManager.renderWaitingPlayers(players);
+    if (status === "waiting")
+      return this.#modalManager.renderWaitingPlayers(players);
     this.#modalManager.hideWaitingPlayersModal();
 
     for (const action of actions) {
@@ -104,8 +113,37 @@ export default class GameController {
     this.#viewManager.renderPlayerSidebar(players);
   }
 
+  #handleReinforcementPhase() {
+    this.#viewManager.startPlayerTurn();
+  }
+
+  async #requestReinforcement() {
+    const troopsCount = await this.#apiService.requestReinforcement();
+    Toastify({
+      text: `You received ${troopsCount} troops.`,
+      duration: 3000,
+      gravity: "top",
+      position: "left",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #303824, #874637)",
+      },
+    }).showToast();
+
+    const userId = this.#gameMetaData.userId;
+    const lastAction = this.#actionsLog.at(-1);
+    const territoryState = lastAction.territoryState;
+
+    this.#modalManager.startReinforcementPhase(userId, territoryState, {
+      troopsCount,
+    });
+  }
+
   init() {
     this.#pollGameData();
+    this.#viewManager.registerReinforcementClick(
+      this.#requestReinforcement.bind(this)
+    );
     this.#audio.play();
   }
 }
