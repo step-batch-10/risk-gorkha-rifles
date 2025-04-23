@@ -42,7 +42,7 @@ describe("getGameActions", () => {
       return () => (i++).toString();
     };
   });
-  it("should return all teh actions that happened after the timeStamp", async () => {
+  it("should return all the actions that happened after the timeStamp", async () => {
     const { app, sessionId, gameManager } =
       createServerWithLoggedInUser("Jack");
 
@@ -57,7 +57,16 @@ describe("getGameActions", () => {
       },
     });
 
+    const expected = {
+      actions: [],
+      currentPlayer: "1",
+      players: ["1", "2", "3"],
+      status: "running",
+    };
+    const actual = await response.json();
+
     assertEquals(response.status, 200);
+    assertEquals(actual, expected);
   });
 });
 

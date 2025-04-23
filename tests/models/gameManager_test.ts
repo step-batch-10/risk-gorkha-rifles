@@ -71,7 +71,7 @@ describe("getGameActions test", () => {
           territoryState: { India: { owner: "1", troops: 1 } },
         },
       ],
-      players: new Set(["1", "2", "3"]),
+      players: ["1", "2", "3"],
     };
     assertEquals(actual, expected);
   });
@@ -87,7 +87,7 @@ describe("getGameActions test", () => {
       status: GameStatus.running,
       currentPlayer: "3",
       actions: [],
-      players: new Set(["1", "2", "3"]),
+      players: ["1", "2", "3"],
     };
     assertEquals(actual, expected);
   });

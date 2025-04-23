@@ -115,6 +115,6 @@ export default class Game {
   }
 
   get allPlayers() {
-    return this.players;
+    return [...this.players];
   }
 }

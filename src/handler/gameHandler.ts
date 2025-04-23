@@ -9,6 +9,8 @@ const gameActionsHandler = (context: Context) => {
   const userId: string = context.get("userId");
   const gameActions = gameManager.getGameActions(userId, lastActionAt);
 
+  console.log(gameActions);
+
   return context.json(gameActions);
 };
 
