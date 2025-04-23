@@ -2,7 +2,7 @@
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
-  font-family: 'yatra one';
+  font-family: "yatra one";
 }
 
 :root {
@@ -12,7 +12,7 @@
 body {
   width: 100vw;
   height: 100vh;
-  background-image: url('../images/game-background.png');
+  background-image: url("../images/game-background.png");
   background-size: cover;
   /* overflow: hidden; */
 }
@@ -46,7 +46,7 @@ tspan {
     transition-duration: 300ms;
     stroke: #000;
     stroke-width: 0.5;
-    filter: url('#filter_texture');
+    filter: url("#filter_texture");
 
     &:hover {
       filter: brightness(100%);
@@ -80,7 +80,7 @@ tspan {
   align-content: center;
   gap: 10px;
 
-  &>div {
+  & > div {
     border: 0.5px solid black;
     background-color: rgba(203, 229, 239, 0.2);
     display: flex;
@@ -90,7 +90,7 @@ tspan {
     padding: 5px;
     margin: 10px;
 
-    & :first-child>img {
+    & :first-child > img {
       height: 50px;
       width: 50px;
       border-radius: 50%;
@@ -100,7 +100,7 @@ tspan {
   }
 
   & :hover {
-    background-color: rgba(203, 229, 239, .6);
+    background-color: rgba(203, 229, 239, 0.6);
   }
 }
 
@@ -155,7 +155,7 @@ input::-webkit-inner-spin-button {
   padding: 5px 10px;
   cursor: pointer;
   width: 16%;
-  background-image: 'images/a9064b2c-5358-4a8a-81c4-c637426999b7.png';
+  background-image: "images/a9064b2c-5358-4a8a-81c4-c637426999b7.png";
   background-color: var(--player-color);
   box-sizing: content-box;
   border-width: 0;
@@ -249,7 +249,7 @@ input::-webkit-inner-spin-button {
   display: none;
 }
 
-#startGame-popup>img {
+#startGame-popup > img {
   width: 1000px;
   opacity: 0;
   object-fit: cover;
@@ -283,14 +283,15 @@ input::-webkit-inner-spin-button {
   border: 1px solid snow;
   border-radius: 1rem;
   padding: 1rem;
+  display: none;
 }
 
-#phaseDetails-box>h2 {
+#phaseDetails-box > h2 {
   color: #fff;
   text-align: center;
 }
 
-#phaseDetails-box>hr {
+#phaseDetails-box > hr {
   border: 0.2px solid #ccc;
   margin: 6px 0px;
 }
@@ -309,5 +310,11 @@ input::-webkit-inner-spin-button {
 }
 
 .phaseBtn:hover {
-  opacity: .8;
+  opacity: 0.8;
+}
+
+.nextPhaseBtn {
+  display: none;
+  background-color: #f8ab4d;
+  color: #fff;
 }
