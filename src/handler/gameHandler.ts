@@ -1,7 +1,6 @@
 import { Context } from "hono";
 import Users from "../models/users.ts";
 import GameManager from "../models/gameManager.ts";
-import { User } from "../models/users.ts";
 const gameActionsHandler = (context: Context) => {
   const lastActionAt = Number(context.req.query("since"));
   const gameManager: GameManager = context.get("gameManager");
