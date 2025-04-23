@@ -1,6 +1,8 @@
 import { Context } from "hono";
 import Users from "../models/users.ts";
 import GameManager from "../models/gameManager.ts";
+import { AllotStatus } from "../types/game.ts";
+
 const gameActionsHandler = (context: Context) => {
   const lastActionAt = Number(context.req.query("since"));
   const gameManager: GameManager = context.get("gameManager");
@@ -10,71 +12,32 @@ const gameActionsHandler = (context: Context) => {
   return context.json(gameActions);
 };
 
-// const reinforcementRequestHandler = (context: Context) => {
-//   const gameManager: GameManager = context.get("gameManager");
-//   const userId: string = context.get("userId");
-//   const game = gameManager.findPlayerActiveGame(userId);
-
-//   if (!game) {
-//     return context.json({ message: "Game not found" }, 400);
-//   }
-
-//   const troopsAvailable = gameManager.reinforcementDetails(game, userId);
-//   console.log(troopsAvailable);
-//   return context.json({ troopsAvailable });
-// };
-
 const joinGameHandler = (context: Context) => {
   const userId: string = context.get("userId");
   const gameManager: GameManager = context.get("gameManager");
-  // const users: Users = context.get("users");
-
-  // const userDetails = users.findById(userId);
   gameManager.allotPlayer(userId, "3");
 
-  return context.redirect("/game");
+  return context.redirect("/game/waiting.html");
 };
 
-// const updateTroops = async (context: Context) => {
-//   const userId = context.get("userId");
-//   const gameManager: GameManager = context.get("gameManager");
-//   const game = gameManager.findPlayerActiveGame(userId);
-//   const { territory, troops } = await context.req.json();
+const lobbyStatusHandler = (context: Context) => {
+  const gameManager: GameManager = context.get("gameManager");
+  const userId: string = context.get("userId");
+  const users: Users = context.get("users");
+  const lobbyStatus = gameManager.waitingStatus(userId);
 
-//   if (!game) return context.json({ message: "Game not found" }, 400);
+  if (lobbyStatus.status) {
+    return context.json({
+      status: AllotStatus.waitingLobby,
+      players: userProfileBuilder(users, lobbyStatus.players),
+    });
+  }
 
-//   // gameManager.updateTroops(game, userId, territory, troops);
-
-//   return context.json({ message: "successfully updated troops" });
-// };
-
-const fetchPlayerInfo = (ctx: Context) => {
-  const userId: string = ctx.get("userId");
-  const users: Users = ctx.get("users");
-  const { avatar, userName } = users.findById(userId);
-
-  return ctx.json({
-    playerName: userName,
-    avatar,
-  });
+  return context.json({ status: AllotStatus.gameRoom, players: [] });
 };
 
-const fetchFullPlayerInfo = (ctx: Context) => {
-  const userId: string = ctx.get("userId");
-  const users: Users = ctx.get("users");
-  const { userName, avatar } = users.findById(userId);
-
-  return ctx.json({
-    playerName: userName,
-    avatar,
-    matchesPlayed: 0,
-    matchesWon: 0,
-  });
+const userProfileBuilder = (users: Users, players: string[]) => {
+  return players.map((playerId) => users.findById(playerId));
 };
 
-export {
-  joinGameHandler,
-  fetchPlayerInfo,
-  fetchFullPlayerInfo,
-  gameActionsHandler,
-};
+export { joinGameHandler, gameActionsHandler, lobbyStatusHandler };

@@ -8,21 +8,19 @@ import { loginHandler } from "./handler/authHandler.ts";
 import GameManager from "./models/gameManager.ts";
 import {
   gameActionsHandler,
-  // boardDataHandler,
+  lobbyStatusHandler,
   joinGameHandler,
-  fetchPlayerInfo,
-  fetchFullPlayerInfo,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
 type App = Hono<BlankEnv, BlankSchema, "/">;
 
 export default class Server {
-  readonly app: App;
-  users: Users;
-  session: Session;
-  gameManager: GameManager;
-  uniqueId: () => string;
+  private app: App;
+  private users: Users;
+  private session: Session;
+  private gameManager: GameManager;
+  private uniqueId: () => string;
 
   constructor(
     users: Users,
@@ -62,13 +60,9 @@ export default class Server {
     const app = new Hono();
     app.use(this.authHandler);
     app.get("/actions", gameActionsHandler);
-
-    // app.get("/start-reinforce", reinforceHandler)//request-reinforce, reinforcement, end
-    // app.get("/request-reinforce", reinforcementRequestHandler);
     app.post("/join-game", joinGameHandler);
-    // app.post("/update-troops", updateTroops);
-    app.get("/profile-details", fetchPlayerInfo); //unchanged
-    app.get("/player-full-profile", fetchFullPlayerInfo);
+    app.get("/lobby-status", lobbyStatusHandler);
+
     return app;
   }
 
@@ -79,6 +73,10 @@ export default class Server {
     app.use("/", this.authHandler);
     app.route("/game", this.gameHandler());
     app.get("*", serveStatic({ root: "./public/" }));
+  }
+
+  get getApp() {
+    return this.app;
   }
 
   public serve() {

@@ -26,7 +26,8 @@ const handleJoinGame = async (numOfPlayers) => {
     });
 
     if (response.redirected) {
-      globalThis.location.href = "/game";
+      globalThis.location.href = "/game/waiting.html";
+
       return;
     }
 

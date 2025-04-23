@@ -18,6 +18,6 @@ export default class Session {
   }
 
   get allSessions() {
-    return this.sessions
+    return this.sessions;
   }
 }

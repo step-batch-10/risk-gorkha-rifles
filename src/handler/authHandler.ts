@@ -22,7 +22,10 @@ export const loginHandler = async (context: Context) => {
   const users: Users = context.get("users");
 
   if (!users.findIdByUsername(username)) {
-    users.createUser(username, "");
+    users.createUser(
+      username,
+      "https://sm.ign.com/ign_pk/cover/a/avatar-gen/avatar-generations_rpge.jpg"
+    );
   }
 
   const userId = users.findIdByUsername(username);

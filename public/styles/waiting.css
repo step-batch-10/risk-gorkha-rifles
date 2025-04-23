@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Yatra+One&display=swap");
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: "yatra one";
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  background-image: url("/images/waiting.png");
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+}
+
+#waiting-popup {
+  background-color: rgba(99, 91, 53, 0.5);
+  width: 800px;
+  min-height: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  color: #fff;
+}
+
+.waiting-details {
+  flex: 1;
+  border-right: 1px solid #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.waiting-players {
+  flex: 1;
+  padding: 10px;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.waiting-players > li {
+  width: 100%;
+  padding: 1rem;
+  background-color: #635b35;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  gap: 1rem;
+}
+
+.waiting-players > li > img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+.waiting-players > li:hover {
+  opacity: 0.8;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 5px solid #fff;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 1rem auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

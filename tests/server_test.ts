@@ -12,6 +12,6 @@ describe("Server", () => {
     const session = new Session();
     const gameManager = gameManagerInstanceBuilder();
     const server = new Server(users, session, gameManager, () => "1");
-    assert(server.app instanceof Hono);
+    assert(server.getApp instanceof Hono);
   });
 });

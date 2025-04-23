@@ -2,12 +2,13 @@ import { assertEquals } from "assert";
 import { describe, it } from "testing";
 import { createServerWithLoggedInUser } from "./gameHandler_test.ts";
 
+const uniqueId = () => () => "1";
+
 describe("tests for app login routes", () => {
   it("Should give status 400 if username not given", async () => {
-    const { server } = createServerWithLoggedInUser("Jack");
-    console.log(server);
+    const { app } = createServerWithLoggedInUser("Jack", uniqueId);
 
-    const response = await server.app.request("/login", {
+    const response = await app.request("/login", {
       method: "POST",
       body: JSON.stringify({}),
     });
@@ -16,8 +17,8 @@ describe("tests for app login routes", () => {
   });
 
   it("Should set the cookies", async () => {
-    const { server } = createServerWithLoggedInUser("Rose");
-    const response = await server.app.request("/login", {
+    const { app } = createServerWithLoggedInUser("Rose", uniqueId);
+    const response = await app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Rose" }),
     });
@@ -27,8 +28,8 @@ describe("tests for app login routes", () => {
   });
 
   it("should create the user if doesn't exist", async () => {
-    const { server, users } = createServerWithLoggedInUser("Ankita");
-    const response = await server.app.request("/login", {
+    const { app, users } = createServerWithLoggedInUser("Ankita", uniqueId);
+    const response = await app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Ankita" }),
     });
@@ -39,8 +40,11 @@ describe("tests for app login routes", () => {
   });
 
   it("should create a new session on each login", async () => {
-    const { server, users, session } = createServerWithLoggedInUser("Jack");
-    const response = await server.app.request("/login", {
+    const { app, users, session } = createServerWithLoggedInUser(
+      "Jack",
+      uniqueId
+    );
+    const response = await app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "Ankita" }),
     });
@@ -52,8 +56,8 @@ describe("tests for app login routes", () => {
   });
 
   it("should give 400 if username is not valid", async () => {
-    const { server } = createServerWithLoggedInUser("Jack");
-    const response = await server.app.request("/login", {
+    const { app } = createServerWithLoggedInUser("Jack", uniqueId);
+    const response = await app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "*" }),
     });
@@ -62,8 +66,8 @@ describe("tests for app login routes", () => {
   });
 
   it("should give 400 if username starts with number", async () => {
-    const { server } = createServerWithLoggedInUser("");
-    const response = await server.app.request("/login", {
+    const { app } = createServerWithLoggedInUser("", uniqueId);
+    const response = await app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "45dhs" }),
     });
@@ -72,8 +76,8 @@ describe("tests for app login routes", () => {
   });
 
   it("should give 400 if username has invalid character in between", async () => {
-    const { server } = createServerWithLoggedInUser("");
-    const response = await server.app.request("/login", {
+    const { app } = createServerWithLoggedInUser("", uniqueId);
+    const response = await app.request("/login", {
       method: "POST",
       body: JSON.stringify({ username: "hdjsk&^%6jdk" }),
     });

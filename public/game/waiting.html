@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Waiting | Risk</title>
+    <link rel="stylesheet" href="/styles/waiting.css" type="text/css" />
+  </head>
+
+  <body>
+    <div id="waiting-popup">
+      <div class="waiting-details">
+        <h2 id="waiting-text">WAITING FOR PLAYERS</h2>
+        <div id="spinner" class="spinner"></div>
+        <h2 id="countdown-text" style="display: none">
+          Game will start in <span id="countdown-timer">3</span>
+        </h2>
+      </div>
+      <ul id="player-list" class="waiting-players"></ul>
+    </div>
+
+    <script>
+      const createPlayerListItem = ({ userName, avatar }) => {
+        const listItem = document.createElement("li");
+
+        const avatarImage = document.createElement("img");
+        avatarImage.setAttribute("src", avatar);
+
+        const usernameSpan = document.createElement("span");
+        usernameSpan.textContent = userName;
+
+        listItem.appendChild(avatarImage);
+        listItem.appendChild(usernameSpan);
+
+        return listItem;
+      };
+
+      const updatePlayerList = (players = []) => {
+        const playerListContainer = document.getElementById("player-list");
+        playerListContainer.innerHTML = "";
+
+        players.forEach((player) => {
+          playerListContainer.appendChild(createPlayerListItem(player));
+        });
+      };
+
+      const mockFetch = async () => {
+        const mockResponse = {
+          status: "gameRoom",
+          players: [
+            {
+              username: "shikha_singh",
+              avatar:
+                "https://sm.ign.com/ign_pk/cover/a/avatar-gen/avatar-generations_rpge.jpg",
+            },
+            {
+              username: "john_doe",
+              avatar:
+                "https://sm.ign.com/ign_pk/cover/a/avatar-gen/avatar-generations_rpge.jpg",
+            },
+          ],
+        };
+
+        return new Response(JSON.stringify(mockResponse), { status: 200 });
+      };
+
+      const startGameCountdown = () => {
+        showCountdown();
+
+        const countdownTimer = document.getElementById("countdown-timer");
+        let remainingTime = parseInt(countdownTimer.textContent);
+
+        const countdownInterval = setInterval(() => {
+          remainingTime -= 1;
+          countdownTimer.textContent = remainingTime;
+
+          if (remainingTime <= 0) {
+            clearInterval(countdownInterval);
+            globalThis.location.href = "/game";
+          }
+        }, 1000);
+      };
+
+      const fetchLobbyStatus = async () => {
+        try {
+          const response = await fetch("/game/lobby-status");
+          if (response.status !== 200) return;
+
+          const lobbyData = await response.json();
+          console.log(lobbyData);
+
+          handleLobbyStatus(lobbyData);
+        } catch (error) {
+          console.error("Error fetching lobby status:", error);
+        }
+      };
+
+      const handleLobbyStatus = (lobbyData) => {
+        updatePlayerList(lobbyData.players);
+
+        if (lobbyData.status === "gameRoom") {
+          return startGameCountdown();
+        }
+
+        return showWaiting();
+      };
+
+      const showCountdown = () => {
+        document.getElementById("waiting-text").style.display = "none";
+        document.getElementById("spinner").style.display = "none";
+        document.getElementById("countdown-text").style.display = "block";
+      };
+
+      const showWaiting = () => {
+        document.getElementById("waiting-text").style.display = "block";
+        document.getElementById("spinner").style.display = "block";
+        document.getElementById("countdown-text").style.display = "none";
+      };
+
+      const startLobbyPolling = () => setInterval(fetchLobbyStatus, 1000);
+
+      globalThis.onload = startLobbyPolling;
+    </script>
+  </body>
+</html>

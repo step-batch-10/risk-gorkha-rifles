@@ -70,6 +70,17 @@ export default class GameManager {
     };
   }
 
+  public waitingStatus(playerId: string) {
+    const waitingLobbies = Object.values(this.waitingLobbies);
+    const waitingLobby = waitingLobbies.find((waitingLobby) =>
+      waitingLobby.has(playerId)
+    );
+
+    if (waitingLobby) return { status: true, players: [...waitingLobby] };
+
+    return { status: false, players: [] };
+  }
+
   public findPlayerActiveGame(playerId: string) {
     return this.games.find(
       (game) => game.hasPlayer(playerId) && game.status === GameStatus.running

@@ -75,6 +75,7 @@ describe("getGameActions test", () => {
     };
     assertEquals(actual, expected);
   });
+
   it("should return empty actions when actions are", () => {
     const gameManager = gameManagerInstanceBuilder();
     gameManager.allotPlayer("1", "3");
@@ -89,5 +90,28 @@ describe("getGameActions test", () => {
       players: new Set(["1", "2", "3"]),
     };
     assertEquals(actual, expected);
+  });
+
+  it("should return true with player list when in waiting lobby", () => {
+    const gameManager = gameManagerInstanceBuilder();
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+
+    assertEquals(gameManager.waitingStatus("1"), {
+      status: true,
+      players: ["1", "2"],
+    });
+  });
+
+  it("should return true with player list when in waiting lobby", () => {
+    const gameManager = gameManagerInstanceBuilder();
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    assertEquals(gameManager.waitingStatus("3"), {
+      status: false,
+      players: [],
+    });
   });
 });

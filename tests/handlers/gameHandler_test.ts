@@ -1,25 +1,33 @@
-import { assertEquals, assert } from "assert";
-import { describe, it } from "testing";
+import { assertEquals } from "assert";
+import { beforeEach, describe, it } from "testing";
 import Server from "../../src/server.ts";
 import Users from "../../src/models/users.ts";
 import Session from "../../src/models/session.ts";
 import { gameManagerInstanceBuilder } from "../models/gameManager_test.ts";
+import { AllotStatus } from "../../src/types/game.ts";
 
-const uniqueId = () => "1";
+let uniqueId = () => {
+  let i = 1;
+  return () => (i++).toString();
+};
 
-export const createServerWithLoggedInUser = (username: string) => {
-  const session = new Session(uniqueId);
-  const users = new Users(uniqueId);
+export const createServerWithLoggedInUser = (
+  username: string,
+  uniqueIdGenerator = uniqueId
+) => {
+  const session = new Session(uniqueIdGenerator());
+  const users = new Users(uniqueIdGenerator());
   const gameManager = gameManagerInstanceBuilder();
   const sessionId = "1";
 
   session.createSession(sessionId);
-  users.createUser(username, "");
+  users.createUser(username, "url");
 
-  const server = new Server(users, session, gameManager, uniqueId);
+  const server = new Server(users, session, gameManager, uniqueIdGenerator());
   server.serve();
+
   return {
-    server,
+    app: server.getApp,
     sessionId,
     gameManager,
     users,
@@ -28,15 +36,21 @@ export const createServerWithLoggedInUser = (username: string) => {
 };
 
 describe("getGameActions", () => {
+  beforeEach(() => {
+    uniqueId = () => {
+      let i = 1;
+      return () => (i++).toString();
+    };
+  });
   it("should return all teh actions that happened after the timeStamp", async () => {
-    const { server, sessionId, gameManager } =
+    const { app, sessionId, gameManager } =
       createServerWithLoggedInUser("Jack");
 
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
 
-    const response = await server.app.request("/game/actions?since=0", {
+    const response = await app.request("/game/actions?since=0", {
       method: "GET",
       headers: {
         Cookie: `sessionId=${sessionId}`,
@@ -48,9 +62,15 @@ describe("getGameActions", () => {
 });
 
 describe("tests for joinGame Handler", () => {
+  beforeEach(() => {
+    uniqueId = () => {
+      let i = 1;
+      return () => (i++).toString();
+    };
+  });
   it("should not allot the game for unauthorized user", async () => {
-    const { server } = createServerWithLoggedInUser("Rose");
-    const response = await server.app.request("/game/join-game", {
+    const { app } = createServerWithLoggedInUser("Rose");
+    const response = await app.request("/game/join-game", {
       method: "POST",
     });
 
@@ -58,9 +78,9 @@ describe("tests for joinGame Handler", () => {
   });
 
   it("should allot the game to the user", async () => {
-    const { server, sessionId } = createServerWithLoggedInUser("Jack");
+    const { app, sessionId } = createServerWithLoggedInUser("Jack");
 
-    const response = await server.app.request("/game/join-game", {
+    const response = await app.request("/game/join-game", {
       method: "POST",
       headers: {
         Cookie: `sessionId=${sessionId}`,
@@ -68,123 +88,80 @@ describe("tests for joinGame Handler", () => {
     });
 
     assertEquals(response.status, 302);
-    assertEquals(response.headers.get("location"), "/game");
+    assertEquals(response.headers.get("location"), "/game/waiting.html");
   });
-
-  // it("should update the troops for an authorized user", async () => {
-  //   const { server, sessionId, gameManager } =
-  //     createServerWithLoggedInUser("John");
-  //   gameManager.allotPlayer("1", "3");
-  //   gameManager.allotPlayer("2", "3");
-  //   gameManager.allotPlayer("3", "3");
-
-  //   const response = await server.app.request("/game/update-troops", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Cookie: `sessionId=${sessionId}`,
-  //     },
-  //     body: JSON.stringify({
-  //       troops: 10,
-  //       territory: "india",
-  //     }),
-  //   });
-  //   const responseBody = await response.json();
-  //   assertEquals(responseBody.message, "successfully updated troops");
-  // });
-
-  // it("should update the troops for an unauthorized user", async () => {
-  //   const { server, sessionId } = createServerWithLoggedInUser("Jack");
-  //   const response = await server.app.request("/game/update-troops", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Cookie: `sessionId=${sessionId}`,
-  //     },
-  //     body: JSON.stringify({
-  //       troops: 10,
-  //       territory: "india",
-  //     }),
-  //   });
-  //   const responseBody = await response.json();
-
-  //   assertEquals(responseBody.message, "Game not found");
-  //   assertEquals(response.status, 400);
-  // });
 });
 
-describe("fetchPlayerInfo", () => {
-  it("should return profile details of the logged in user", async () => {
-    const { server, sessionId } = createServerWithLoggedInUser("Jack");
-    const response = await server.app.request("/game/profile-details", {
+describe("lobbyHandler test", () => {
+  beforeEach(() => {
+    uniqueId = () => {
+      let i = 1;
+      return () => (i++).toString();
+    };
+  });
+  it("should return waiting status and player when player is in waiting lobby", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("gour");
+    gameManager.allotPlayer("1", "3");
+
+    const response = await app.request("/game/lobby-status", {
       method: "GET",
       headers: {
-        Cookie: `sessionId=${sessionId}`,
+        Cookie: `sessionId=1`,
       },
     });
+    const expected = {
+      status: AllotStatus.waitingLobby,
+      players: [{ userName: "gour", avatar: "url" }],
+    };
 
-    assertEquals(response.status, 200);
-    const responseBody = await response.json();
-
-    assertEquals(responseBody.playerName, "Jack");
-    assert("avatar" in responseBody);
+    assertEquals(await response.json(), expected);
   });
-});
 
-describe("fetchFullPlayerInfo", () => {
-  it("should return full profile details of the logged in user", async () => {
-    const { server, sessionId } = createServerWithLoggedInUser("Jack");
-    const response = await server.app.request("/game/player-full-profile", {
+  it("should return running status and player when player is not in waiting lobby", async () => {
+    const { app, gameManager, users } = createServerWithLoggedInUser("gour");
+    gameManager.allotPlayer("1", "3");
+    users.createUser("pirate", "url2");
+    users.createUser("cowboy", "url3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request("/game/lobby-status", {
       method: "GET",
       headers: {
-        Cookie: `sessionId=${sessionId}`,
+        Cookie: `sessionId=1`,
       },
     });
+    const expected = {
+      status: AllotStatus.gameRoom,
+      players: [],
+    };
 
-    assertEquals(response.status, 200);
-    const responseBody = await response.json();
+    assertEquals(await response.json(), expected);
+  });
 
-    assertEquals(responseBody.playerName, "Jack");
-    assertEquals(responseBody.matchesPlayed, 0);
-    assertEquals(responseBody.matchesWon, 0);
-    assert("avatar" in responseBody);
+  it("should return waiting status and player when player is  in waiting lobby", async () => {
+    const { app, gameManager, users, session } =
+      createServerWithLoggedInUser("gour");
+    gameManager.allotPlayer("1", "3");
+    users.createUser("pirate", "url2");
+    users.createUser("cowboy", "url3");
+    users.createUser("dinesh", "url4");
+    session.createSession("4");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    gameManager.allotPlayer("4", "3");
+
+    const response = await app.request("/game/lobby-status", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=2`,
+      },
+    });
+    const expected = {
+      status: AllotStatus.waitingLobby,
+      players: [{ userName: "dinesh", avatar: "url4" }],
+    };
+
+    assertEquals(await response.json(), expected);
   });
 });
-
-// describe.ignore("reinforecementRequestHandler", () => {
-//   it("should return the troops the player can place", async () => {
-//     const { server, sessionId, gameManager } =
-//       createServerWithLoggedInUser("Jack");
-//     gameManager.allotPlayer("1", "3");
-//     gameManager.allotPlayer("2", "3");
-//     gameManager.allotPlayer("3", "3");
-
-//     const response = await server.app.request("/game/request-reinforce", {
-//       method: "GET",
-//       headers: {
-//         Cookie: `sessionId=${sessionId}`,
-//       },
-//     });
-
-//     const body = await response.json();
-
-//     assertEquals(body.troopsAvailable, 4);
-//     assertEquals(response.status, 200);
-//   });
-
-//   it("should return the game is not found", async () => {
-//     const { server, sessionId } = createServerWithLoggedInUser("Jack");
-
-//     const response = await server.app.request("/game/request-reinforce", {
-//       method: "GET",
-//       headers: {
-//         Cookie: `sessionId=${sessionId}`,
-//       },
-//     });
-
-//     const responseBody = await response.json();
-
-//     assertEquals(responseBody.message, "Game not found");
-//     assertEquals(response.status, 400);
-//   });
-// });
