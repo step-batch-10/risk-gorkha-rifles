@@ -26,16 +26,12 @@ const handleJoinGame = async (numOfPlayers) => {
     });
 
     if (response.redirected) {
-      // const responseData = { message: "you entered the game.....!" };
-      // showToast(responseData.message);
       globalThis.location.href = "/game";
-
       return;
     }
 
     globalThis.location.href = "/";
-  } catch (error) {
-    console.error("Join error:", error);
+  } catch {
     showToast("An error occurred. Please try again later.");
   }
 };
@@ -64,6 +60,28 @@ const handlePopup = () => {
   joinGame.addEventListener("click", handleJoin);
 };
 
+const textContent = (context, element, content) => {
+  const ele = context.querySelector(element);
+  ele.textContent = content;
+};
+
+const innerHTML = (context, element, content) => {
+  const ele = context.querySelector(element);
+  ele.innerHTML = content;
+};
+
+const renderPlayerProfile = (userProfile, profile) => {
+  const { playerName, matchesPlayed, matchesWon, avatar } = profile;
+  textContent(userProfile, "#player-name", playerName);
+  textContent(userProfile, "#matches-played", matchesPlayed);
+  textContent(userProfile, "#matches-won", matchesWon);
+  innerHTML(
+    userProfile,
+    "#picture",
+    `<img src=${avatar} width=100% height=100%/>`
+  );
+};
+
 const handleProfile = async () => {
   const response = await fetch("/game/player-full-profile");
   const profile = await response.json();
@@ -77,21 +95,17 @@ const handleProfile = async () => {
     userProfile.style.display = "none";
   };
 
-  userProfile.querySelector("#player-name").textContent = profile.playerName;
-  userProfile.querySelector("#matches-played").textContent =
-    profile.matchesPlayed;
-  userProfile.querySelector("#matches-won").textContent = profile.matchesWon;
-  userProfile.querySelector(
-    "#picture"
-  ).innerHTML = `<img src=${profile.avatar} width=100% height=100%/>`;
+  renderPlayerProfile(userProfile, profile);
 };
 
 const renderDashBoard = ({ playerName, avatar }) => {
   const profile = document.querySelector("#profile");
-  profile.querySelector("#player-name").textContent = playerName;
-  profile.querySelector(
-    "#profile-picture"
-  ).innerHTML = `<img src=${avatar} alt="user avatar" width=100% height=100% />`;
+  textContent(profile, "#player-name", playerName);
+  innerHTML(
+    profile,
+    "#profile-picture",
+    `<img src=${avatar} alt="user avatar" width=100% height=100% />`
+  );
 };
 
 const main = async () => {

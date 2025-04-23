@@ -89,8 +89,8 @@ export default class ReinforcementModal {
   #attachToastEventListeners(territoryId, toast) {
     const inputField = document.querySelector("#number-input");
     const placeButton = document.querySelector("#place-troops-btn");
-    const incrementButton = document.querySelector("#increment");
-    const decrementButton = document.querySelector("#decrement");
+    // const incrementButton = document.querySelector("#increment");
+    // const decrementButton = document.querySelector("#decrement");
 
     placeButton?.addEventListener("click", () => this.#handlePlaceButtonClick(territoryId, inputField, toast));
     incrementButton?.addEventListener("click", () => this.#handleIncrementButtonClick(inputField));

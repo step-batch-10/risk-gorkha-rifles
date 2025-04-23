@@ -18,4 +18,12 @@ export default class ViewManager {
   renderPlayerSidebar(players) {
     this.#playerSidebarRenderer.render(players);
   }
+
+  registerReinforcementClick(callback) {
+    this.#phaseView.onReinforcementRequest(callback);
+  }
+
+  startPlayerTurn() {
+    this.#phaseView.showDraftPhaseUI();
+  }
 }
