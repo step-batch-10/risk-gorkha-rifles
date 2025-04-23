@@ -4,22 +4,22 @@ import Users from "../../src/models/users.ts";
 
 describe("tests for users model", () => {
   it("should create user", () => {
-    const userName = "Pirate";
+    const username = "Pirate";
     const avatar = "avatar";
     const user = new Users();
-    const actual = user.createUser(userName, avatar);
+    const actual = user.createUser(username, avatar);
 
-    assertEquals(actual, { userName: "Pirate", avatar: "avatar" });
+    assertEquals(actual, { username: "Pirate", avatar: "avatar" });
   });
 
   it("should find the user using userId", () => {
-    const userName = "Pirate";
+    const username = "Pirate";
     const avatar = "avatar";
     const user = new Users();
-    user.createUser(userName, avatar);
+    user.createUser(username, avatar);
     const actual = user.findById("1");
 
-    assertEquals(actual, { userName: "Pirate", avatar: "avatar" });
+    assertEquals(actual, { username: "Pirate", avatar: "avatar" });
   });
 
   it("should return undefined if userId doesn't exist", () => {
@@ -29,17 +29,17 @@ describe("tests for users model", () => {
     assertEquals(actual, undefined);
   });
 
-  it("should find the user using userName", () => {
-    const userName = "Pirate";
+  it("should find the user using username", () => {
+    const username = "Pirate";
     const avatar = "avatar";
     const user = new Users();
-    user.createUser(userName, avatar);
+    user.createUser(username, avatar);
     const actual = user.findIdByUsername("Pirate");
 
     assertEquals(actual, "1");
   });
 
-  it("should return undefined if userName doesn't exist", () => {
+  it("should return undefined if username doesn't exist", () => {
     const user = new Users();
     const actual = user.findIdByUsername("Cowboy");
 

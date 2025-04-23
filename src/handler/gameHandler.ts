@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import Users from "../models/users.ts";
+import Users, { User } from "../models/users.ts";
 import GameManager from "../models/gameManager.ts";
 import { AllotStatus } from "../types/game.ts";
 
@@ -40,4 +40,31 @@ const userProfileBuilder = (users: Users, players: string[]) => {
   return players.map((playerId) => users.findById(playerId));
 };
 
-export { joinGameHandler, gameActionsHandler, lobbyStatusHandler };
+const profileDetailsHandler = (context: Context) => {
+  const userId: string = context.get("userId");
+  const users: Users = context.get("users");
+  const userDetails: User = users.findById(userId);
+
+  return context.json(userDetails);
+};
+
+const fullProfileDetailsHandler = (context: Context) => {
+  const userId: string = context.get("userId");
+  const users: Users = context.get("users");
+  const { username, avatar }: User = users.findById(userId);
+
+  return context.json({
+    username,
+    avatar,
+    matchesPlayed: 0,
+    matchesWon: 0,
+  });
+};
+
+export {
+  joinGameHandler,
+  gameActionsHandler,
+  lobbyStatusHandler,
+  profileDetailsHandler,
+  fullProfileDetailsHandler,
+};

@@ -1,11 +1,11 @@
 * {
   margin: 0;
-  font-family: 'yatra one';
+  font-family: "yatra one";
   box-sizing: border-box;
 }
 
-body{
-  background-image: url('../images/risk-home.png');
+body {
+  background-image: url("../images/risk-home.png");
 }
 
 header {
@@ -21,7 +21,8 @@ header {
   text-decoration: none;
   display: flex;
   gap: 10px;
-  color: white;
+  color: rgb(217, 185, 69);
+  font-size: 1.2rem;
   align-items: center;
   padding-left: 20px;
 }
@@ -62,7 +63,7 @@ header {
 #leaderboard {
   height: 70px;
   aspect-ratio: 1;
-  background-image: url('../images/leaderboard.png');
+  background-image: url("../images/leaderboard.png");
   background-size: cover;
   background-position: top;
 }
@@ -84,13 +85,14 @@ main {
   gap: 20px;
 }
 
-#create, #join {
+#create,
+#join {
   width: 200px;
   height: 200px;
   border-radius: 10px;
   box-shadow: 2px 2px 15px black;
   background-color: #c19a6ba1;
-  border: 1px solid #8B5A2B;
+  border: 1px solid #8b5a2b;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,7 +109,7 @@ main {
 }
 
 .popup-content {
-  background-color: #E9B35D;
+  background-color: #e9b35d;
   width: 330px;
   height: 500px;
   position: absolute;
@@ -126,7 +128,7 @@ main {
 }
 
 .horizontal-rectangle {
-  background-color:#C19A6B;
+  background-color: #c19a6b;
   height: 40%;
   width: 40%;
   position: absolute;
@@ -134,7 +136,7 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  border: 2px solid #8B5A2B;
+  border: 2px solid #8b5a2b;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   border-radius: 10px;
   display: flex;
@@ -144,7 +146,7 @@ main {
 #picture-and-name {
   height: 70%;
   width: 25%;
-  color: #2E1A0F;
+  color: #2e1a0f;
 }
 
 #picture {
@@ -158,8 +160,8 @@ main {
   padding-left: 10px;
   height: 80%;
   width: 70%;
-  background-color: #FDF7E3;
-  color: #2E1A0F;
+  background-color: #fdf7e3;
+  color: #2e1a0f;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -193,7 +195,7 @@ main {
 }
 
 button {
-  background-color: #2E1A0F;
+  background-color: #2e1a0f;
   color: rgb(201, 175, 79);
   padding: 10px 20px;
   border: none;
@@ -204,7 +206,7 @@ button {
 }
 
 button:hover {
-  background-color: #5C4033;
+  background-color: #5c4033;
 }
 
 #player-name {

@@ -72,8 +72,8 @@ const innerHTML = (context, element, content) => {
 };
 
 const renderPlayerProfile = (userProfile, profile) => {
-  const { playerName, matchesPlayed, matchesWon, avatar } = profile;
-  textContent(userProfile, "#player-name", playerName);
+  const { username, matchesPlayed, matchesWon, avatar } = profile;
+  textContent(userProfile, "#player-name", username);
   textContent(userProfile, "#matches-played", matchesPlayed);
   textContent(userProfile, "#matches-won", matchesWon);
   innerHTML(
@@ -99,9 +99,9 @@ const handleProfile = async () => {
   renderPlayerProfile(userProfile, profile);
 };
 
-const renderDashBoard = ({ playerName, avatar }) => {
+const renderDashBoard = ({ username, avatar }) => {
   const profile = document.querySelector("#profile");
-  textContent(profile, "#player-name", playerName);
+  textContent(profile, "#player-name", username);
   innerHTML(
     profile,
     "#profile-picture",

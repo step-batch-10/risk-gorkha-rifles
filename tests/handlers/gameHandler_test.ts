@@ -111,7 +111,7 @@ describe("lobbyHandler test", () => {
     });
     const expected = {
       status: AllotStatus.waitingLobby,
-      players: [{ userName: "gour", avatar: "url" }],
+      players: [{ username: "gour", avatar: "url" }],
     };
 
     assertEquals(await response.json(), expected);
@@ -159,9 +159,55 @@ describe("lobbyHandler test", () => {
     });
     const expected = {
       status: AllotStatus.waitingLobby,
-      players: [{ userName: "dinesh", avatar: "url4" }],
+      players: [{ username: "dinesh", avatar: "url4" }],
     };
 
     assertEquals(await response.json(), expected);
+  });
+});
+
+describe("fullProfileDetailsHandler", () => {
+  it("should return full profile details", async () => {
+    const { app } = createServerWithLoggedInUser("Jack");
+
+    const response = await app.request("/game/player-full-profile", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    const actual = await response.json();
+
+    const expected = {
+      username: "Jack",
+      avatar: "url",
+      matchesPlayed: 0,
+      matchesWon: 0,
+    };
+
+    assertEquals(actual, expected);
+  });
+});
+
+describe("profileDetailsHandler", () => {
+  it("should return full profile details", async () => {
+    const { app } = createServerWithLoggedInUser("Jack");
+
+    const response = await app.request("/game/profile-details", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    const actual = await response.json();
+
+    const expected = {
+      username: "Jack",
+      avatar: "url",
+    };
+
+    assertEquals(actual, expected);
   });
 });

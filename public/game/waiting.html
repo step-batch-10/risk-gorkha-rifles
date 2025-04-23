@@ -20,14 +20,14 @@
     </div>
 
     <script>
-      const createPlayerListItem = ({ userName, avatar }) => {
+      const createPlayerListItem = ({ username, avatar }) => {
         const listItem = document.createElement("li");
 
         const avatarImage = document.createElement("img");
         avatarImage.setAttribute("src", avatar);
 
         const usernameSpan = document.createElement("span");
-        usernameSpan.textContent = userName;
+        usernameSpan.textContent = username;
 
         listItem.appendChild(avatarImage);
         listItem.appendChild(usernameSpan);

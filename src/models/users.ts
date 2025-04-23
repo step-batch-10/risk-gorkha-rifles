@@ -1,7 +1,7 @@
 import _ from "npm:lodash";
 
 export interface User {
-  userName: string;
+  username: string;
   avatar: string;
 }
 
@@ -13,9 +13,9 @@ export default class Users {
     this.uniqueId = uniqueId;
   }
 
-  createUser(userName: string, avatar: string) {
+  createUser(username: string, avatar: string) {
     const userId = this.uniqueId();
-    this.users[userId] = { userName, avatar };
+    this.users[userId] = { username, avatar };
 
     return this.users[userId];
   }
@@ -26,7 +26,7 @@ export default class Users {
 
   findIdByUsername(name: string) {
     const userDetails = Object.entries(this.users).find(
-      ([_, { userName }]) => userName === name
+      ([_, { username }]) => username === name
     );
 
     return userDetails ? userDetails[0] : undefined;
