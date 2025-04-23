@@ -43,8 +43,10 @@ describe("getGameActions", () => {
     };
   });
   it("should return all the actions that happened after the timeStamp", async () => {
-    const { app, sessionId, gameManager } =
+    const { app, sessionId, gameManager, users } =
       createServerWithLoggedInUser("Jack");
+    users.createUser("2", "url");
+    users.createUser("3", "url");
 
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -57,10 +59,25 @@ describe("getGameActions", () => {
       },
     });
 
+    const players = [
+      {
+        avatar: "url",
+        username: "Jack",
+      },
+      {
+        avatar: "url",
+        username: "2",
+      },
+      {
+        avatar: "url",
+        username: "3",
+      },
+    ];
+    
     const expected = {
       actions: [],
       currentPlayer: "1",
-      players: ["1", "2", "3"],
+      players,
       status: "running",
     };
     const actual = await response.json();

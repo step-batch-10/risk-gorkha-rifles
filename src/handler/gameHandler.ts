@@ -8,10 +8,14 @@ const gameActionsHandler = (context: Context) => {
   const gameManager: GameManager = context.get("gameManager");
   const userId: string = context.get("userId");
   const gameActions = gameManager.getGameActions(userId, lastActionAt);
+  const users = context.get("users");
 
-  console.log(gameActions);
-
-  return context.json(gameActions);
+  return context.json({
+    status: gameActions.status,
+    currentPlayer: gameActions.currentPlayer,
+    actions: gameActions.actions,
+    players: userProfileBuilder(users, gameActions.players),
+  });
 };
 
 const joinGameHandler = (context: Context) => {
@@ -38,7 +42,7 @@ const lobbyStatusHandler = (context: Context) => {
   return context.json({ status: AllotStatus.gameRoom, players: [] });
 };
 
-const userProfileBuilder = (users: Users, players: string[]) => {
+const userProfileBuilder = (users: Users, players: string[] = []) => {
   return players.map((playerId) => users.findById(playerId));
 };
 
