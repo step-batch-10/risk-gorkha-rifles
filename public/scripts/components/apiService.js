@@ -1,7 +1,7 @@
 export default class ApiService {
   static async getGameDetails() {
     // return mockedData.reinforcementPhase;
-    const response = await fetch("/game/game-board?since=");
+    const response = await fetch("/game/actions?since=");
 
     return await response.json();
   }

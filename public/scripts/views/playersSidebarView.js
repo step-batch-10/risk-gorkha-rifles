@@ -1,6 +1,6 @@
 export default class PlayerSidebarView {
   #sidebar;
-  #template = `<div class="avatar"><img style="border-color: {{colour}}" src="{{avatar}}"></div><div class="player-details"><p>{{name}}</p> </div>`;
+  #template = `<div class="avatar"><img style="border-color: {{colour}}" src="{{avatar}}"></div><div class="player-details"><p>{{username}}</p> </div>`;
 
   constructor(sidebarId) {
     this.#sidebar = document.getElementById(sidebarId);
