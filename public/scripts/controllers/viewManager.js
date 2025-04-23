@@ -1,10 +1,12 @@
 export default class ViewManager {
   #territoryRenderer;
   #playerSidebarRenderer;
+  #phaseView;
 
-  constructor(territoryRenderer, playerSidebarRenderer) {
+  constructor(territoryRenderer, playerSidebarRenderer, phaseView) {
     this.#territoryRenderer = territoryRenderer;
     this.#playerSidebarRenderer = playerSidebarRenderer;
+    this.#phaseView = phaseView;
   }
 
   updateTerritoryDetails(territoryDetails) {
