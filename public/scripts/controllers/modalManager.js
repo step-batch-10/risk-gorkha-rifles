@@ -1,24 +1,13 @@
 export default class ModalManager {
-  #waitingPlayersModal;
   #gameStartNotificationModal;
   #reinforcementPhaseModal;
 
   constructor(
-    waitingPlayersModal,
     gameStartNotificationModal,
     reinforcementPhaseModal
   ) {
-    this.#waitingPlayersModal = waitingPlayersModal;
     this.#gameStartNotificationModal = gameStartNotificationModal;
     this.#reinforcementPhaseModal = reinforcementPhaseModal;
-  }
-
-  renderWaitingPlayers(players) {
-    return this.#waitingPlayersModal.render(players);
-  }
-
-  hideWaitingPlayersModal() {
-    this.#waitingPlayersModal.hide();
   }
 
   showGameStartNotificationModal() {
@@ -30,8 +19,6 @@ export default class ModalManager {
   }
 
   startReinforcementPhase(userId, territoryState, data) {
-    console.log(data);
-
     this.#reinforcementPhaseModal.addTerritoryListeners(
       userId,
       territoryState,

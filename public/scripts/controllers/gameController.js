@@ -3,6 +3,7 @@ export default class GameController {
   #apiService;
   #viewManager;
   #audio;
+  #eventBus;
 
   #actionMap = {
     intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
@@ -13,18 +14,19 @@ export default class GameController {
   };
 
   #gameMetaData = {
-    status: "waiting",
+    status: "running",
     userId: "1",
     players: [],
   };
 
   #actionsLog = [];
 
-  constructor(modalManager, viewManager, apiService, audio) {
+  constructor(modalManager, viewManager, apiService, audio, eventBus) {
     this.#modalManager = modalManager;
     this.#viewManager = viewManager;
     this.#apiService = apiService;
     this.#audio = audio;
+    this.#eventBus = eventBus;
   }
 
   #startGame() {
@@ -43,15 +45,15 @@ export default class GameController {
     return this.#actionsLog.length ? this.#actionsLog.at(-1).timestamp : 0;
   }
 
-  #pollGameData() {
-    setInterval(async () => {
+  async #pollGameData() {
+    // setInterval(async () => {
       const lastTimestamp = this.#getLastTimestamp();
 
       const gameData = await this.#apiService.getGameDetails(lastTimestamp);
       this.#updateLocalState(gameData);
       this.#handleGameData(gameData);
       this.#viewManager.renderPlayerSidebar(gameData.players);
-    }, 1000);
+    // }, 1000);
   }
 
   #handleTroopDeployment(gameDetails) {
@@ -97,9 +99,6 @@ export default class GameController {
 
   #handleGameData(gameData) {
     const { status, actions, userId, players } = gameData;
-    if (status === "waiting")
-      return this.#modalManager.renderWaitingPlayers(players);
-    this.#modalManager.hideWaitingPlayersModal();
 
     for (const action of actions) {
       const gameDetails = { action, status, userId, players };
@@ -142,9 +141,7 @@ export default class GameController {
 
   init() {
     this.#pollGameData();
-    this.#viewManager.registerReinforcementClick(
-      this.#requestReinforcement.bind(this)
-    );
+    this.#eventBus.on('requestReinforcement', this.#requestReinforcement.bind(this));
     this.#audio.play();
   }
 }

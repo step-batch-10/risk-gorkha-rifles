@@ -1,5 +1,4 @@
 export default class MapView {
-
   #findPlayerColor(playerId, players) {
     const player = players.find(player => player.id === playerId);
     return player.colour;

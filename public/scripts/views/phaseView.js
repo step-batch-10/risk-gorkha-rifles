@@ -1,8 +1,8 @@
 export default class PhaseView {
-  #onReinforcementRequestCallback;
+  #eventBus;
 
-  onReinforcementRequest(callback) {
-    this.#onReinforcementRequestCallback = callback;
+  constructor(eventBus) {
+    this.#eventBus = eventBus;
   }
 
   #clearPhaseButtons(id) {
@@ -29,8 +29,8 @@ export default class PhaseView {
   }
 
   #handleReinforcementRequestClick() {
-    this.#onReinforcementRequestCallback();
     this.#displayNextPhaseButton();
+    this.#eventBus.emit('requestReinforcement');
   }
 
   showDraftPhaseUI() {
