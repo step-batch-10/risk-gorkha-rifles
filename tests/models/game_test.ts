@@ -96,3 +96,34 @@ describe("tests for updateTerritoryTroops", () => {
     assertEquals(actual, null);
   });
 });
+
+describe("update troops method", () => {
+  it("should update troops", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    const territoryState = {
+      alaska: { owner: "1", troops: 1 },
+      alberta: { owner: "2", troops: 1 },
+      brazil: { owner: "1", troops: 1 },
+      peru: { owner: "2", troops: 11 },
+    };
+
+    const updatedTerritory = game.updateTroops("peru", 10, "2");
+
+    const lastAction = game.lastAction;
+    const expected = {
+      id: "1",
+      name: "updateTroops",
+      playerId: null,
+      currentPlayer: "2",
+      data: {
+        territory: "peru",
+        troops: 11,
+      },
+      timeStamp: 1,
+      territoryState,
+    };
+    assertEquals(updatedTerritory, { owner: "2", troops: 11 });
+    assertEquals(lastAction, expected);
+  });
+});

@@ -62,7 +62,7 @@ export default class Game {
 
   private generateAction(
     playerId: string,
-    data: { [key: string]: number },
+    data: { [key: string]: number | string },
     action: string,
     to: string | null
   ) {
@@ -108,6 +108,21 @@ export default class Game {
     );
 
     return this.territoryState;
+  }
+
+  public updateTroops(territory: string, troopCount: number, playerId: string) {
+    this.territoryState[territory].troops += troopCount;
+    const updateTroops = this.territoryState[territory].troops;
+    this.actions.push(
+      this.generateAction(
+        playerId,
+        { territory, troops: updateTroops },
+        "updateTroops",
+        null
+      )
+    );
+
+    return this.territoryState[territory];
   }
 
   get lastAction() {
