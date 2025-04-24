@@ -2,25 +2,31 @@ import { assert, assertEquals, assertFalse, assertThrows } from "assert";
 import { describe, it } from "testing";
 import GameManager from "../../src/models/gameManager.ts";
 import Game from "../../src/models/game.ts";
-import { Continent, GameStatus } from "../../src/types/gameTypes.ts";
+import { GameStatus } from "../../src/types/gameTypes.ts";
 
 const iterator = () => {
   let i = 1;
   return () => i++;
 };
 
-export const gameManagerInstanceBuilder = () => {
+export const gameManagerInstanceBuilder = (
+  getContinents: () => Record<string, string[]>
+) => {
   const uniqueId = (): string => "1";
-  const getContinents = (): Continent => ({
-    Asia: ["India"],
-  });
-  const gameManager = new GameManager(uniqueId, getContinents, iterator());
+  const shuffler = (ar: string[]): string[] => ar;
+
+  const gameManager = new GameManager(
+    uniqueId,
+    getContinents,
+    iterator(),
+    shuffler
+  );
   return gameManager;
 };
 
 describe("find player active game", () => {
   it("should return player active game", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -29,7 +35,7 @@ describe("find player active game", () => {
     assert(result instanceof Game);
   });
   it("should return undefined when player is not in active game", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
 
     const result = gameManager.findPlayerActiveGame("4");
     assertEquals(result, undefined);
@@ -38,14 +44,14 @@ describe("find player active game", () => {
 
 describe("allotPlayer method", () => {
   it("should return updated waiting list when players are allotted", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     assertEquals(gameManager.allotPlayer("1", "3"), new Set(["1"]));
     assertEquals(gameManager.allotPlayer("2", "3"), new Set(["1", "2"]));
     assertEquals(gameManager.allotPlayer("3", "3"), new Set([]));
   });
 
   it("should create a game instance when 3 players assigned", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -57,7 +63,7 @@ describe("allotPlayer method", () => {
 
 describe("getGameActions test", () => {
   it("should return  actions when actions are present", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -114,7 +120,7 @@ describe("getGameActions test", () => {
   });
 
   it("should return actions after the time stamp", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -178,7 +184,7 @@ describe("getGameActions test", () => {
   });
 
   it("should return empty actions when actions are", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
 
@@ -193,7 +199,7 @@ describe("getGameActions test", () => {
   });
 
   it("should return true with player list when in waiting lobby", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
 
@@ -204,7 +210,7 @@ describe("getGameActions test", () => {
   });
 
   it("should return true with player list when in waiting lobby", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -218,7 +224,7 @@ describe("getGameActions test", () => {
 
 describe("handleGameActions test", () => {
   it("should return updated troops in territory", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -236,7 +242,7 @@ describe("handleGameActions test", () => {
     assertEquals(actual.territory, expected);
   });
   it("should return isDeploymentOver as false", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
 
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -251,7 +257,7 @@ describe("handleGameActions test", () => {
     assertFalse(actual);
   });
   it("should return isDeploymentOver as false", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -272,7 +278,7 @@ describe("handleGameActions test", () => {
   });
 
   it("should throw when game not found ", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
 
@@ -286,7 +292,7 @@ describe("handleGameActions test", () => {
   });
 
   it("should return the territories of the player for attack request", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -302,7 +308,7 @@ describe("handleGameActions test", () => {
   });
 
   it("should return the territories of the player for reinforcement request", () => {
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
@@ -312,7 +318,60 @@ describe("handleGameActions test", () => {
       data: {},
     });
 
-    const expected = ["India"];
+    const expected = {
+      newTroops: 3,
+      territories: ["India"],
+    };
+
+    assertEquals(actual, expected);
+  });
+  it("should return the reinforcement data for reinforcement request when player has more than 9 territories", () => {
+    const gameManager = gameManagerInstanceBuilder(() => ({
+      Asia: "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27".split(
+        " "
+      ),
+    }));
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const actual = gameManager.handleGameActions({
+      name: "reinforceRequest",
+      playerId: "1",
+      data: {},
+    });
+
+    const expected = {
+      newTroops: 3,
+      territories: "1 4 7 10 13 16 19 22 25".split(" "),
+    };
+
+    assertEquals(actual, expected);
+  });
+
+  it("should return the reinforcement data for reinforcement request when player has more than 9 territories", () => {
+    const gameManager = gameManagerInstanceBuilder(() => ({
+      Asia: ["India"],
+    }));
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const gameInstance = gameManager.findPlayerActiveGame("1");
+    const playerStates = gameInstance?.playerState;
+
+    playerStates?.["1"].continents.push({ name: "Asia", extraTroops: 7 });
+
+    const actual = gameManager.handleGameActions({
+      name: "reinforceRequest",
+      playerId: "1",
+      data: {},
+    });
+
+    const expected = {
+      newTroops: 10,
+      territories: ["India"],
+    };
 
     assertEquals(actual, expected);
   });

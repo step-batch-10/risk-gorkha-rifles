@@ -51,9 +51,11 @@ type Data = {
     | Record<string, PlayerState>;
 };
 
+type Continent = { name: string; extraTroops: number };
+
 export type PlayerState = {
   territories: string[];
-  continents: string[];
+  continents: Continent[];
   availableTroops: number;
   cards: string[];
 };
@@ -254,8 +256,38 @@ export default class Game {
     return this.actions.at(-1);
   }
 
+  private updateTroopsToBeCollected(
+    territories: string[],
+    continents: Continent[]
+  ) {
+    const territoryTroops = Math.floor(territories.length / 3);
+    const totalTerritoryTroops = territoryTroops < 3 ? 3 : territoryTroops;
+    const continentTroops = continents.reduce(
+      (sum, { extraTroops }) => extraTroops + sum,
+      0
+    );
+
+    return totalTerritoryTroops + continentTroops;
+  }
+
+  public fetchReinforcementData(actionDetails: ActionDetails) {
+    const { playerId } = actionDetails;
+    const territories = this.playerTerritories(playerId);
+    const continents = this.playerStates[playerId].continents;
+    const newTroops = this.updateTroopsToBeCollected(territories, continents);
+
+    return {
+      territories,
+      newTroops,
+    };
+  }
+
   public playerTerritories(playerId: string) {
     return this.playerStates[playerId].territories;
+  }
+
+  get playerState() {
+    return this.playerStates;
   }
 
   get playersData() {

@@ -5,6 +5,7 @@ import { Action } from "./game.ts";
 import { ActionTypes } from "../types/gameTypes.ts";
 
 export default class GameManager {
+  private shuffler: (ar: string[]) => string[];
   private gameSessions: Record<string, string> = {};
   private games: Game[] = [];
   private waitingLobbies: Record<string, Set<string>> = { "3": new Set() };
@@ -15,11 +16,13 @@ export default class GameManager {
   constructor(
     uniqueId: () => string,
     getContinents: () => Continent,
-    timeStamp: () => number
+    timeStamp: () => number,
+    shuffler: (ar: string[]) => string[] = lodash.shuffle
   ) {
     this.uniqueId = uniqueId;
     this.getContinents = getContinents;
     this.timeStamp = timeStamp;
+    this.shuffler = shuffler;
   }
 
   private createGame(players: Set<string>) {
@@ -29,7 +32,7 @@ export default class GameManager {
       players,
       continents,
       this.uniqueId,
-      lodash.shuffle,
+      this.shuffler,
       this.timeStamp
     );
     game.init();
@@ -94,7 +97,7 @@ export default class GameManager {
       updateTroops: () => requiredGame.updateTroops(actionDetails),
       isDeploymentOver: () => requiredGame.isDeploymentOver(actionDetails),
       reinforceRequest: () =>
-        requiredGame.playerTerritories(actionDetails.playerId),
+        requiredGame.fetchReinforcementData(actionDetails),
       attackRequest: () =>
         requiredGame.playerTerritories(actionDetails.playerId),
     };

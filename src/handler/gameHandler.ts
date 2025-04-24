@@ -50,8 +50,8 @@ const requestReinforcementHandler = (context: Context) => {
     data: {},
   };
 
-  const attackingTerritories = gameManager.handleGameActions(action);
-  return context.json(attackingTerritories);
+  const reinforcementData = gameManager.handleGameActions(action);
+  return context.json(reinforcementData);
 };
 
 const joinGameHandler = (context: Context) => {

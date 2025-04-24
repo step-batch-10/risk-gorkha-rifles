@@ -17,7 +17,7 @@ export const createServerWithLoggedInUser = (
 ) => {
   const session = new Session(uniqueIdGenerator());
   const users = new Users(uniqueIdGenerator());
-  const gameManager = gameManagerInstanceBuilder();
+  const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
   const sessionId = "1";
 
   session.createSession(sessionId);
@@ -328,7 +328,10 @@ describe("requestReinforcementHandler", () => {
       },
     });
 
-    assertEquals(await response.json(), ["India"]);
+    assertEquals(await response.json(), {
+      newTroops: 3,
+      territories: ["India"],
+    });
   });
 });
 

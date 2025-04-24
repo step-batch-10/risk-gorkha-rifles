@@ -10,7 +10,7 @@ describe("Server", () => {
   it("should initialize with an instance of Hono", () => {
     const users = new Users();
     const session = new Session();
-    const gameManager = gameManagerInstanceBuilder();
+    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     const server = new Server(users, session, gameManager, () => "1");
     assert(server.getApp instanceof Hono);
   });
