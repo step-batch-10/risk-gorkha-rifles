@@ -56,7 +56,7 @@ export default class MapView {
     this.#attackPhaseDetails.attackingTerritory = territoryId;
     this.#showToast("Select the number of troops to attack with");
     setTimeout(() => {
-      const troopsCount = prompt("Troops count");
+      prompt("Troops count");
     }, 2000);
   }
 
