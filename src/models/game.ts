@@ -1,11 +1,31 @@
-import { GameStatus, Territory } from "../types/game.ts";
+import { GameStatus, Territory } from "../types/gameTypes.ts";
+
+type Data = {
+  [key: string]:
+    | number
+    | Record<string, string>
+    | string
+    | Record<string, PlayerState>;
+};
+
+export type PlayerState = {
+  territories: string[];
+  continents: string[];
+  availableTroops: number;
+  cards: string[];
+};
 
 export interface Action {
   id: string;
   name: string;
   playerId: string | null;
-  data: unknown;
+  data: {
+    territory?: string;
+    troopCount?: number;
+    initialState?: Record<string, PlayerState>;
+  };
   currentPlayer: string;
+  playerStates: Record<string, PlayerState>;
   territoryState: Record<string, Territory>;
   timeStamp: number;
 }
@@ -16,6 +36,7 @@ export default class Game {
   private actions: Action[] = [];
   private continents: Record<string, string[]>;
   private shuffler: (arr: string[]) => string[];
+  private playerStates: Record<string, PlayerState> = {};
   private territoryState: Record<string, Territory> = {};
   private uniqueId;
   private timeStamp;
@@ -39,10 +60,35 @@ export default class Game {
     return this.actions;
   }
 
-  private divideTerritories = (
+  private initializePlayerStates() {
+    const players = [...this.players];
+    const territoriesByPlayer: Record<string, string[]> = {};
+    const playerStates: Record<string, PlayerState> = {};
+
+    for (const [territory, { owner }] of Object.entries(this.territoryState)) {
+      if (!(owner in territoriesByPlayer)) {
+        territoriesByPlayer[owner] = [];
+      }
+
+      territoriesByPlayer[owner].push(territory);
+    }
+
+    players.forEach((playerId) => {
+      playerStates[playerId] = {
+        territories: territoriesByPlayer[playerId] || [],
+        continents: [],
+        availableTroops: 21,
+        cards: [],
+      };
+    });
+
+    return playerStates;
+  }
+
+  private divideTerritories(
     continents: Record<string, string[]>,
     playerSet: Set<string>
-  ): Record<string, Territory> => {
+  ): Record<string, Territory> {
     const territories: Record<string, Territory> = {};
     const totalPlayers = playerSet.size;
     const players = [...playerSet];
@@ -58,11 +104,11 @@ export default class Game {
     });
 
     return territories;
-  };
+  }
 
   private generateAction(
     playerId: string,
-    data: { [key: string]: number | string },
+    data: Data,
     action: string,
     to: string | null
   ) {
@@ -73,21 +119,31 @@ export default class Game {
       currentPlayer: playerId,
       data: data,
       timeStamp: this.timeStamp(),
+      playerStates: this.playerStates,
       territoryState: this.territoryState,
     };
   }
 
-  public updateTerritoryTroops(territory: string, troopCount: number) {
+  public updateTroops(playerId: string, territory: string, troopCount: number) {
     if (!(territory in this.territoryState)) {
       return null;
     }
 
     this.territoryState[territory].troops += troopCount;
-    return this.territoryState[territory];
+    this.playerStates[playerId].availableTroops -= troopCount;
+
+    return {
+      territory: this.territoryState[territory],
+      player: this.playerStates[playerId],
+    };
   }
 
   public hasPlayer(playerId: string) {
     return this.players.has(playerId);
+  }
+
+  public isDeploymentOver(playerId: string) {
+    return this.playerStates[playerId].availableTroops === 0;
   }
 
   get status() {
@@ -95,34 +151,23 @@ export default class Game {
   }
 
   public init() {
-    const territories = this.divideTerritories(this.continents, this.players);
-    this.territoryState = territories;
+    this.territoryState = this.divideTerritories(this.continents, this.players);
+    this.playerStates = this.initializePlayerStates();
 
     this.actions.push(
       this.generateAction(
         "",
-        { troopsCount: 21 },
-        "initialDeploymentStart",
+        { initialState: this.playerStates },
+        "startInitialDeployment",
         null
       )
     );
 
-    return this.territoryState;
-  }
-
-  public updateTroops(territory: string, troopCount: number, playerId: string) {
-    this.territoryState[territory].troops += troopCount;
-    const updateTroops = this.territoryState[territory].troops;
-    this.actions.push(
-      this.generateAction(
-        playerId,
-        { territory, troops: updateTroops },
-        "updateTroops",
-        null
-      )
-    );
-
-    return this.territoryState[territory];
+    return {
+      territories: this.territoryState,
+      players: this.playerStates,
+      actions: this.actions,
+    };
   }
 
   get lastAction() {

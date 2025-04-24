@@ -4,7 +4,7 @@ import Server from "../../src/server.ts";
 import Users from "../../src/models/users.ts";
 import Session from "../../src/models/session.ts";
 import { gameManagerInstanceBuilder } from "../models/gameManager_test.ts";
-import { AllotStatus } from "../../src/types/game.ts";
+import { AllotStatus } from "../../src/types/gameTypes.ts";
 
 let uniqueId = () => {
   let i = 1;
@@ -73,9 +73,65 @@ describe("getGameActions", () => {
         username: "3",
       },
     ];
-    
+
     const expected = {
-      actions: [],
+      actions: [
+        {
+          currentPlayer: "",
+          data: {
+            initialState: {
+              "1": {
+                availableTroops: 21,
+                cards: [],
+                continents: [],
+                territories: ["India"],
+              },
+              "2": {
+                availableTroops: 21,
+                cards: [],
+                continents: [],
+                territories: [],
+              },
+              "3": {
+                availableTroops: 21,
+                cards: [],
+                continents: [],
+                territories: [],
+              },
+            },
+          },
+          id: "1",
+          name: "startInitialDeployment",
+          playerId: null,
+          playerStates: {
+            "1": {
+              availableTroops: 21,
+              cards: [],
+              continents: [],
+              territories: ["India"],
+            },
+            "2": {
+              availableTroops: 21,
+              cards: [],
+              continents: [],
+              territories: [],
+            },
+            "3": {
+              availableTroops: 21,
+              cards: [],
+              continents: [],
+              territories: [],
+            },
+          },
+          territoryState: {
+            India: {
+              owner: "1",
+              troops: 1,
+            },
+          },
+          timeStamp: 1,
+        },
+      ],
       currentPlayer: "1",
       players,
       status: "running",

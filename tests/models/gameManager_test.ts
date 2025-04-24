@@ -1,8 +1,8 @@
-import { assert, assertEquals } from "assert";
+import { assert, assertEquals, assertFalse, assertThrows } from "assert";
 import { describe, it } from "testing";
 import GameManager from "../../src/models/gameManager.ts";
 import Game from "../../src/models/game.ts";
-import { Continent, GameStatus } from "../../src/types/game.ts";
+import { Continent } from "../../src/types/gameTypes.ts";
 
 export const gameManagerInstanceBuilder = () => {
   const uniqueId = (): string => "1";
@@ -49,45 +49,17 @@ describe("allotPlayer method", () => {
 });
 
 describe("getGameActions test", () => {
-  it("should return all actions after the timestamp", () => {
-    const gameManager = gameManagerInstanceBuilder();
-    gameManager.allotPlayer("1", "3");
-    gameManager.allotPlayer("2", "3");
-    gameManager.allotPlayer("3", "3");
-    const game = gameManager.findPlayerActiveGame("3");
-    game?.init();
-    const actual = gameManager.getGameActions("3", 0);
-    const expected = {
-      status: GameStatus.running,
-      currentPlayer: "3",
-      actions: [
-        {
-          id: "1",
-          name: "initialDeploymentStart",
-          playerId: null,
-          currentPlayer: "",
-          data: { troopsCount: 21 },
-          timeStamp: 1,
-          territoryState: { India: { owner: "1", troops: 1 } },
-        },
-      ],
-      players: ["1", "2", "3"],
-    };
-    assertEquals(actual, expected);
-  });
-
   it("should return empty actions when actions are", () => {
     const gameManager = gameManagerInstanceBuilder();
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
-    gameManager.allotPlayer("3", "3");
 
     const actual = gameManager.getGameActions("3", 0);
     const expected = {
-      status: GameStatus.running,
+      status: undefined,
       currentPlayer: "3",
       actions: [],
-      players: ["1", "2", "3"],
+      players: undefined,
     };
     assertEquals(actual, expected);
   });
@@ -112,6 +84,191 @@ describe("getGameActions test", () => {
     assertEquals(gameManager.waitingStatus("3"), {
       status: false,
       players: [],
+    });
+  });
+});
+
+describe("handleGameActions test", () => {
+  it("should return updated troops in territory", () => {
+    const gameManager = gameManagerInstanceBuilder();
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const actual = gameManager.handleGameActions("3", {
+      id: "1",
+      name: "updateTroops",
+      playerId: "3",
+      data: {
+        territory: "India",
+        troopCount: 1,
+      },
+      currentPlayer: "3",
+      playerStates: {
+        "1": {
+          territories: ["India"],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+        "2": {
+          territories: [],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+        "3": {
+          territories: [],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+      },
+      territoryState: { India: { owner: "1", troops: 1 } },
+      timeStamp: 1,
+    });
+    const expected = { owner: "1", troops: 2 };
+    assertEquals(actual.territory, expected);
+  });
+  it("should return isDeploymentOver as false", () => {
+    const gameManager = gameManagerInstanceBuilder();
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const actual = gameManager.handleGameActions("3", {
+      id: "1",
+      name: "isDeploymentOver",
+      playerId: "3",
+      data: {},
+      territoryState: { India: { owner: "1", troops: 1 } },
+      playerStates: {
+        "1": {
+          territories: ["India"],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+        "2": {
+          territories: [],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+        "3": {
+          territories: [],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+      },
+      currentPlayer: "3",
+      timeStamp: 1,
+    });
+    assertFalse(actual);
+  });
+  it("should return isDeploymentOver as false", () => {
+    const gameManager = gameManagerInstanceBuilder();
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    gameManager.handleGameActions("3", {
+      id: "1",
+      name: "updateTroops",
+      playerId: "3",
+      data: {
+        territory: "India",
+        troopCount: 21,
+      },
+      currentPlayer: "3",
+      playerStates: {
+        "1": {
+          territories: ["India"],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+        "2": {
+          territories: [],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+        "3": {
+          territories: [],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+      },
+      territoryState: { India: { owner: "1", troops: 1 } },
+      timeStamp: 1,
+    });
+    const actual = gameManager.handleGameActions("3", {
+      id: "1",
+      name: "isDeploymentOver",
+      playerId: "3",
+      data: {},
+      territoryState: { India: { owner: "1", troops: 1 } },
+      playerStates: {
+        "1": {
+          territories: ["India"],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+        "2": {
+          territories: [],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+        "3": {
+          territories: [],
+          continents: [],
+          availableTroops: 21,
+          cards: [],
+        },
+      },
+      currentPlayer: "3",
+      timeStamp: 1,
+    });
+    assert(actual);
+  });
+
+  it("should throw when game not found ", () => {
+    const gameManager = gameManagerInstanceBuilder();
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+
+    assertThrows(() => {
+      gameManager.handleGameActions("1", {
+        id: "1",
+        name: "isDeploymentOver",
+        playerId: "1",
+        data: {},
+        territoryState: { India: { owner: "1", troops: 1 } },
+        playerStates: {
+          "1": {
+            territories: ["India"],
+            continents: [],
+            availableTroops: 21,
+            cards: [],
+          },
+          "2": {
+            territories: [],
+            continents: [],
+            availableTroops: 21,
+            cards: [],
+          },
+          "3": {
+            territories: [],
+            continents: [],
+            availableTroops: 21,
+            cards: [],
+          },
+        },
+        currentPlayer: "3",
+        timeStamp: 1,
+      });
     });
   });
 });

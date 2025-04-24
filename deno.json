@@ -14,20 +14,18 @@
     "deploy-prod": "./bin/deno-deploy.sh risk-gorkha-rifles-prod"
   },
   "test": {
-    "include": [
-      "src/**/*",
-      "tests/**/*"
-    ],
-    "exclude": [
-      "src/main.ts"
-    ]
+    "include": ["src/**/*", "tests/**/*"],
+    "exclude": ["src/main.ts"]
   },
   "deploy": {
     "project": "8df4209a-7e42-440b-823d-a8df84a5452a",
-    "exclude": [
-      "**/node_modules"
-    ],
+    "exclude": ["**/node_modules"],
     "include": [],
     "entrypoint": "src/main.ts"
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any"]
+    }
   }
 }

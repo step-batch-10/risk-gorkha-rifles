@@ -1,7 +1,8 @@
 import Game from "./game.ts";
-import { Continent, GameStatus, LobbyStatus } from "../types/game.ts";
+import { Continent, GameStatus, LobbyStatus } from "../types/gameTypes.ts";
 import lodash from "npm:lodash";
 import { Action } from "./game.ts";
+import { ActionTypes } from "../types/gameTypes.ts";
 
 export default class GameManager {
   private gameSessions: Record<string, string> = {};
@@ -31,10 +32,19 @@ export default class GameManager {
       lodash.shuffle,
       this.timeStamp
     );
+    game.init();
     this.games.push(game);
     players.forEach((playerId) => (this.gameSessions[playerId] = gameId));
 
     return gameId;
+  }
+
+  private getRecentActions(actions: Action[] = [], timeStamp: number) {
+    const index = actions.findIndex((action) => {
+      action.timeStamp > timeStamp;
+    });
+
+    return actions.slice(index);
   }
 
   public allotPlayer(playerId: string, noOfPlayers: string) {
@@ -47,14 +57,6 @@ export default class GameManager {
     }
 
     return this.waitingLobbies[noOfPlayers];
-  }
-
-  private getRecentActions(actions: Action[] = [], timeStamp: number) {
-    const index = actions.findIndex((action) => {
-      action.timeStamp > timeStamp;
-    });
-
-    return actions.slice(index);
   }
 
   public getGameActions(playerId: string, lastActionat: number) {
@@ -85,5 +87,22 @@ export default class GameManager {
     return this.games.find(
       (game) => game.hasPlayer(playerId) && game.status === GameStatus.running
     );
+  }
+
+  public handleGameActions(playerId: string, actionDetails: Action) {
+    const requiredGame = this.findPlayerActiveGame(playerId);
+
+    const territory = actionDetails.data?.territory || "";
+    const troopCount = actionDetails.data?.troopCount || 0;
+
+    if (!requiredGame) throw "Game not found";
+
+    const actionMap: Record<ActionTypes, () => any> = {
+      updateTroops: () =>
+        requiredGame.updateTroops(playerId, territory, troopCount),
+      isDeploymentOver: () => requiredGame.isDeploymentOver(playerId),
+    };
+
+    return actionMap[actionDetails.name as ActionTypes]();
   }
 }

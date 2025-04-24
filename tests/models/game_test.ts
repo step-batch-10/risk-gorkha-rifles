@@ -31,7 +31,7 @@ describe("testing init", () => {
       peru: { owner: "2", troops: 1 },
     };
 
-    assertEquals(result, expected1);
+    assertEquals(result.territories, expected1);
   });
 });
 
@@ -39,6 +39,20 @@ describe("getLastAction", () => {
   it("should return the last action with details", () => {
     const game = gameInstanceBuilder();
     game.init();
+    const playerState = {
+      "1": {
+        territories: ["alaska", "brazil"],
+        continents: [],
+        availableTroops: 21,
+        cards: [],
+      },
+      "2": {
+        territories: ["alberta", "peru"],
+        continents: [],
+        availableTroops: 21,
+        cards: [],
+      },
+    };
     const territoryState = {
       alaska: { owner: "1", troops: 1 },
       alberta: { owner: "2", troops: 1 },
@@ -48,11 +62,27 @@ describe("getLastAction", () => {
 
     const expected = {
       id: "1",
-      name: "initialDeploymentStart",
+      name: "startInitialDeployment",
       playerId: null,
       currentPlayer: "",
-      data: { troopsCount: 21 },
+      data: {
+        initialState: {
+          "1": {
+            availableTroops: 21,
+            cards: [],
+            continents: [],
+            territories: ["alaska", "brazil"],
+          },
+          "2": {
+            availableTroops: 21,
+            cards: [],
+            continents: [],
+            territories: ["alberta", "peru"],
+          },
+        },
+      },
       timeStamp: 1,
+      playerStates: playerState,
       territoryState,
     };
 
@@ -78,52 +108,39 @@ describe("tests for updateTerritoryTroops", () => {
   it("should return updated troops when valid territory and troop count is given", () => {
     const game = gameInstanceBuilder();
     game.init();
-    const actual = game.updateTerritoryTroops("peru", 1);
-    assertEquals(actual, { owner: "2", troops: 2 });
+    const actual = game.updateTroops("1", "peru", 1);
+    assertEquals(actual?.territory, { owner: "2", troops: 2 });
   });
 
   it("should return updated troops when valid territory and troop count is given", () => {
     const game = gameInstanceBuilder();
     game.init();
-    const actual = game.updateTerritoryTroops("peru", -1);
-    assertEquals(actual, { owner: "2", troops: 0 });
+    const actual = game.updateTroops("2", "peru", -1);
+    assertEquals(actual?.territory, { owner: "2", troops: 0 });
   });
 
   it("should return null when invalid territory is given", () => {
     const game = gameInstanceBuilder();
     game.init();
-    const actual = game.updateTerritoryTroops("India", 2);
+    const actual = game.updateTroops("1", "India", 2);
     assertEquals(actual, null);
   });
 });
 
-describe("update troops method", () => {
-  it("should update troops", () => {
+describe("tests for isDeploymentOver", () => {
+  it("should return true when deployment for current player id is over", () => {
     const game = gameInstanceBuilder();
     game.init();
-    const territoryState = {
-      alaska: { owner: "1", troops: 1 },
-      alberta: { owner: "2", troops: 1 },
-      brazil: { owner: "1", troops: 1 },
-      peru: { owner: "2", troops: 11 },
-    };
+    game.updateTroops("2", "peru", 21);
+    const actual = game.isDeploymentOver("2");
+    assert(actual);
+  });
 
-    const updatedTerritory = game.updateTroops("peru", 10, "2");
-
-    const lastAction = game.lastAction;
-    const expected = {
-      id: "1",
-      name: "updateTroops",
-      playerId: null,
-      currentPlayer: "2",
-      data: {
-        territory: "peru",
-        troops: 11,
-      },
-      timeStamp: 1,
-      territoryState,
-    };
-    assertEquals(updatedTerritory, { owner: "2", troops: 11 });
-    assertEquals(lastAction, expected);
+  it("should return false when deployment for current player id is not over", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    game.updateTroops("2", "peru", 1);
+    const actual = game.isDeploymentOver("2");
+    assertFalse(actual);
   });
 });
