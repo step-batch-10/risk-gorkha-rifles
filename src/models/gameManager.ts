@@ -1,13 +1,13 @@
-import Game, { ActionDetails } from './game.ts';
-import { Continent, GameStatus, LobbyStatus } from '../types/gameTypes.ts';
-import lodash from 'npm:lodash';
-import { Action } from './game.ts';
-import { ActionTypes } from '../types/gameTypes.ts';
+import Game, { ActionDetails } from "./game.ts";
+import { Continent, GameStatus, LobbyStatus } from "../types/gameTypes.ts";
+import lodash from "npm:lodash";
+import { Action } from "./game.ts";
+import { ActionTypes } from "../types/gameTypes.ts";
 
 export default class GameManager {
   private gameSessions: Record<string, string> = {};
   private games: Game[] = [];
-  private waitingLobbies: Record<string, Set<string>> = { '3': new Set() };
+  private waitingLobbies: Record<string, Set<string>> = { "3": new Set() };
   private uniqueId: () => string;
   private getContinents: () => Continent;
   private timeStamp: () => number = Date.now;
@@ -41,8 +41,7 @@ export default class GameManager {
   }
 
   private getRecentActions(actions: Action[] = [], timeStamp: number) {
-    const index = actions.findIndex((action) => action.timeStamp > timeStamp);
-    return actions.slice(index);
+    return actions.filter((action) => action.timeStamp > timeStamp);
   }
 
   public allotPlayer(playerId: string, noOfPlayers: string) {
@@ -61,7 +60,6 @@ export default class GameManager {
     const activeGame = this.findPlayerActiveGame(playerId);
     const allActions = activeGame?.gameActions;
     const recentActions = this.getRecentActions(allActions, lastActionat);
-    
 
     return {
       status: activeGame?.status,
@@ -90,7 +88,7 @@ export default class GameManager {
 
   public handleGameActions(actionDetails: ActionDetails) {
     const requiredGame = this.findPlayerActiveGame(actionDetails.playerId);
-    if (!requiredGame) throw 'Game not found';
+    if (!requiredGame) throw "Game not found";
 
     const actionMap: Record<ActionTypes, () => any> = {
       updateTroops: () => requiredGame.updateTroops(actionDetails),

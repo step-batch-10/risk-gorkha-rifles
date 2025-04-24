@@ -2,7 +2,7 @@ export default class MapView {
   #attackPhaseDetails = {
     attackingTerritory: "",
     defendingTerritory: "",
-    troopsCount: ""
+    troopsCount: "",
   };
   #eventBus;
   #listeners = {};
@@ -25,7 +25,7 @@ export default class MapView {
   }
 
   #findPlayerColor(playerId, players) {
-    const player = players.find(player => player.id === playerId);
+    const player = players.find((player) => player.id === playerId);
     return player?.colour || "#000";
   }
 
@@ -36,10 +36,10 @@ export default class MapView {
   }
 
   #removeClickListeners(territories) {
-    territories.forEach(territoryId => {
+    territories.forEach((territoryId) => {
       const territory = document.getElementById(territoryId);
       this.#toggleTerritoryHighlight(territoryId, false);
-      territory.removeEventListener('click', this.#listeners[territoryId]);
+      territory.removeEventListener("click", this.#listeners[territoryId]);
       delete this.#listeners[territoryId];
     });
   }
@@ -61,11 +61,14 @@ export default class MapView {
   }
 
   async #selectDefendingTerritory(attackingTerritoryId) {
-    this.#showToast('Selecting defending territory');
-    const [response] = this.#eventBus.emit('getDefendingTerritories', attackingTerritoryId);
+    this.#showToast("Selecting defending territory");
+    const [response] = this.#eventBus.emit(
+      "getDefendingTerritories",
+      attackingTerritoryId
+    );
     const defendingTerritories = await response;
 
-    defendingTerritories.forEach(territoryId => {
+    defendingTerritories.forEach((territoryId) => {
       const territory = document.getElementById(territoryId);
       this.#toggleTerritoryHighlight(territoryId, true);
       const listener = this.#handleTerritoryClick(
@@ -74,7 +77,7 @@ export default class MapView {
         defendingTerritories
       );
       this.#listeners[territoryId] = listener;
-      territory.addEventListener('click', listener);
+      territory.addEventListener("click", listener);
     });
   }
 
@@ -84,31 +87,31 @@ export default class MapView {
   }
 
   handleAttackPhase(attackingTerritories) {
-    attackingTerritories.forEach(territoryId => {
+    attackingTerritories.forEach((territoryId) => {
       const territory = document.getElementById(territoryId);
       this.#toggleTerritoryHighlight(territoryId, true);
       const listener = this.#handleTerritoryClick(
         territoryId,
-        () => this.#handleAttackTerritoryClick(territoryId, attackingTerritories),
+        () =>
+          this.#handleAttackTerritoryClick(territoryId, attackingTerritories),
         attackingTerritories
       );
       this.#listeners[territoryId] = listener;
-      territory.addEventListener('click', listener);
+      territory.addEventListener("click", listener);
     });
   }
 
-  updateTerritory({ territory, troopsCount }) {
+  updateTerritory({ territory, troopCount }) {
     const domTerritory = document.getElementById(territory);
-    const troopsCountDOM = domTerritory.querySelector('tspan');
-    const existingTroops = parseInt(troopsCountDOM.textContent, 10);
+    const troopsCountDOM = domTerritory.querySelector("tspan");
 
-    troopsCountDOM.textContent = existingTroops + troopsCount;
+    troopsCountDOM.textContent = troopCount;
   }
 
   #renderTerritories(territories, players) {
     Object.entries(territories).forEach(([territoryId, { troops, owner }]) => {
       const domTerritory = document.getElementById(territoryId);
-      const troopsCountDOM = domTerritory.querySelector('tspan');
+      const troopsCountDOM = domTerritory.querySelector("tspan");
       troopsCountDOM.textContent = troops;
       troopsCountDOM.style.fill = this.#findPlayerColor(owner, players);
     });

@@ -125,15 +125,15 @@ const fullProfileDetailsHandler = (context: Context) => {
 const updateTroopsHandler = async (context: Context) => {
   const userId: string = context.get("userId");
   const gameManager: GameManager = context.get("gameManager");
-  const { territoryId, troopCount } = await context.req.json();
+  const { territory, troopCount } = await context.req.json();
 
-  return context.json(
-    gameManager.handleGameActions({
-      playerId: userId,
-      name: "updateTroops",
-      data: { territory: territoryId, troopCount },
-    })
-  );
+  const updatedTroops = gameManager.handleGameActions({
+    playerId: userId,
+    name: "updateTroops",
+    data: { territory, troopCount },
+  });
+
+  return context.json(updatedTroops);
 };
 
 export {

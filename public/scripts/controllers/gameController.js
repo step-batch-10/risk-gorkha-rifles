@@ -6,12 +6,12 @@ export default class GameController {
   #eventBus;
 
   #actionMap = {
-    intialDeploymentStart: this.#handleIntialDeploymentStart.bind(this),
-    troopDeployment: this.#handleTroopDeployment.bind(this),
-    intialDeploymentStop: this.#intialDeploymentStop.bind(this),
+    startInitialDeployment: this.#handleIntialDeploymentStart.bind(this),
+    updateTroops: this.#handleTroopDeployment.bind(this),
+    stopInitialDeployment: this.#intialDeploymentStop.bind(this),
     startGame: this.#startGame.bind(this),
     reinforcementPhase: this.#handleReinforcementPhase.bind(this),
-    attackPhaseStart: this.#handleAttackPhase.bind(this)
+    attackPhaseStart: this.#handleAttackPhase.bind(this),
   };
 
   #gameMetaData = {
@@ -43,32 +43,33 @@ export default class GameController {
   }
 
   #getLastTimestamp() {
-    return this.#actionsLog.length ? this.#actionsLog.at(-1).timestamp : 0;
+    return this.#actionsLog.length ? this.#actionsLog.at(-1).timeStamp : 0;
   }
 
-  async #pollGameData() {
-    // setInterval(async () => {
-    const lastTimestamp = this.#getLastTimestamp();
+  #pollGameData() {
+    setInterval(async () => {
+      const lastTimestamp = this.#getLastTimestamp();
 
-    const gameData = await this.#apiService.getGameDetails(lastTimestamp);
-    this.#updateLocalState(gameData);
-    this.#handleGameData(gameData);
-    this.#viewManager.renderPlayerSidebar(gameData.players);
-    // }, 1000);
+      const gameData = await this.#apiService.getGameDetails(lastTimestamp);
+      this.#updateLocalState(gameData);
+      this.#handleGameData(gameData);
+      this.#viewManager.renderPlayerSidebar(gameData.players);
+    }, 1000);
   }
 
   #handleTroopDeployment(gameDetails) {
     const {
-      action: { data, playerId },
+      action: { currentPlayer, data },
       players,
     } = gameDetails;
     this.#viewManager.updateTerritoryDetails(data);
+    const player = players.find((player) => player.id === currentPlayer);
+    const actionerName = player ? player.username : "Unknown Player";
 
-    const player = players.find((player) => player.id === playerId);
-    const actionerName = player ? player.name : "Unknown Player";
+    const { troopDeployed, territory } = data;
 
     Toastify({
-      text: `${actionerName} placed ${data.troopsCount} in ${data.territory}`,
+      text: `${actionerName} placed ${troopDeployed} in ${territory}`,
       duration: 3000,
       gravity: "top",
       position: "right",
@@ -151,17 +152,28 @@ export default class GameController {
   }
 
   async #getDefendingTerritories(attackingTerritoryId) {
-    const defendingTerritories = await this.#apiService.defendingTerritories(attackingTerritoryId);
+    const defendingTerritories = await this.#apiService.defendingTerritories(
+      attackingTerritoryId
+    );
 
-    return defendingTerritories;;
+    return defendingTerritories;
   }
 
   init() {
     this.#pollGameData();
-    this.#eventBus.on('requestReinforcement', this.#requestReinforcement.bind(this));
-    this.#eventBus.on('attackPhaseStarted', this.#handleAttackPhase.bind(this));
-    this.#eventBus.on('stopReinforcement', this.#stopReinforcementPhase.bind(this));
-    this.#eventBus.on('getDefendingTerritories', this.#getDefendingTerritories.bind(this));
+    this.#eventBus.on(
+      "requestReinforcement",
+      this.#requestReinforcement.bind(this)
+    );
+    this.#eventBus.on("attackPhaseStarted", this.#handleAttackPhase.bind(this));
+    this.#eventBus.on(
+      "stopReinforcement",
+      this.#stopReinforcementPhase.bind(this)
+    );
+    this.#eventBus.on(
+      "getDefendingTerritories",
+      this.#getDefendingTerritories.bind(this)
+    );
     this.#audio.play();
   }
 }

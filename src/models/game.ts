@@ -199,8 +199,9 @@ export default class Game {
       this.generateAction(
         playerId,
         {
-          playerTroops: this.playerStates[playerId].availableTroops,
-          territoryTroops: this.territoryState[territory].troops,
+          territory: territory,
+          troopCount: this.territoryState[territory].troops,
+          troopDeployed: troopCount,
         },
         "updateTroops",
         null

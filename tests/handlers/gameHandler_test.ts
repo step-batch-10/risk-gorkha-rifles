@@ -295,7 +295,7 @@ describe("update troop handler", () => {
       headers: {
         Cookie: `sessionId=${sessionId}`,
       },
-      body: JSON.stringify({ territoryId: "India", troopCount: 10 }),
+      body: JSON.stringify({ territory: "India", troopCount: 10 }),
     });
 
     const actual = await response.json();

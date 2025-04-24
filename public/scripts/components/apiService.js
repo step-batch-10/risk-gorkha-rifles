@@ -475,9 +475,9 @@
 // };
 
 export default class ApiService {
-  static async getGameDetails() {
+  static async getGameDetails(timestamp) {
     // return mockedData.reinforcementPhase;
-    const response = await fetch("/game/actions?since=");
+    const response = await fetch(`/game/actions?since=${timestamp}`);
     return await response.json();
   }
 
@@ -486,7 +486,7 @@ export default class ApiService {
       method: "POST",
       body: JSON.stringify({
         territory: territoryId,
-        troops: parseInt(troopsCount),
+        troopCount: parseInt(troopsCount),
       }),
     });
   }
@@ -500,17 +500,13 @@ export default class ApiService {
   }
 
   static requestAttack() {
-
     // const attackResponse = await fetch('/game/request-attack');
     // const responseData = await attackResponse.json();
 
-    return [
-      "china",
-      "siam", "india"
-    ];
+    return ["china", "siam", "india"];
   }
 
   static defendingTerritories() {
-    return ['mongolia', 'afghanistan', 'japan', 'peru', 'argentina'];
+    return ["mongolia", "afghanistan", "japan", "peru", "argentina"];
   }
 }
