@@ -1,12 +1,12 @@
 import { assertEquals } from "assert";
-import { beforeEach, describe, it } from "testing";
+import { describe, it } from "testing";
 import Server from "../../src/server.ts";
 import Users from "../../src/models/users.ts";
 import Session from "../../src/models/session.ts";
 import { gameManagerInstanceBuilder } from "../models/gameManager_test.ts";
 import { AllotStatus } from "../../src/types/gameTypes.ts";
 
-let uniqueId = () => {
+const uniqueId = () => {
   let i = 1;
   return () => (i++).toString();
 };
@@ -17,7 +17,9 @@ export const createServerWithLoggedInUser = (
 ) => {
   const session = new Session(uniqueIdGenerator());
   const users = new Users(uniqueIdGenerator());
-  const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
+  const gameManager = gameManagerInstanceBuilder(() => ({
+    Asia: ["India", "China", "Nepal"],
+  }));
   const sessionId = "1";
 
   session.createSession(sessionId);
@@ -36,12 +38,6 @@ export const createServerWithLoggedInUser = (
 };
 
 describe("getGameActions", () => {
-  beforeEach(() => {
-    uniqueId = () => {
-      let i = 1;
-      return () => (i++).toString();
-    };
-  });
   it("should return all the actions that happened after the timeStamp", async () => {
     const { app, sessionId, gameManager, users } =
       createServerWithLoggedInUser("Jack");
@@ -101,18 +97,23 @@ describe("getGameActions", () => {
               availableTroops: 21,
               cards: [],
               continents: [],
-              territories: [],
+              territories: ["China"],
             },
             "3": {
               availableTroops: 21,
               cards: [],
               continents: [],
-              territories: [],
+              territories: ["Nepal"],
             },
           },
           territoryState: {
-            India: {
-              owner: "1",
+            China: {
+              owner: "2",
+              troops: 1,
+            },
+            India: { owner: "1", troops: 1 },
+            Nepal: {
+              owner: "3",
               troops: 1,
             },
           },
@@ -131,12 +132,6 @@ describe("getGameActions", () => {
 });
 
 describe("tests for joinGame Handler", () => {
-  beforeEach(() => {
-    uniqueId = () => {
-      let i = 1;
-      return () => (i++).toString();
-    };
-  });
   it("should not allot the game for unauthorized user", async () => {
     const { app } = createServerWithLoggedInUser("Rose");
     const response = await app.request("/game/join-game", {
@@ -162,12 +157,6 @@ describe("tests for joinGame Handler", () => {
 });
 
 describe("lobbyHandler test", () => {
-  beforeEach(() => {
-    uniqueId = () => {
-      let i = 1;
-      return () => (i++).toString();
-    };
-  });
   it("should return waiting status and player when player is in waiting lobby", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("gour");
     gameManager.allotPlayer("1", "3");
@@ -350,5 +339,77 @@ describe("requestAttack", () => {
     });
 
     assertEquals(await response.json(), ["India"]);
+  });
+});
+
+describe("deploymentStatusHandler test", () => {
+  it("should return true when deployment is over", async () => {
+    const { app, gameManager, users, session, sessionId } =
+      createServerWithLoggedInUser("1");
+    users.createUser("2", "url");
+    users.createUser("3", "url");
+
+    const session2Id = session.createSession("2");
+    const session3Id = session.createSession("3");
+
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    await app.request("/game/update-troops", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=${sessionId}`,
+      },
+      body: JSON.stringify({
+        territory: "India",
+        troopCount: 21,
+      }),
+    });
+
+    await app.request("/game/update-troops", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=${session2Id}`,
+      },
+      body: JSON.stringify({
+        territory: "China",
+        troopCount: 21,
+      }),
+    });
+
+    await app.request("/game/update-troops", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=${session3Id}`,
+      },
+      body: JSON.stringify({
+        territory: "Nepal",
+        troopCount: 21,
+      }),
+    });
+    const response = await app.request("/game/is-deployment-over", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), { status: true });
+  });
+  it("should return false when deployment is not over", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request("/game/is-deployment-over", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), { status: false });
   });
 });

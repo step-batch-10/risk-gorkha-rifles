@@ -2,10 +2,7 @@ export default class ModalManager {
   #gameStartNotificationModal;
   #reinforcementPhaseModal;
 
-  constructor(
-    gameStartNotificationModal,
-    reinforcementPhaseModal
-  ) {
+  constructor(gameStartNotificationModal, reinforcementPhaseModal) {
     this.#gameStartNotificationModal = gameStartNotificationModal;
     this.#reinforcementPhaseModal = reinforcementPhaseModal;
   }
@@ -27,6 +24,7 @@ export default class ModalManager {
   }
 
   endReinforcementPhase() {
+    alert("deployment phase over");
     this.#reinforcementPhaseModal.removeListeners();
   }
 }

@@ -95,7 +95,7 @@ export default class GameManager {
 
     const actionMap: Record<ActionTypes, () => any> = {
       updateTroops: () => requiredGame.updateTroops(actionDetails),
-      isDeploymentOver: () => requiredGame.isDeploymentOver(actionDetails),
+      isDeploymentOver: () => requiredGame.isDeploymentOver(),
       reinforceRequest: () =>
         requiredGame.fetchReinforcementData(actionDetails),
       attackRequest: () =>

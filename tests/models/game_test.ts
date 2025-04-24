@@ -173,16 +173,23 @@ describe("tests for isDeploymentOver", () => {
   it("should return true when deployment for current player id is over", () => {
     const game = gameInstanceBuilder();
     game.init();
-    const actionDetails = {
+    game.updateTroops({
       playerId: "1",
+      name: "updateTroops",
+      data: {
+        territory: "brazil",
+        troopCount: 21,
+      },
+    });
+    game.updateTroops({
+      playerId: "2",
       name: "updateTroops",
       data: {
         territory: "peru",
         troopCount: 21,
       },
-    };
-    game.updateTroops(actionDetails);
-    const actual = game.isDeploymentOver(actionDetails);
+    });
+    const actual = game.isDeploymentOver();
     assert(actual);
   });
 
@@ -198,14 +205,13 @@ describe("tests for isDeploymentOver", () => {
       },
     };
     game.updateTroops(actionDetails);
-    const actual = game.isDeploymentOver(actionDetails);
+    const actual = game.isDeploymentOver();
     assertFalse(actual);
   });
 });
 
-
-describe('tests for playerTerritories', () => {
-  it('should ', () => {
+describe("tests for playerTerritories", () => {
+  it("should ", () => {
     const game = gameInstanceBuilder();
     game.init();
 

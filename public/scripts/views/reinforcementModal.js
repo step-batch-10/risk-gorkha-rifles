@@ -41,17 +41,18 @@ export default class ReinforcementModal {
   }
 
   addTerritoryListeners(currentPlayer, territories, actionData) {
-    this.#totalTroops = actionData.troopsCount;
-    this.#remainingTroops = actionData.troopsCount;
+    const { newTroops } = actionData;
+    this.#totalTroops = newTroops;
+    this.#remainingTroops = newTroops;
 
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
     console.log(territories);
 
-    Object.keys(territories).forEach((territoryId) => {
-      const territoryElement = document.getElementById(territoryId);
-      const listener = this.#handleTerritoryClick(territoryId).bind(this);
-      this.#clickListeners[territoryId] = listener;
+    Object.keys(territories).forEach((territoryName) => {
+      const territoryElement = document.getElementById(territoryName);
+      const listener = this.#handleTerritoryClick(territoryName).bind(this);
+      this.#clickListeners[territoryName] = listener;
       territoryElement.addEventListener("click", listener);
     });
   }
@@ -93,16 +94,22 @@ export default class ReinforcementModal {
     const incrementButton = document.querySelector("#increment");
     const decrementButton = document.querySelector("#decrement");
 
-    placeButton?.addEventListener("click", () => this.#handlePlaceButtonClick(territoryId, inputField, toast));
-    incrementButton?.addEventListener("click", () => this.#handleIncrementButtonClick(inputField));
-    decrementButton?.addEventListener("click", () => this.#handleDecrementButtonClick(inputField));
+    placeButton?.addEventListener("click", () =>
+      this.#handlePlaceButtonClick(territoryId, inputField, toast)
+    );
+    incrementButton?.addEventListener("click", () =>
+      this.#handleIncrementButtonClick(inputField)
+    );
+    decrementButton?.addEventListener("click", () =>
+      this.#handleDecrementButtonClick(inputField)
+    );
   }
 
-  #handlePlaceButtonClick(territoryId, inputField, toast) {
+  #handlePlaceButtonClick(territoryName, inputField, toast) {
     if (!inputField.value) return;
-    ApiService.saveTroopsDeployment(territoryId, inputField.value);
+    ApiService.saveTroopsDeployment(territoryName, inputField.value);
 
-    console.log("Troops placed:", inputField.value, territoryId);
+    console.log("Troops placed:", inputField.value, territoryName);
     toast.hideToast();
     this.#removeTerritoryHighlight();
   }

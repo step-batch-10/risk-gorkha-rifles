@@ -257,15 +257,33 @@ describe("handleGameActions test", () => {
     assertFalse(actual);
   });
   it("should return isDeploymentOver as false", () => {
-    const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
+    const gameManager = gameManagerInstanceBuilder(() => ({
+      Asia: ["India", "China", "Nepal"],
+    }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
     gameManager.handleGameActions({
       name: "updateTroops",
-      playerId: "3",
+      playerId: "1",
       data: {
         territory: "India",
+        troopCount: 21,
+      },
+    });
+    gameManager.handleGameActions({
+      name: "updateTroops",
+      playerId: "2",
+      data: {
+        territory: "China",
+        troopCount: 21,
+      },
+    });
+    gameManager.handleGameActions({
+      name: "updateTroops",
+      playerId: "3",
+      data: {
+        territory: "Nepal",
         troopCount: 21,
       },
     });

@@ -120,9 +120,10 @@ export default class GameController {
   }
 
   async #requestReinforcement() {
-    const troopsCount = await this.#apiService.requestReinforcement();
+    const { territories, newTroops } =
+      await this.#apiService.requestReinforcement();
     Toastify({
-      text: `You received ${troopsCount} troops.`,
+      text: `You received ${newTroops} troops.`,
       duration: 3000,
       gravity: "top",
       position: "left",
@@ -137,7 +138,8 @@ export default class GameController {
     const territoryState = lastAction.territoryState;
 
     this.#modalManager.startReinforcementPhase(userId, territoryState, {
-      troopsCount,
+      newTroops,
+      territories,
     });
   }
 

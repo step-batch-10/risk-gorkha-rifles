@@ -220,9 +220,18 @@ export default class Game {
     return this.players.has(playerId);
   }
 
-  public isDeploymentOver(actionDetails: ActionDetails) {
-    const { playerId } = actionDetails;
-    return this.playerStates[playerId].availableTroops === 0;
+  public isDeploymentOver() {
+    const status = Object.values(this.playerStates).every(
+      ({ availableTroops }) => availableTroops === 0
+    );
+
+    if (status) {
+      this.actions.push(
+        this.generateAction("", {}, "stopInitialDeployment", null)
+      );
+    }
+
+    return status;
   }
 
   get status() {

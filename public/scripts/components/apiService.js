@@ -489,14 +489,15 @@ export default class ApiService {
         troopCount: parseInt(troopsCount),
       }),
     });
+
+    await fetch("/game/is-deployment-over");
   }
 
-  static requestReinforcement() {
-    return 20;
-    // const reinforcementResponse = await fetch('/game/request-reinforcement');
-    // const responseData = await reinforcementResponse.json();
+  static async requestReinforcement() {
+    const reinforcementResponse = await fetch("/game/request-reinforcement");
+    const responseData = await reinforcementResponse.json();
 
-    // return responseData.troopsCount;
+    return responseData;
   }
 
   static requestAttack() {
