@@ -1,15 +1,14 @@
-import { Context } from "hono";
-import Users, { User } from "../models/users.ts";
-import GameManager from "../models/gameManager.ts";
-import { ActionTypes, AllotStatus, LobbyStatus } from "../types/gameTypes.ts";
-import { ActionDetails } from "../models/game.ts";
-
+import { Context } from 'hono';
+import Users, { User } from '../models/users.ts';
+import GameManager from '../models/gameManager.ts';
+import { ActionTypes, AllotStatus, LobbyStatus } from '../types/gameTypes.ts';
+import { ActionDetails } from '../models/game.ts';
 const gameActionsHandler = (context: Context) => {
-  const lastActionAt = Number(context.req.query("since"));
-  const gameManager: GameManager = context.get("gameManager");
-  const userId: string = context.get("userId");
+  const lastActionAt = Number(context.req.query('since'));
+  const gameManager: GameManager = context.get('gameManager');
+  const userId: string = context.get('userId');
   const gameActions = gameManager.getGameActions(userId, lastActionAt);
-  const users = context.get("users");
+  const users = context.get('users');
 
   return context.json({
     status: gameActions.status,
@@ -24,9 +23,9 @@ const requestReinforcementHandler = (context: Context) => {
   const gameManager: GameManager = context.get('gameManager');
 
   const action: ActionDetails = {
-    name: ActionTypes.attackRequest,
+    name: ActionTypes.reinforceRequest,
     playerId: userId,
-    data: {}
+    data: {},
   };
 
   const attackingTerritories = gameManager.handleGameActions(action);
@@ -34,17 +33,17 @@ const requestReinforcementHandler = (context: Context) => {
 };
 
 const joinGameHandler = (context: Context) => {
-  const userId: string = context.get("userId");
-  const gameManager: GameManager = context.get("gameManager");
-  gameManager.allotPlayer(userId, "3");
+  const userId: string = context.get('userId');
+  const gameManager: GameManager = context.get('gameManager');
+  gameManager.allotPlayer(userId, '3');
 
-  return context.redirect("/game/waiting.html");
+  return context.redirect('/game/waiting.html');
 };
 
 const lobbyStatusHandler = (context: Context) => {
-  const gameManager: GameManager = context.get("gameManager");
-  const userId: string = context.get("userId");
-  const users: Users = context.get("users");
+  const gameManager: GameManager = context.get('gameManager');
+  const userId: string = context.get('userId');
+  const users: Users = context.get('users');
   const lobbyStatus = gameManager.waitingStatus(userId);
 
   return context.json(formatLobbyStatusHandlerResponse(lobbyStatus, users));
@@ -69,16 +68,16 @@ const userProfileBuilder = (users: Users, players: string[] = []) => {
 };
 
 const profileDetailsHandler = (context: Context) => {
-  const userId: string = context.get("userId");
-  const users: Users = context.get("users");
+  const userId: string = context.get('userId');
+  const users: Users = context.get('users');
   const userDetails: User = users.findById(userId);
 
   return context.json(userDetails);
 };
 
 const fullProfileDetailsHandler = (context: Context) => {
-  const userId: string = context.get("userId");
-  const users: Users = context.get("users");
+  const userId: string = context.get('userId');
+  const users: Users = context.get('users');
   const { username, avatar }: User = users.findById(userId);
 
   return context.json({
@@ -89,11 +88,26 @@ const fullProfileDetailsHandler = (context: Context) => {
   });
 };
 
+const updateTroopsHandler = async (context: Context) => {
+  const userId: string = context.get('userId');
+  const gameManager: GameManager = context.get('gameManager');
+  const { territoryId, troopCount } = await context.req.json();
+
+  return context.json(
+    gameManager.handleGameActions({
+      playerId: userId,
+      name: 'updateTroops',
+      data: { territory: territoryId, troopCount },
+    })
+  );
+};
+
 export {
   joinGameHandler,
   gameActionsHandler,
   lobbyStatusHandler,
   profileDetailsHandler,
   fullProfileDetailsHandler,
-  requestReinforcementHandler
+  requestReinforcementHandler,
+  updateTroopsHandler,
 };
