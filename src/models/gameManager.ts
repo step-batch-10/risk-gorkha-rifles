@@ -1,5 +1,5 @@
 import Game from "./game.ts";
-import { Continent, GameStatus } from "../types/game.ts";
+import { Continent, GameStatus, LobbyStatus } from "../types/game.ts";
 import lodash from "npm:lodash";
 import { Action } from "./game.ts";
 
@@ -70,7 +70,7 @@ export default class GameManager {
     };
   }
 
-  public waitingStatus(playerId: string) {
+  public waitingStatus(playerId: string): LobbyStatus {
     const waitingLobbies = Object.values(this.waitingLobbies);
     const waitingLobby = waitingLobbies.find((waitingLobby) =>
       waitingLobby.has(playerId)

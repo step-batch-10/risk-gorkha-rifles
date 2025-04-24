@@ -8,6 +8,8 @@ export enum AllotStatus {
   gameRoom = "gameRoom",
 }
 
+export type LobbyStatus = { status: boolean, players: string[]; };
+
 export type Continent = Record<string, string[]>;
 
-export type Territory = { owner: string; troops: number };
+export type Territory = { owner: string; troops: number; };

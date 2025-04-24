@@ -1,7 +1,7 @@
 import { Context } from "hono";
 import Users, { User } from "../models/users.ts";
 import GameManager from "../models/gameManager.ts";
-import { AllotStatus } from "../types/game.ts";
+import { AllotStatus, LobbyStatus } from "../types/game.ts";
 
 const gameActionsHandler = (context: Context) => {
   const lastActionAt = Number(context.req.query("since"));
@@ -32,15 +32,19 @@ const lobbyStatusHandler = (context: Context) => {
   const users: Users = context.get("users");
   const lobbyStatus = gameManager.waitingStatus(userId);
 
-  if (lobbyStatus.status) {
-    return context.json({
-      status: AllotStatus.waitingLobby,
-      players: userProfileBuilder(users, lobbyStatus.players),
-    });
-  }
-
-  return context.json({ status: AllotStatus.gameRoom, players: [] });
+  return context.json(formatLobbyStatusHandlerResponse(lobbyStatus, users));
 };
+
+const formatLobbyStatusHandlerResponse = (lobbyStatus: LobbyStatus, users: Users) => {
+    if (lobbyStatus.status) {
+      return {
+        status: AllotStatus.waitingLobby,
+        players: userProfileBuilder(users, lobbyStatus.players),
+      };
+    }
+
+    return { status: AllotStatus.gameRoom, players: [] };
+  };
 
 const userProfileBuilder = (users: Users, players: string[] = []) => {
   return players.map((playerId) => users.findById(playerId));
