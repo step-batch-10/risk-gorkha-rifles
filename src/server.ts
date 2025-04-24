@@ -14,6 +14,7 @@ import {
   fullProfileDetailsHandler,
   updateTroopsHandler,
   requestReinforcementHandler,
+  requestAttackHandler,
 } from './handler/gameHandler.ts';
 import { getCookie } from 'hono/cookie';
 
@@ -70,6 +71,7 @@ export default class Server {
     app.get('/player-full-profile', fullProfileDetailsHandler);
     app.post('/update-troops', updateTroopsHandler);
     app.get('/request-reinforcement', requestReinforcementHandler);
+    app.get('/request-attack', requestAttackHandler);
     return app;
   }
 

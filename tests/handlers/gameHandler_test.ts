@@ -329,18 +329,36 @@ describe('update troop handler', () => {
 
 describe('requestReinforcementHandler', () => {
   it('should return the player territories', async () => {
-    const { app, gameManager } = createServerWithLoggedInUser("Jack");
-    gameManager.allotPlayer("1", "3");
-    gameManager.allotPlayer("2", "3");
-    gameManager.allotPlayer("3", "3");
+    const { app, gameManager } = createServerWithLoggedInUser('Jack');
+    gameManager.allotPlayer('1', '3');
+    gameManager.allotPlayer('2', '3');
+    gameManager.allotPlayer('3', '3');
 
-    const response = await app.request("/game/request-reinforcement", {
-      method: "GET",
+    const response = await app.request('/game/request-reinforcement', {
+      method: 'GET',
       headers: {
         Cookie: `sessionId=1`,
       },
     });
 
-    assertEquals(await response.json(), ["India"]);
+    assertEquals(await response.json(), ['India']);
+  });
+});
+
+describe('requestAttack', () => {
+  it('should return the player territories', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser('Jack');
+    gameManager.allotPlayer('1', '3');
+    gameManager.allotPlayer('2', '3');
+    gameManager.allotPlayer('3', '3');
+
+    const response = await app.request('/game/request-attack', {
+      method: 'GET',
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), ['India']);
   });
 });

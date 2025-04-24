@@ -3,6 +3,7 @@ import Users, { User } from '../models/users.ts';
 import GameManager from '../models/gameManager.ts';
 import { ActionTypes, AllotStatus, LobbyStatus } from '../types/gameTypes.ts';
 import { ActionDetails } from '../models/game.ts';
+
 const gameActionsHandler = (context: Context) => {
   const lastActionAt = Number(context.req.query('since'));
   const gameManager: GameManager = context.get('gameManager');
@@ -16,6 +17,20 @@ const gameActionsHandler = (context: Context) => {
     actions: gameActions.actions,
     players: userProfileBuilder(users, gameActions.players),
   });
+};
+
+const requestAttackHandler = (context: Context) => {
+  const userId: string = context.get('userId');
+  const gameManager: GameManager = context.get('gameManager');
+
+  const action: ActionDetails = {
+    name: ActionTypes.attackRequest,
+    playerId: userId,
+    data: {},
+  };
+
+  const attackingTerritories = gameManager.handleGameActions(action);
+  return context.json(attackingTerritories);
 };
 
 const requestReinforcementHandler = (context: Context) => {
@@ -110,4 +125,5 @@ export {
   fullProfileDetailsHandler,
   requestReinforcementHandler,
   updateTroopsHandler,
+  requestAttackHandler,
 };
