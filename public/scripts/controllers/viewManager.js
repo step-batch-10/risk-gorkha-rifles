@@ -9,6 +9,18 @@ export default class ViewManager {
     this.#phaseView = phaseView;
   }
 
+  highlightTerritory(territoryId) {
+    this.#territoryRenderer.highlightTerritory(territoryId);
+  }
+
+  handleAttackView(territories) {
+    this.#territoryRenderer.handleAttackPhase(territories);
+  }
+
+  unhighlightTerritory(territoryId) {
+    this.#territoryRenderer.highlightTerritory(territoryId);
+  }
+
   updateTerritoryDetails(territoryDetails) {
     this.#territoryRenderer.updateTerritory(territoryDetails);
   }

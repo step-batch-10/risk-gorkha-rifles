@@ -17,7 +17,7 @@ const initModalManager = () => {
 };
 
 const initViewManager = (eventBus) => {
-  const mapView = new MapView();
+  const mapView = new MapView(eventBus);
   const phaseView = new PhaseView(eventBus);
   const playerSidebarView = new PlayerSidebarView('side-bar-left');
 

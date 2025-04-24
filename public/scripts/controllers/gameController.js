@@ -11,6 +11,7 @@ export default class GameController {
     intialDeploymentStop: this.#intialDeploymentStop.bind(this),
     startGame: this.#startGame.bind(this),
     reinforcementPhase: this.#handleReinforcementPhase.bind(this),
+    attackPhaseStart: this.#handleAttackPhase.bind(this)
   };
 
   #gameMetaData = {
@@ -47,12 +48,12 @@ export default class GameController {
 
   async #pollGameData() {
     // setInterval(async () => {
-      const lastTimestamp = this.#getLastTimestamp();
+    const lastTimestamp = this.#getLastTimestamp();
 
-      const gameData = await this.#apiService.getGameDetails(lastTimestamp);
-      this.#updateLocalState(gameData);
-      this.#handleGameData(gameData);
-      this.#viewManager.renderPlayerSidebar(gameData.players);
+    const gameData = await this.#apiService.getGameDetails(lastTimestamp);
+    this.#updateLocalState(gameData);
+    this.#handleGameData(gameData);
+    this.#viewManager.renderPlayerSidebar(gameData.players);
     // }, 1000);
   }
 
@@ -139,9 +140,28 @@ export default class GameController {
     });
   }
 
+  #handleAttackPhase() {
+    const territories = this.#apiService.requestAttack();
+
+    this.#viewManager.handleAttackView(territories);
+  }
+
+  #stopReinforcementPhase() {
+    this.#modalManager.endReinforcementPhase();
+  }
+
+  async #getDefendingTerritories(attackingTerritoryId) {
+    const defendingTerritories = await this.#apiService.defendingTerritories(attackingTerritoryId);
+
+    return defendingTerritories;;
+  }
+
   init() {
     this.#pollGameData();
     this.#eventBus.on('requestReinforcement', this.#requestReinforcement.bind(this));
+    this.#eventBus.on('attackPhaseStarted', this.#handleAttackPhase.bind(this));
+    this.#eventBus.on('stopReinforcement', this.#stopReinforcementPhase.bind(this));
+    this.#eventBus.on('getDefendingTerritories', this.#getDefendingTerritories.bind(this));
     this.#audio.play();
   }
 }

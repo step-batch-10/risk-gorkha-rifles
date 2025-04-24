@@ -46,6 +46,7 @@ export default class ReinforcementModal {
 
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
+    console.log(territories);
 
     Object.keys(territories).forEach((territoryId) => {
       const territoryElement = document.getElementById(territoryId);
