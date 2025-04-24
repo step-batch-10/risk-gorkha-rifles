@@ -9,6 +9,7 @@ export enum AllotStatus {
 }
 
 export type LobbyStatus = { status: boolean; players: string[] };
+
 export enum ActionTypes {
   updateTroops = "updateTroops",
   isDeploymentOver = "isDeploymentOver",

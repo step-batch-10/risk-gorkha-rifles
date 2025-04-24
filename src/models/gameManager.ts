@@ -1,4 +1,4 @@
-import Game from "./game.ts";
+import Game, { ActionDetails } from "./game.ts";
 import { Continent, GameStatus, LobbyStatus } from "../types/gameTypes.ts";
 import lodash from "npm:lodash";
 import { Action } from "./game.ts";
@@ -34,6 +34,7 @@ export default class GameManager {
     );
     game.init();
     this.games.push(game);
+
     players.forEach((playerId) => (this.gameSessions[playerId] = gameId));
 
     return gameId;
@@ -89,18 +90,13 @@ export default class GameManager {
     );
   }
 
-  public handleGameActions(playerId: string, actionDetails: Action) {
-    const requiredGame = this.findPlayerActiveGame(playerId);
-
-    const territory = actionDetails.data?.territory || "";
-    const troopCount = actionDetails.data?.troopCount || 0;
-
+  public handleGameActions(actionDetails: ActionDetails) {
+    const requiredGame = this.findPlayerActiveGame(actionDetails.playerId);
     if (!requiredGame) throw "Game not found";
 
     const actionMap: Record<ActionTypes, () => any> = {
-      updateTroops: () =>
-        requiredGame.updateTroops(playerId, territory, troopCount),
-      isDeploymentOver: () => requiredGame.isDeploymentOver(playerId),
+      updateTroops: () => requiredGame.updateTroops(actionDetails),
+      isDeploymentOver: () => requiredGame.isDeploymentOver(actionDetails),
     };
 
     return actionMap[actionDetails.name as ActionTypes]();

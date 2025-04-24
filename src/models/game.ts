@@ -30,6 +30,12 @@ export interface Action {
   timeStamp: number;
 }
 
+export interface ActionDetails {
+  playerId: string;
+  name: string;
+  data: Record<string, number | string>;
+}
+
 export default class Game {
   private players: Set<string>;
   private gameStatus: GameStatus;
@@ -124,13 +130,16 @@ export default class Game {
     };
   }
 
-  public updateTroops(playerId: string, territory: string, troopCount: number) {
+  public updateTroops(actionDetails: ActionDetails) {
+    const { territory, troopCount } = actionDetails.data;
+    const playerId = actionDetails.playerId;
+
     if (!(territory in this.territoryState)) {
       return null;
     }
 
-    this.territoryState[territory].troops += troopCount;
-    this.playerStates[playerId].availableTroops -= troopCount;
+    this.territoryState[territory].troops += Number(troopCount);
+    this.playerStates[playerId].availableTroops -= Number(troopCount);
 
     return {
       territory: this.territoryState[territory],
@@ -142,7 +151,8 @@ export default class Game {
     return this.players.has(playerId);
   }
 
-  public isDeploymentOver(playerId: string) {
+  public isDeploymentOver(actionDetails: ActionDetails) {
+    const { playerId } = actionDetails;
     return this.playerStates[playerId].availableTroops === 0;
   }
 

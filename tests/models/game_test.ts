@@ -108,21 +108,45 @@ describe("tests for updateTerritoryTroops", () => {
   it("should return updated troops when valid territory and troop count is given", () => {
     const game = gameInstanceBuilder();
     game.init();
-    const actual = game.updateTroops("1", "peru", 1);
-    assertEquals(actual?.territory, { owner: "2", troops: 2 });
+    const actionDetails = {
+      playerId: "1",
+      name: "updateTroops",
+      data: {
+        territory: "peru",
+        troopCount: 2,
+      },
+    };
+    const actual = game.updateTroops(actionDetails);
+    assertEquals(actual?.territory, { owner: "2", troops: 3 });
   });
 
   it("should return updated troops when valid territory and troop count is given", () => {
     const game = gameInstanceBuilder();
     game.init();
-    const actual = game.updateTroops("2", "peru", -1);
-    assertEquals(actual?.territory, { owner: "2", troops: 0 });
+    const actionDetails = {
+      playerId: "1",
+      name: "updateTroops",
+      data: {
+        territory: "peru",
+        troopCount: 10,
+      },
+    };
+    const actual = game.updateTroops(actionDetails);
+    assertEquals(actual?.territory, { owner: "2", troops: 11 });
   });
 
   it("should return null when invalid territory is given", () => {
     const game = gameInstanceBuilder();
     game.init();
-    const actual = game.updateTroops("1", "India", 2);
+    const actionDetails = {
+      playerId: "1",
+      name: "updateTroops",
+      data: {
+        territory: "Invalid",
+        troopCount: 10,
+      },
+    };
+    const actual = game.updateTroops(actionDetails);
     assertEquals(actual, null);
   });
 });
@@ -131,16 +155,32 @@ describe("tests for isDeploymentOver", () => {
   it("should return true when deployment for current player id is over", () => {
     const game = gameInstanceBuilder();
     game.init();
-    game.updateTroops("2", "peru", 21);
-    const actual = game.isDeploymentOver("2");
+    const actionDetails = {
+      playerId: "1",
+      name: "updateTroops",
+      data: {
+        territory: "peru",
+        troopCount: 21,
+      },
+    };
+    game.updateTroops(actionDetails);
+    const actual = game.isDeploymentOver(actionDetails);
     assert(actual);
   });
 
   it("should return false when deployment for current player id is not over", () => {
     const game = gameInstanceBuilder();
     game.init();
-    game.updateTroops("2", "peru", 1);
-    const actual = game.isDeploymentOver("2");
+    const actionDetails = {
+      playerId: "1",
+      name: "updateTroops",
+      data: {
+        territory: "peru",
+        troopCount: 10,
+      },
+    };
+    game.updateTroops(actionDetails);
+    const actual = game.isDeploymentOver(actionDetails);
     assertFalse(actual);
   });
 });
