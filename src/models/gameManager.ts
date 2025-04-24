@@ -41,10 +41,7 @@ export default class GameManager {
   }
 
   private getRecentActions(actions: Action[] = [], timeStamp: number) {
-    const index = actions.findIndex((action) => {
-      action.timeStamp > timeStamp;
-    });
-
+    const index = actions.findIndex((action) => action.timeStamp > timeStamp);
     return actions.slice(index);
   }
 
@@ -64,12 +61,13 @@ export default class GameManager {
     const activeGame = this.findPlayerActiveGame(playerId);
     const allActions = activeGame?.gameActions;
     const recentActions = this.getRecentActions(allActions, lastActionat);
+    
 
     return {
       status: activeGame?.status,
-      currentPlayer: playerId,
+      userId: playerId,
+      players: activeGame?.playersData,
       actions: recentActions,
-      players: activeGame?.allPlayers,
     };
   }
 

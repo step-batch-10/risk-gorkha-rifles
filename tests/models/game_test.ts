@@ -15,7 +15,8 @@ export const gameInstanceBuilder = () => {
     continents,
     uniqueId,
     shuffler,
-    timeStamp
+    timeStamp,
+    ["red", "green", "yellow"]
   );
   return game;
 };
@@ -32,6 +33,38 @@ describe("testing init", () => {
     };
 
     assertEquals(result.territories, expected1);
+  });
+
+  it("should update players with their colours", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    const expected = [
+      { id: "1", colour: "red" },
+      { id: "2", colour: "green" },
+    ];
+
+    assertEquals(game.playersData, expected);
+  });
+
+  it("should return player state after distributing troops", () => {
+    const game = gameInstanceBuilder();
+    const actual = game.init();
+    const expected = {
+      "1": {
+        territories: ["alaska", "brazil"],
+        continents: [],
+        availableTroops: 21,
+        cards: [],
+      },
+      "2": {
+        territories: ["alberta", "peru"],
+        continents: [],
+        availableTroops: 21,
+        cards: [],
+      },
+    };
+
+    assertEquals(actual.players, expected);
   });
 });
 
@@ -65,22 +98,7 @@ describe("getLastAction", () => {
       name: "startInitialDeployment",
       playerId: null,
       currentPlayer: "",
-      data: {
-        initialState: {
-          "1": {
-            availableTroops: 21,
-            cards: [],
-            continents: [],
-            territories: ["alaska", "brazil"],
-          },
-          "2": {
-            availableTroops: 21,
-            cards: [],
-            continents: [],
-            territories: ["alberta", "peru"],
-          },
-        },
-      },
+      data: { troopCount: 21 },
       timeStamp: 1,
       playerStates: playerState,
       territoryState,

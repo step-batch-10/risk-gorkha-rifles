@@ -1,11 +1,54 @@
 import { GameStatus, Territory } from "../types/gameTypes.ts";
 
+// {
+//     status: "running",
+//     userId: "1",
+//     players: [
+//       {
+//         id: "1",
+//         username: "siya",
+//         colour: "red",
+//         avatar:
+//           "url",
+//       },
+//       {
+//         id: "2",
+//         username: "shikha",
+//         colour: "green",
+//         avatar:
+//           "url",
+//       },
+//     ],
+//     actions: [
+//       {
+//         id: "1",
+//         name: "intialDeploymentStart",
+//         playerId: null,
+//         currentPlayerTurn: null,
+//         data: {
+//           troopsCount: 11
+//         },
+//         timestamp: Date.now(),
+//         territoryState: {
+//           india: {
+//             troops: 23,
+//             owner: "1",
+//           },
+//           china: {
+//             troops: 99,
+//             owner: "2",
+//           },
+//         },
+//       },
+//     ],
+//   },
+
 type Data = {
   [key: string]:
-  | number
-  | Record<string, string>
-  | string
-  | Record<string, PlayerState>;
+    | number
+    | Record<string, string>
+    | string
+    | Record<string, PlayerState>;
 };
 
 export type PlayerState = {
@@ -23,6 +66,8 @@ export interface Action {
     territory?: string;
     troopCount?: number;
     initialState?: Record<string, PlayerState>;
+    territoryTroops?: number;
+    playerTroops?: number;
   };
   currentPlayer: string;
   playerStates: Record<string, PlayerState>;
@@ -36,6 +81,11 @@ export interface ActionDetails {
   data: Record<string, number | string>;
 }
 
+export interface Player {
+  id: string;
+  colour: string;
+}
+
 export default class Game {
   private players: Set<string>;
   private gameStatus: GameStatus;
@@ -46,13 +96,16 @@ export default class Game {
   private territoryState: Record<string, Territory> = {};
   private uniqueId;
   private timeStamp;
+  private playerDetails: Player[] = [];
+  private colours: string[];
 
   constructor(
     players: Set<string>,
     continents: Record<string, string[]>,
     uniqueId: () => string,
     shuffler: (arr: string[]) => string[],
-    timeStamp: () => number
+    timeStamp: () => number,
+    colours: string[] = ["red", "green", "yellow", "black", "brown", "grey"]
   ) {
     this.players = players;
     this.continents = continents;
@@ -60,6 +113,7 @@ export default class Game {
     this.shuffler = shuffler;
     this.uniqueId = uniqueId;
     this.timeStamp = timeStamp;
+    this.colours = colours;
   }
 
   get gameActions() {
@@ -141,6 +195,18 @@ export default class Game {
     this.territoryState[territory].troops += Number(troopCount);
     this.playerStates[playerId].availableTroops -= Number(troopCount);
 
+    this.actions.push(
+      this.generateAction(
+        playerId,
+        {
+          playerTroops: this.playerStates[playerId].availableTroops,
+          territoryTroops: this.territoryState[territory].troops,
+        },
+        "updateTroops",
+        null
+      )
+    );
+
     return {
       territory: this.territoryState[territory],
       player: this.playerStates[playerId],
@@ -163,11 +229,14 @@ export default class Game {
   public init() {
     this.territoryState = this.divideTerritories(this.continents, this.players);
     this.playerStates = this.initializePlayerStates();
+    this.playerDetails = [...this.players].map((player, index) => {
+      return { id: player, colour: this.colours[index] };
+    });
 
     this.actions.push(
       this.generateAction(
         "",
-        { initialState: this.playerStates },
+        { troopCount: 21 },
         "startInitialDeployment",
         null
       )
@@ -188,7 +257,7 @@ export default class Game {
     return this.playerStates[playerId].territories;
   }
 
-  get allPlayers() {
-    return [...this.players];
+  get playersData() {
+    return [...this.playerDetails];
   }
 }

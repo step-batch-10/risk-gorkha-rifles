@@ -1,27 +1,34 @@
-import { Context } from 'hono';
-import Users, { User } from '../models/users.ts';
-import GameManager from '../models/gameManager.ts';
-import { ActionTypes, AllotStatus, LobbyStatus } from '../types/gameTypes.ts';
-import { ActionDetails } from '../models/game.ts';
+import { Context } from "hono";
+import Users, { User } from "../models/users.ts";
+import GameManager from "../models/gameManager.ts";
+import { ActionTypes, AllotStatus, LobbyStatus } from "../types/gameTypes.ts";
+import { ActionDetails } from "../models/game.ts";
+
+interface Player {
+  id: string;
+  colour: string;
+  username?: string;
+  avatar?: string;
+}
 
 const gameActionsHandler = (context: Context) => {
-  const lastActionAt = Number(context.req.query('since'));
-  const gameManager: GameManager = context.get('gameManager');
-  const userId: string = context.get('userId');
+  const lastActionAt = Number(context.req.query("since"));
+  const gameManager: GameManager = context.get("gameManager");
+  const userId: string = context.get("userId");
   const gameActions = gameManager.getGameActions(userId, lastActionAt);
-  const users = context.get('users');
+  const users = context.get("users");
 
   return context.json({
     status: gameActions.status,
-    currentPlayer: gameActions.currentPlayer,
+    userId: gameActions.userId,
     actions: gameActions.actions,
-    players: userProfileBuilder(users, gameActions.players),
+    players: gameProfileBuilder(users, gameActions.players),
   });
 };
 
 const requestAttackHandler = (context: Context) => {
-  const userId: string = context.get('userId');
-  const gameManager: GameManager = context.get('gameManager');
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
 
   const action: ActionDetails = {
     name: ActionTypes.attackRequest,
@@ -34,8 +41,8 @@ const requestAttackHandler = (context: Context) => {
 };
 
 const requestReinforcementHandler = (context: Context) => {
-  const userId: string = context.get('userId');
-  const gameManager: GameManager = context.get('gameManager');
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
 
   const action: ActionDetails = {
     name: ActionTypes.reinforceRequest,
@@ -48,17 +55,17 @@ const requestReinforcementHandler = (context: Context) => {
 };
 
 const joinGameHandler = (context: Context) => {
-  const userId: string = context.get('userId');
-  const gameManager: GameManager = context.get('gameManager');
-  gameManager.allotPlayer(userId, '3');
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
+  gameManager.allotPlayer(userId, "3");
 
-  return context.redirect('/game/waiting.html');
+  return context.redirect("/game/waiting.html");
 };
 
 const lobbyStatusHandler = (context: Context) => {
-  const gameManager: GameManager = context.get('gameManager');
-  const userId: string = context.get('userId');
-  const users: Users = context.get('users');
+  const gameManager: GameManager = context.get("gameManager");
+  const userId: string = context.get("userId");
+  const users: Users = context.get("users");
   const lobbyStatus = gameManager.waitingStatus(userId);
 
   return context.json(formatLobbyStatusHandlerResponse(lobbyStatus, users));
@@ -82,17 +89,29 @@ const userProfileBuilder = (users: Users, players: string[] = []) => {
   return players.map((playerId) => users.findById(playerId));
 };
 
+const gameProfileBuilder = (users: Users, players: Player[] = []): Player[] => {
+  return players.map((player) => {
+    const { username, avatar } = users.findById(player.id);
+    return {
+      id: player.id,
+      colour: player.colour,
+      username,
+      avatar,
+    };
+  });
+};
+
 const profileDetailsHandler = (context: Context) => {
-  const userId: string = context.get('userId');
-  const users: Users = context.get('users');
+  const userId: string = context.get("userId");
+  const users: Users = context.get("users");
   const userDetails: User = users.findById(userId);
 
   return context.json(userDetails);
 };
 
 const fullProfileDetailsHandler = (context: Context) => {
-  const userId: string = context.get('userId');
-  const users: Users = context.get('users');
+  const userId: string = context.get("userId");
+  const users: Users = context.get("users");
   const { username, avatar }: User = users.findById(userId);
 
   return context.json({
@@ -104,14 +123,14 @@ const fullProfileDetailsHandler = (context: Context) => {
 };
 
 const updateTroopsHandler = async (context: Context) => {
-  const userId: string = context.get('userId');
-  const gameManager: GameManager = context.get('gameManager');
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
   const { territoryId, troopCount } = await context.req.json();
 
   return context.json(
     gameManager.handleGameActions({
       playerId: userId,
-      name: 'updateTroops',
+      name: "updateTroops",
       data: { territory: territoryId, troopCount },
     })
   );

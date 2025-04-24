@@ -1,15 +1,20 @@
-import { assert, assertEquals, assertFalse, assertThrows } from 'assert';
-import { describe, it } from 'testing';
-import GameManager from '../../src/models/gameManager.ts';
-import Game from '../../src/models/game.ts';
-import { Continent } from '../../src/types/gameTypes.ts';
+import { assert, assertEquals, assertFalse, assertThrows } from "assert";
+import { describe, it } from "testing";
+import GameManager from "../../src/models/gameManager.ts";
+import Game from "../../src/models/game.ts";
+import { Continent, GameStatus } from "../../src/types/gameTypes.ts";
+
+const iterator = () => {
+  let i = 1;
+  return () => i++;
+};
 
 export const gameManagerInstanceBuilder = () => {
   const uniqueId = (): string => '1';
   const getContinents = (): Continent => ({
     Asia: ['India'],
   });
-  const gameManager = new GameManager(uniqueId, getContinents, () => 1);
+  const gameManager = new GameManager(uniqueId, getContinents, iterator());
   return gameManager;
 };
 
@@ -50,8 +55,128 @@ describe('allotPlayer method', () => {
   });
 });
 
-describe('getGameActions test', () => {
-  it('should return empty actions when actions are', () => {
+describe("getGameActions test", () => {
+  it("should return  actions when actions are present", () => {
+    const gameManager = gameManagerInstanceBuilder();
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const actual = gameManager.getGameActions("3", 0);
+    const expected = {
+      status: GameStatus.running,
+      userId: "3",
+      actions: [
+        {
+          id: "1",
+          name: "startInitialDeployment",
+          playerId: null,
+          data: {
+            troopCount: 21,
+          },
+          currentPlayer: "",
+          playerStates: {
+            "1": {
+              availableTroops: 21,
+              cards: [],
+              continents: [],
+              territories: ["India"],
+            },
+            "2": {
+              availableTroops: 21,
+              cards: [],
+              continents: [],
+              territories: [],
+            },
+            "3": {
+              availableTroops: 21,
+              cards: [],
+              continents: [],
+              territories: [],
+            },
+          },
+          territoryState: {
+            India: {
+              owner: "1",
+              troops: 1,
+            },
+          },
+          timeStamp: 1,
+        },
+      ],
+      players: [
+        { id: "1", colour: "red" },
+        { id: "2", colour: "green" },
+        { id: "3", colour: "yellow" },
+      ],
+    };
+    assertEquals(actual, expected);
+  });
+
+  it("should return actions after the time stamp", () => {
+    const gameManager = gameManagerInstanceBuilder();
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    gameManager.handleGameActions({
+      playerId: "1",
+      name: "updateTroops",
+      data: { territory: "India", troopCount: 10 },
+    });
+    const actual = gameManager.getGameActions("3", 1);
+    const expected = {
+      status: GameStatus.running,
+      userId: "3",
+      actions: [
+        {
+          currentPlayer: "1",
+          data: {
+            territoryTroops: 11,
+            playerTroops: 11,
+          },
+          id: "1",
+          name: "updateTroops",
+          playerId: null,
+          playerStates: {
+            "1": {
+              availableTroops: 11,
+              cards: [],
+              continents: [],
+              territories: ["India"],
+            },
+            "2": {
+              availableTroops: 21,
+              cards: [],
+              continents: [],
+              territories: [],
+            },
+            "3": {
+              availableTroops: 21,
+              cards: [],
+              continents: [],
+              territories: [],
+            },
+          },
+          territoryState: {
+            India: {
+              owner: "1",
+              troops: 11,
+            },
+          },
+          timeStamp: 2,
+        },
+      ],
+      players: [
+        { id: "1", colour: "red" },
+        { id: "2", colour: "green" },
+        { id: "3", colour: "yellow" },
+      ],
+    };
+    assertEquals(actual, expected);
+  });
+
+  it("should return empty actions when actions are", () => {
     const gameManager = gameManagerInstanceBuilder();
     gameManager.allotPlayer('1', '3');
     gameManager.allotPlayer('2', '3');
@@ -59,7 +184,7 @@ describe('getGameActions test', () => {
     const actual = gameManager.getGameActions('3', 0);
     const expected = {
       status: undefined,
-      currentPlayer: '3',
+      userId: "3",
       actions: [],
       players: undefined,
     };
