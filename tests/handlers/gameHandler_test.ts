@@ -293,3 +293,21 @@ describe("profileDetailsHandler", () => {
     assertEquals(actual, expected);
   });
 });
+
+describe('requestReinforcementHandler', () => {
+  it('should return teh player territories', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request("/game/request-reinforcement", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), ["India"]);
+  });
+});

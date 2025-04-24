@@ -184,3 +184,14 @@ describe("tests for isDeploymentOver", () => {
     assertFalse(actual);
   });
 });
+
+
+describe('tests for playerTerritories', () => {
+  it('should ', () => {
+    const game = gameInstanceBuilder();
+    game.init();
+
+    assertEquals(game.playerTerritories("1"), ["alaska", "brazil"]);
+    assertEquals(game.playerTerritories("2"), ["alberta", "peru"]);
+  });
+});

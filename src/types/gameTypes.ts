@@ -13,6 +13,7 @@ export type LobbyStatus = { status: boolean; players: string[] };
 export enum ActionTypes {
   updateTroops = "updateTroops",
   isDeploymentOver = "isDeploymentOver",
+  attackRequest = "attackRequest"
 }
 
 export type Continent = Record<string, string[]>;

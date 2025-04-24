@@ -2,10 +2,10 @@ import { GameStatus, Territory } from "../types/gameTypes.ts";
 
 type Data = {
   [key: string]:
-    | number
-    | Record<string, string>
-    | string
-    | Record<string, PlayerState>;
+  | number
+  | Record<string, string>
+  | string
+  | Record<string, PlayerState>;
 };
 
 export type PlayerState = {
@@ -182,6 +182,10 @@ export default class Game {
 
   get lastAction() {
     return this.actions.at(-1);
+  }
+
+  public playerTerritories(playerId: string) {
+    return this.playerStates[playerId].territories;
   }
 
   get allPlayers() {

@@ -12,6 +12,7 @@ import {
   joinGameHandler,
   profileDetailsHandler,
   fullProfileDetailsHandler,
+  requestReinforcementHandler
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -66,6 +67,7 @@ export default class Server {
     app.get("/lobby-status", lobbyStatusHandler);
     app.get("/profile-details", profileDetailsHandler);
     app.get("/player-full-profile", fullProfileDetailsHandler);
+    app.get("/request-reinforcement", requestReinforcementHandler);
 
     return app;
   }
