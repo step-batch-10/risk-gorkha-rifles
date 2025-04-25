@@ -24,7 +24,6 @@ export default class ModalManager {
   }
 
   endReinforcementPhase() {
-    alert("deployment phase over");
     this.#reinforcementPhaseModal.removeListeners();
   }
 }

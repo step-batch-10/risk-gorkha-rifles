@@ -81,6 +81,16 @@ export default class GameController {
   }
 
   #intialDeploymentStop() {
+    Toastify({
+      text: `Initial deployment is over`,
+      duration: 3000,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #3e2514, #c99147)",
+      },
+    }).showToast();
     this.#modalManager.endReinforcementPhase();
   }
 
@@ -116,7 +126,9 @@ export default class GameController {
   }
 
   #handleReinforcementPhase() {
-    this.#viewManager.startPlayerTurn();
+    setTimeout(() => {
+      this.#viewManager.startPlayerTurn();
+    }, 5000);
   }
 
   async #requestReinforcement() {
@@ -132,6 +144,10 @@ export default class GameController {
         background: "linear-gradient(to right, #303824, #874637)",
       },
     }).showToast();
+
+    territories.forEach((territoryName) => {
+      this.#viewManager.highlightTerritory(territoryName);
+    });
 
     const userId = this.#gameMetaData.userId;
     const lastAction = this.#actionsLog.at(-1);
@@ -168,11 +184,20 @@ export default class GameController {
 
   init() {
     this.#pollGameData();
-    this.#eventBus.on('requestReinforcement', this.#requestReinforcement.bind(this));
-    this.#eventBus.on('attackPhaseStarted', this.#handleAttackPhase.bind(this));
-    this.#eventBus.on('stopReinforcement', this.#stopReinforcementPhase.bind(this));
-    this.#eventBus.on('getDefendingTerritories', this.#getDefendingTerritories.bind(this));
-    this.#eventBus.on('renderCards', this.#renderCards.bind(this));
+    this.#eventBus.on(
+      "requestReinforcement",
+      this.#requestReinforcement.bind(this)
+    );
+    this.#eventBus.on("attackPhaseStarted", this.#handleAttackPhase.bind(this));
+    this.#eventBus.on(
+      "stopReinforcement",
+      this.#stopReinforcementPhase.bind(this)
+    );
+    this.#eventBus.on(
+      "getDefendingTerritories",
+      this.#getDefendingTerritories.bind(this)
+    );
+    this.#eventBus.on("renderCards", this.#renderCards.bind(this));
     this.#audio.play();
   }
 }

@@ -1,5 +1,4 @@
 import { GameStatus, Territory } from "../types/gameTypes.ts";
-
 // {
 //     status: "running",
 //     userId: "1",
@@ -228,6 +227,10 @@ export default class Game {
     if (status) {
       this.actions.push(
         this.generateAction("", {}, "stopInitialDeployment", null)
+      );
+      this.actions.push(this.generateAction("", {}, "startGame", null));
+      this.actions.push(
+        this.generateAction("", {}, "reinforcementPhase", null)
       );
     }
 

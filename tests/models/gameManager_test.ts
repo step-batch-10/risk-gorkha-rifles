@@ -253,10 +253,9 @@ describe("handleGameActions test", () => {
       playerId: "3",
       data: {},
     });
-
     assertFalse(actual);
   });
-  it("should return isDeploymentOver as false", () => {
+  it("should return isDeploymentOver as true", () => {
     const gameManager = gameManagerInstanceBuilder(() => ({
       Asia: ["India", "China", "Nepal"],
     }));

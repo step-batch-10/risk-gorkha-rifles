@@ -11,7 +11,7 @@ export default class PhaseView {
   }
 
   #startAttack() {
-    this.#eventBus.emit('attackPhaseStarted');
+    this.#eventBus.emit("attackPhaseStarted");
     Toastify({
       text: `Select the attacking terrirory`,
       duration: 3000,
@@ -38,7 +38,7 @@ export default class PhaseView {
   }
 
   #stopReinforcement() {
-    this.#eventBus.emit('stopReinforcement');
+    this.#eventBus.emit("stopReinforcement");
   }
 
   #displayNextPhaseButton() {
@@ -47,13 +47,15 @@ export default class PhaseView {
     nextPhaseButton.style.display = "flex";
 
     nextPhaseButton.addEventListener("click", this.#showAttackPhase.bind(this));
-    nextPhaseButton.addEventListener("click", this.#stopReinforcement.bind(this));
-
+    nextPhaseButton.addEventListener(
+      "click",
+      this.#stopReinforcement.bind(this)
+    );
   }
 
   #handleReinforcementRequestClick() {
     this.#displayNextPhaseButton();
-    this.#eventBus.emit('requestReinforcement');
+    this.#eventBus.emit("requestReinforcement");
   }
 
   showDraftPhaseUI() {

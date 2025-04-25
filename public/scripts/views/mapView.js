@@ -35,6 +35,14 @@ export default class MapView {
     path.classList.toggle("highlight-territory", highlight);
   }
 
+  highlightTerritory(territoryId) {
+    this.#toggleTerritoryHighlight(territoryId);
+  }
+
+  unHighlightTerritory(territoryId) {
+    this.#toggleTerritoryHighlight(territoryId, false);
+  }
+
   #removeClickListeners(territories) {
     territories.forEach((territoryId) => {
       const territory = document.getElementById(territoryId);
