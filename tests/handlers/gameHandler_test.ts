@@ -413,3 +413,25 @@ describe("deploymentStatusHandler test", () => {
     assertEquals(await response.json(), { status: false });
   });
 });
+
+describe("cardsHandler", () => {
+  it("should return the player cards", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const response = await app.request("/game/cards", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), {
+      infantry: 0,
+      cavalry: 0,
+      artillery: 0,
+      hybrid: 0,
+    });
+  });
+});

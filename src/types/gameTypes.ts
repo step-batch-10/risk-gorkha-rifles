@@ -1,20 +1,21 @@
 export enum GameStatus {
-  over = 'over',
-  running = 'running',
+  over = "over",
+  running = "running",
 }
 
 export enum AllotStatus {
-  waitingLobby = 'waitingLobby',
-  gameRoom = 'gameRoom',
+  waitingLobby = "waitingLobby",
+  gameRoom = "gameRoom",
 }
 
 export type LobbyStatus = { status: boolean; players: string[] };
 
 export enum ActionTypes {
-  updateTroops = 'updateTroops',
-  isDeploymentOver = 'isDeploymentOver',
-  reinforceRequest = 'reinforceRequest',
-  attackRequest = 'attackRequest',
+  updateTroops = "updateTroops",
+  isDeploymentOver = "isDeploymentOver",
+  reinforceRequest = "reinforceRequest",
+  attackRequest = "attackRequest",
+  getCards = "getCards",
 }
 
 export type Continent = Record<string, string[]>;

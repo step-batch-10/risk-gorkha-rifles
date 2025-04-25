@@ -295,6 +295,10 @@ export default class Game {
     return this.playerStates[playerId].territories;
   }
 
+  public getPlayerCards(playerId: string) {
+    return this.playerStates[playerId].cards;
+  }
+
   get playerState() {
     return this.playerStates;
   }

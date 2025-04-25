@@ -475,9 +475,9 @@
 // };
 
 export default class ApiService {
-  static async getGameDetails() {
+  static async getGameDetails(timestamp) {
     // return mockedData.cardsView;
-    const response = await fetch("/game/actions?since=");
+    const response = await fetch(`/game/actions?since=${timestamp}`);
     return await response.json();
   }
 

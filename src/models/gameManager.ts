@@ -100,6 +100,7 @@ export default class GameManager {
         requiredGame.fetchReinforcementData(actionDetails),
       attackRequest: () =>
         requiredGame.playerTerritories(actionDetails.playerId),
+      getCards: () => requiredGame.getPlayerCards(actionDetails.playerId),
     };
 
     return actionMap[actionDetails.name as ActionTypes]();

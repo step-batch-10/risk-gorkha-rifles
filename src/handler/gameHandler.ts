@@ -1,7 +1,12 @@
 import { Context } from "hono";
 import Users, { User } from "../models/users.ts";
 import GameManager from "../models/gameManager.ts";
-import { ActionTypes, AllotStatus, LobbyStatus } from "../types/gameTypes.ts";
+import {
+  ActionTypes,
+  AllotStatus,
+  LobbyStatus,
+  CardType,
+} from "../types/gameTypes.ts";
 import { ActionDetails } from "../models/game.ts";
 
 interface Player {
@@ -148,6 +153,29 @@ const deploymentStatusHandler = (context: Context) => {
   return context.json({ status });
 };
 
+const cardsHandler = (context: Context) => {
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
+  const action: ActionDetails = {
+    playerId: userId,
+    name: "getCards",
+    data: {},
+  };
+  const cards = gameManager.handleGameActions(action);
+
+  return context.json(getTypeCounts(cards));
+};
+
+export const getTypeCounts = (cards: CardType[]): Record<CardType, number> => {
+  return cards.reduce(
+    (acc, type) => {
+      acc[type]++;
+      return acc;
+    },
+    { infantry: 0, cavalry: 0, artillery: 0, hybrid: 0 }
+  );
+};
+
 export {
   joinGameHandler,
   gameActionsHandler,
@@ -158,4 +186,5 @@ export {
   updateTroopsHandler,
   requestAttackHandler,
   deploymentStatusHandler,
+  cardsHandler,
 };
