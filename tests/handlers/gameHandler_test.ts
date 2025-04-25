@@ -515,7 +515,7 @@ describe("connectedTerritoriesHandler", () => {
 });
 
 describe("storeTroopsToAttack", () => {
-  it("should return success message when attacker select the troops ", async () => {
+  it("should store the troops count of the attacker and should return success message", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");

@@ -248,3 +248,39 @@ describe("test for gameDefender", () => {
     assertEquals(game.gameDefender("india", "3748"), "player not found");
   });
 });
+
+describe("test for storeTroopsToAttack", () => {
+  it("should return the success message", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    const actionDetails = {
+      playerId: "1",
+      name: "storeTroops",
+      data: {
+        troops: 1,
+      },
+    };
+
+    assertEquals(game.storeTroops(actionDetails), {
+      status: "success",
+    });
+  });
+});
+
+describe("test for storeTroopsToDefend", () => {
+  it("should return the success message", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    const actionDetails = {
+      playerId: "1",
+      name: "storeTroops",
+      data: {
+        troops: 1,
+      },
+    };
+
+    assertEquals(game.storeTroops(actionDetails), {
+      status: "success",
+    });
+  });
+});
