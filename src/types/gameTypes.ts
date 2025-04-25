@@ -20,3 +20,5 @@ export enum ActionTypes {
 export type Continent = Record<string, string[]>;
 
 export type Territory = { owner: string; troops: number };
+
+export type CardType = "infantry" | "cavalry" | "artillery" | "hybrid";
