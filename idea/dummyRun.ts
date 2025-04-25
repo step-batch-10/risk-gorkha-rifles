@@ -2,7 +2,11 @@ import GameManager from "../src/models/gameManager.ts";
 import Session from "../src/models/session.ts";
 import Users from "../src/models/users.ts";
 import Server from "../src/server.ts";
-import { getContinents } from "../src/utils/continents.ts";
+import {
+  getContinents,
+  neighbouringTerritories,
+} from "../src/utils/continents.ts";
+import lodash from "npm:lodash";
 
 export const uniqueId = () => {
   return Date.now().toString(36) + Math.random().toString(36);
@@ -25,7 +29,13 @@ export const main = () => {
   const user1Id = users.findIdByUsername("dummyPlayer1") || "";
   const user2Id = users.findIdByUsername("dummyPlayer2") || "";
 
-  const gameManager = new GameManager(uniqueId, getContinents, Date.now);
+  const gameManager = new GameManager(
+    uniqueId,
+    getContinents,
+    Date.now,
+    lodash.shuffle,
+    neighbouringTerritories()
+  );
   gameManager.allotPlayer(user1Id, "3");
   gameManager.allotPlayer(user2Id, "3");
 
