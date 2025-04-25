@@ -250,6 +250,9 @@ export default class Game {
       return { status };
     }
 
+    this.actions.push(
+      this.generateAction("", {}, "stopInitialDeployment", null, null)
+    );
     this.actions.push(this.generateAction("", {}, "startGame", null, null));
     const playerCycle = this.selectPlayerTurn(3);
     this.currentPlayer = playerCycle().id;

@@ -8,18 +8,26 @@ export default class PlayerSidebarView {
 
   #generatePlayerDetails(player) {
     const output = Mustache.render(this.#template, player);
-    const ele = document.createElement('div');
+    const ele = document.createElement("div");
+    ele.id = player.id;
     ele.innerHTML = output;
 
     return ele;
-  };
+  }
 
   #clear() {
     this.#sidebar.innerHTML = "";
   }
 
-  render(players) {
+  #highlightCurrentPlayer(currentPlayer) {
+    const ele = document.getElementById(currentPlayer);
+    ele.style.backgroundColor = "red";
+  }
+
+  render(players, currentPlayer) {
     this.#clear();
+    this.#highlightCurrentPlayer(currentPlayer);
+
     Object.values(players).forEach((player) => {
       const playerObj = this.#generatePlayerDetails(player);
       this.#sidebar.appendChild(playerObj);

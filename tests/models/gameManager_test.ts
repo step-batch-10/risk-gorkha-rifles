@@ -283,7 +283,7 @@ describe("getGameActions test", () => {
       data: {},
     });
 
-    const actual = gameManager.getGameActions("1", 5);
+    const actual = gameManager.getGameActions("1", 6);
     const expected = {
       status: GameStatus.running,
       userId: "1",
@@ -334,7 +334,7 @@ describe("getGameActions test", () => {
               troops: 22,
             },
           },
-          timeStamp: 6,
+          timeStamp: 7,
         },
       ],
     };

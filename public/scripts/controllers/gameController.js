@@ -38,7 +38,6 @@ export default class GameController {
     const { players, status, userId, actions } = gameDetails;
     this.#gameMetaData = { players, status, userId };
     this.#actionsLog = [...this.#actionsLog, ...actions];
-
   }
 
   #getLastTimestamp() {
