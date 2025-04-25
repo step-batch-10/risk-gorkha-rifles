@@ -161,21 +161,18 @@ export default class GameController {
     return defendingTerritories;
   }
 
+  async #renderCards() {
+    const cards = await this.#apiService.getCards();
+    this.#viewManager.renderCards(cards);
+  }
+
   init() {
     this.#pollGameData();
-    this.#eventBus.on(
-      "requestReinforcement",
-      this.#requestReinforcement.bind(this)
-    );
-    this.#eventBus.on("attackPhaseStarted", this.#handleAttackPhase.bind(this));
-    this.#eventBus.on(
-      "stopReinforcement",
-      this.#stopReinforcementPhase.bind(this)
-    );
-    this.#eventBus.on(
-      "getDefendingTerritories",
-      this.#getDefendingTerritories.bind(this)
-    );
+    this.#eventBus.on('requestReinforcement', this.#requestReinforcement.bind(this));
+    this.#eventBus.on('attackPhaseStarted', this.#handleAttackPhase.bind(this));
+    this.#eventBus.on('stopReinforcement', this.#stopReinforcementPhase.bind(this));
+    this.#eventBus.on('getDefendingTerritories', this.#getDefendingTerritories.bind(this));
+    this.#eventBus.on('renderCards', this.#renderCards.bind(this));
     this.#audio.play();
   }
 }

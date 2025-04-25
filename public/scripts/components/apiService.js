@@ -25,7 +25,7 @@
 //         playerId: null,
 //         currentPlayerTurn: null,
 //         data: {
-//           troopsCount: 11
+//           troopsCount: 11,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -41,8 +41,8 @@
 //       },
 //     ],
 //   },
-//   waiting: {
-//     status: "waiting",
+//   cardsView: {
+//     status: "running",
 //     userId: "1",
 //     players: [
 //       {
@@ -63,11 +63,11 @@
 //     actions: [
 //       {
 //         id: "1",
-//         name: "intialDeploymentStart",
+//         name: "intialDeploymentStop",
 //         playerId: null,
 //         currentPlayerTurn: "2",
 //         data: {
-//           troopsCount: 11
+//           troopsCount: 11,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -109,7 +109,7 @@
 //         playerId: null,
 //         currentPlayerTurn: null,
 //         data: {
-//           troopsCount: 11
+//           troopsCount: 11,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -130,7 +130,7 @@
 //         currentPlayerTurn: null,
 //         data: {
 //           territory: "india",
-//           troopsCount: 5
+//           troopsCount: 5,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -151,7 +151,7 @@
 //         currentPlayerTurn: null,
 //         data: {
 //           territory: "china",
-//           troopsCount: 10
+//           troopsCount: 10,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -193,7 +193,7 @@
 //         playerId: null,
 //         currentPlayerTurn: null,
 //         data: {
-//           troopsCount: 11
+//           troopsCount: 11,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -214,7 +214,7 @@
 //         currentPlayerTurn: null,
 //         data: {
 //           territory: "india",
-//           troopsCount: 5
+//           troopsCount: 5,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -235,7 +235,7 @@
 //         currentPlayerTurn: null,
 //         data: {
 //           territory: "china",
-//           troopsCount: 10
+//           troopsCount: 10,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -295,7 +295,7 @@
 //         playerId: null,
 //         currentPlayerTurn: null,
 //         data: {
-//           troopsCount: 11
+//           troopsCount: 11,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -316,7 +316,7 @@
 //         currentPlayerTurn: null,
 //         data: {
 //           territory: "india",
-//           troopsCount: 5
+//           troopsCount: 5,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -337,7 +337,7 @@
 //         currentPlayerTurn: null,
 //         data: {
 //           territory: "china",
-//           troopsCount: 10
+//           troopsCount: 10,
 //         },
 //         timestamp: Date.now(),
 //         territoryState: {
@@ -466,18 +466,18 @@
 //           },
 //           siam: {
 //             troops: 1,
-//             owner: "2"
-//           }
+//             owner: "2",
+//           },
 //         },
-//       }
+//       },
 //     ],
-//   }
+//   },
 // };
 
 export default class ApiService {
-  static async getGameDetails(timestamp) {
-    // return mockedData.reinforcementPhase;
-    const response = await fetch(`/game/actions?since=${timestamp}`);
+  static async getGameDetails() {
+    // return mockedData.cardsView;
+    const response = await fetch("/game/actions?since=");
     return await response.json();
   }
 
@@ -509,5 +509,17 @@ export default class ApiService {
 
   static defendingTerritories() {
     return ["mongolia", "afghanistan", "japan", "peru", "argentina"];
+  }
+
+  static async getCards() {
+    // return {
+    //   infantry: 4,
+    //   cavalry: 5,
+    //   artillery: 2,
+    //   combo: 4,
+    // };
+
+    const response = await fetch("/game/cards");
+    return await response.json();
   }
 }

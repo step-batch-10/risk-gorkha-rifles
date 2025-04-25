@@ -8,6 +8,7 @@ import ModalManager from "./controllers/modalManager.js";
 import ViewManager from "./controllers/viewManager.js";
 import PhaseView from "./views/phaseView.js";
 import EventBus from "./components/eventBus.js";
+import CardsViewModal from "./views/cardsView.js";
 
 const initModalManager = () => {
   const gameStartModal = new GameStartModal('startGame-popup');
@@ -20,8 +21,10 @@ const initViewManager = (eventBus) => {
   const mapView = new MapView(eventBus);
   const phaseView = new PhaseView(eventBus);
   const playerSidebarView = new PlayerSidebarView('side-bar-left');
+  const cardsView = new CardsViewModal('cards-popup', 'cards-option', eventBus);
+  cardsView.init();
 
-  return new ViewManager(mapView, playerSidebarView, phaseView);
+  return new ViewManager(mapView, playerSidebarView, phaseView, cardsView);
 };
 
 const initalizeApp = () => {

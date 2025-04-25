@@ -2,11 +2,13 @@ export default class ViewManager {
   #territoryRenderer;
   #playerSidebarRenderer;
   #phaseView;
+  #cardsView;
 
-  constructor(territoryRenderer, playerSidebarRenderer, phaseView) {
+  constructor(territoryRenderer, playerSidebarRenderer, phaseView, cardsView) {
     this.#territoryRenderer = territoryRenderer;
     this.#playerSidebarRenderer = playerSidebarRenderer;
     this.#phaseView = phaseView;
+    this.#cardsView = cardsView;
   }
 
   highlightTerritory(territoryId) {
@@ -31,6 +33,10 @@ export default class ViewManager {
 
   renderPlayerSidebar(players) {
     this.#playerSidebarRenderer.render(players);
+  }
+
+  renderCards(cards) {
+    this.#cardsView.render(cards);
   }
 
   startPlayerTurn() {
