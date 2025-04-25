@@ -12,7 +12,7 @@ export type LobbyStatus = { status: boolean; players: string[] };
 
 export enum ActionTypes {
   updateTroops = "updateTroops",
-  isDeploymentOver = "isDeploymentOver",
+  startGame = "startGame",
   reinforceRequest = "reinforceRequest",
   getCards = "getCards",
   requestAttack = "requestAttack",

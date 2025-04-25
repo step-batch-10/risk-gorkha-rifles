@@ -76,7 +76,7 @@ export default class Server {
     app.post("/update-troops", updateTroopsHandler);
     app.get("/request-reinforcement", requestReinforcementHandler);
     app.get("/request-attack", requestAttackHandler);
-    app.get("/is-deployment-over", deploymentStatusHandler);
+    app.get("/start-game", deploymentStatusHandler);
     app.get("/cards", cardsHandler);
     app.post("/request-defendTerritories", defendingTerritories);
     app.post("/request-defendingPlayer", getDefendingPlayer);

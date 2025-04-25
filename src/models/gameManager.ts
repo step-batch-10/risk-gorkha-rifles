@@ -47,8 +47,16 @@ export default class GameManager {
     return gameId;
   }
 
-  private getRecentActions(actions: Action[] = [], timeStamp: number) {
-    return actions.filter((action) => action.timeStamp > timeStamp);
+  private getRecentActions(
+    actions: Action[] = [],
+    timeStamp: number,
+    playerId: string
+  ) {
+    return actions.filter(
+      (action) =>
+        action.timeStamp > timeStamp &&
+        (action.to === null || action.to === playerId)
+    );
   }
 
   public allotPlayer(playerId: string, noOfPlayers: string) {
@@ -66,7 +74,11 @@ export default class GameManager {
   public getGameActions(playerId: string, lastActionat: number) {
     const activeGame = this.findPlayerActiveGame(playerId);
     const allActions = activeGame?.gameActions;
-    const recentActions = this.getRecentActions(allActions, lastActionat);
+    const recentActions = this.getRecentActions(
+      allActions,
+      lastActionat,
+      playerId
+    );
 
     return {
       status: activeGame?.status,
@@ -95,10 +107,12 @@ export default class GameManager {
 
   public handleGameActions(actionDetails: ActionDetails) {
     const requiredGame = this.findPlayerActiveGame(actionDetails.playerId);
+
     if (!requiredGame) throw "Game not found";
+
     const actionMap: Record<ActionTypes, () => any> = {
       updateTroops: () => requiredGame.updateTroops(actionDetails),
-      isDeploymentOver: () => requiredGame.isDeploymentOver(),
+      startGame: () => requiredGame.startGame(),
       reinforceRequest: () =>
         requiredGame.fetchReinforcementData(actionDetails),
       getCards: () => requiredGame.getPlayerCards(actionDetails.playerId),

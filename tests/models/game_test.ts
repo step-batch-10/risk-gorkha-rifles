@@ -101,6 +101,7 @@ describe("getLastAction", () => {
       id: "1",
       name: "startInitialDeployment",
       playerId: null,
+      to: null,
       currentPlayer: "",
       data: { troopCount: 21 },
       timeStamp: 1,
@@ -193,8 +194,8 @@ describe("tests for isDeploymentOver", () => {
         troopCount: 21,
       },
     });
-    const actual = game.isDeploymentOver();
-    assert(actual);
+    const actual = game.startGame();
+    assertEquals(actual, { status: true });
   });
 
   it("should return false when deployment for current player id is not over", () => {
@@ -208,9 +209,10 @@ describe("tests for isDeploymentOver", () => {
         troopCount: 10,
       },
     };
+
     game.updateTroops(actionDetails);
-    const actual = game.isDeploymentOver();
-    assertFalse(actual);
+    const actual = game.startGame();
+    assertEquals(actual, { status: false });
   });
 });
 

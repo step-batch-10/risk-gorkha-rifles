@@ -65,6 +65,7 @@ export interface Action {
   id: string;
   name: string;
   playerId: string | null;
+  to: string | null;
   data: {
     territory?: string;
     troopCount?: number;
@@ -90,6 +91,7 @@ export interface Player {
 }
 
 export default class Game {
+  private currentPlayer: string = "";
   private players: Set<string>;
   private gameStatus: GameStatus;
   private actions: Action[] = [];
@@ -180,16 +182,18 @@ export default class Game {
   }
 
   private generateAction(
-    playerId: string,
+    userId: string,
     data: Data,
     action: string,
+    playerId: string | null,
     to: string | null
   ) {
     return {
       id: this.uniqueId(),
       name: action,
-      playerId: to,
-      currentPlayer: playerId,
+      playerId,
+      to,
+      currentPlayer: userId,
       data: data,
       timeStamp: this.timeStamp(),
       playerStates: this.playerStates,
@@ -217,6 +221,7 @@ export default class Game {
           troopDeployed: troopCount,
         },
         "updateTroops",
+        null,
         null
       )
     );
@@ -231,22 +236,33 @@ export default class Game {
     return this.players.has(playerId);
   }
 
-  public isDeploymentOver() {
+  private isDeploymentOver() {
     const status = Object.values(this.playerStates).every(
       ({ availableTroops }) => availableTroops === 0
     );
+    return status;
+  }
 
-    if (status) {
-      this.actions.push(
-        this.generateAction("", {}, "stopInitialDeployment", null)
-      );
-      this.actions.push(this.generateAction("", {}, "startGame", null));
-      this.actions.push(
-        this.generateAction("", {}, "reinforcementPhase", null)
-      );
+  public startGame() {
+    const status = this.isDeploymentOver();
+
+    if (!status) {
+      return { status };
     }
 
-    return status;
+    this.actions.push(this.generateAction("", {}, "startGame", null, null));
+    const playerCycle = this.selectPlayerTurn(3);
+    this.currentPlayer = playerCycle().id;
+    this.actions.push(
+      this.generateAction(
+        this.currentPlayer,
+        {},
+        "reinforcementPhase",
+        this.currentPlayer,
+        this.currentPlayer
+      )
+    );
+    return { status };
   }
 
   get status() {
@@ -265,6 +281,7 @@ export default class Game {
         "",
         { troopCount: 21 },
         "startInitialDeployment",
+        null,
         null
       )
     );

@@ -175,16 +175,16 @@ const updateTroopsHandler = async (context: Context) => {
   return context.json(updatedTroops);
 };
 
-const deploymentStatusHandler = (context: Context) => {
+const startGameHandler = (context: Context) => {
   const userId: string = context.get("userId");
   const gameManager: GameManager = context.get("gameManager");
   const status = gameManager.handleGameActions({
     playerId: userId,
-    name: "isDeploymentOver",
+    name: "startGame",
     data: {},
   });
 
-  return context.json({ status });
+  return context.json(status);
 };
 
 const cardsHandler = (context: Context) => {
@@ -219,7 +219,7 @@ export {
   requestReinforcementHandler,
   updateTroopsHandler,
   requestAttackHandler,
-  deploymentStatusHandler,
+  startGameHandler as deploymentStatusHandler,
   cardsHandler,
   defendingTerritories,
   getDefendingPlayer,

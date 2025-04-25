@@ -86,6 +86,7 @@ describe("getGameActions", () => {
           id: "1",
           name: "startInitialDeployment",
           playerId: null,
+          to: null,
           playerStates: {
             "1": {
               availableTroops: 21,
@@ -389,7 +390,7 @@ describe("deploymentStatusHandler test", () => {
         troopCount: 21,
       }),
     });
-    const response = await app.request("/game/is-deployment-over", {
+    const response = await app.request("/game/start-game", {
       method: "GET",
       headers: {
         Cookie: `sessionId=1`,
@@ -398,13 +399,14 @@ describe("deploymentStatusHandler test", () => {
 
     assertEquals(await response.json(), { status: true });
   });
+
   it("should return false when deployment is not over", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
 
-    const response = await app.request("/game/is-deployment-over", {
+    const response = await app.request("/game/start-game", {
       method: "GET",
       headers: {
         Cookie: `sessionId=1`,
