@@ -126,6 +126,13 @@ export default class Game {
     return this.actions;
   }
 
+  private selectPlayerTurn(noOfPlayers: number) {
+    let i = 0;
+    return () => {
+      return this.playerDetails[i++ % noOfPlayers];
+    };
+  }
+
   private initializePlayerStates() {
     const players = [...this.players];
     const territoriesByPlayer: Record<string, string[]> = {};
