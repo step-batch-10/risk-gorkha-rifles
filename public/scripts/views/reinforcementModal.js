@@ -60,11 +60,11 @@ export default class ReinforcementModal {
     return `
       <div id="troop-toast-box">
         <div class="custom-number-input">
-          <button id="decrement">-</button>
+          <div class="decrement-button" id="decrement">-</div>
           <input type="number" id="number-input" disabled value="0" min="0" max="100" />
-          <button id="increment">+</button>
+          <div class="decrement-button" id="increment">+</div>
         </div>
-        <button id="place-troops-btn">Place</button>
+        <div id="place-troops-btn">Place</div>
       </div>
     `;
   }
@@ -78,11 +78,8 @@ export default class ReinforcementModal {
       gravity: "bottom",
       position: "right",
       style: {
-        height: "20%",
-        width: "40%",
-        background: "rgba(200,170,140,0.5)",
-        color: "#000",
-        padding: "26px",
+        padding: "0px",
+        background: "transparent"
       },
     });
   }
