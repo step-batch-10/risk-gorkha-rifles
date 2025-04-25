@@ -241,10 +241,10 @@ describe("test for gameDefender", () => {
     const game = gameInstanceBuilder();
     game.init();
 
-    assertEquals(game.gameDefender("brazil"), "1");
-    assertEquals(game.gameDefender("alaska"), "1");
-    assertEquals(game.gameDefender("alberta"), "2");
-    assertEquals(game.gameDefender("peru"), "2");
-    assertEquals(game.gameDefender("india"), "player not found");
+    assertEquals(game.gameDefender("brazil", "1"), "1");
+    assertEquals(game.gameDefender("alaska", "1"), "1");
+    assertEquals(game.gameDefender("alberta", "2"), "2");
+    assertEquals(game.gameDefender("peru", "2"), "2");
+    assertEquals(game.gameDefender("india", "3748"), "player not found");
   });
 });

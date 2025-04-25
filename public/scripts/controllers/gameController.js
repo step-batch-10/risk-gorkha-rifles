@@ -12,7 +12,8 @@ export default class GameController {
     startGame: this.#startGame.bind(this),
     reinforcementPhase: this.#handleReinforcementPhase.bind(this),
     attackPhaseStart: this.#handleAttackPhase.bind(this),
-    foritfication: this.#handleForitificationPhase.bind(this)
+    foritfication: this.#handleForitificationPhase.bind(this),
+    troopsToDefendWith: this.#handleDefenderTroops.bind(this)
   };
 
   #gameMetaData = {
@@ -109,7 +110,6 @@ export default class GameController {
 
   #handleGameData(gameData) {
     const { status, actions, userId, players } = gameData;
-
     for (const action of actions) {
       const { currentPlayer } = action;
       const gameDetails = { action, status, userId, players };
@@ -126,6 +126,7 @@ export default class GameController {
 
   #handleReinforcementPhase() {
     setTimeout(() => {
+      console.log;
       this.#viewManager.startPlayerTurn();
     }, 5000);
   }
@@ -202,6 +203,23 @@ export default class GameController {
     return await this.#apiService.connectedTerritories(territoryId);
   }
 
+  async #troopsToAttack(troops) {
+    await this.#apiService.troopsToAttack(troops);
+  }
+
+  #handleDefenderTroops() {
+    Toastify({
+      text: `Attacker select your territory to attack`,
+      duration: 3000,
+      gravity: "top",
+      position: "left",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #303824, #874637)",
+      },
+    }).showToast();
+  }
+
   init() {
     this.#pollGameData();
     this.#eventBus.on(
@@ -219,7 +237,8 @@ export default class GameController {
     );
     this.#eventBus.on("renderCards", this.#renderCards.bind(this));
     this.#eventBus.on("defendingPlayer", this.#getDefendingPlayer.bind(this));
-    this.#eventBus.on("getConnectedTerritories", this.#getConnectedTerritories.bind(this))
+    this.#eventBus.on("getConnectedTerritories", this.#getConnectedTerritories.bind(this));
+    this.#eventBus.on("troopsToAttack", this.#troopsToAttack.bind(this));
     this.#audio.play();
   }
 }

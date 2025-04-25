@@ -513,3 +513,39 @@ describe("connectedTerritoriesHandler", () => {
     assertEquals(await response.json(), ["siam", "mongolia", "congo", "ural"]);
   });
 });
+
+describe("storeTroopsToAttack", () => {
+  it("should return success message when attacker select the troops ", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const response = await app.request("/game/troops-to-attack", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+      body: JSON.stringify({ troops: 3 }),
+    });
+
+    assertEquals(await response.json(), { status: "success" });
+  });
+});
+
+describe("storeTroopsToDefend", () => {
+  it("should return success message when defender select the troops to defend with ", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const response = await app.request("/game/troops-to-defend", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+      body: JSON.stringify({ troopsToDefend: 3 }),
+    });
+
+    assertEquals(await response.json(), { status: "success" });
+  });
+});

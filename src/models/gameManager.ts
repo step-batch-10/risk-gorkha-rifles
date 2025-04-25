@@ -37,7 +37,8 @@ export default class GameManager {
       this.uniqueId,
       this.shuffler,
       this.timeStamp,
-      this.connectedTerritories
+      this.connectedTerritories,
+      []
     );
     game.init();
     this.games.push(game);
@@ -124,7 +125,12 @@ export default class GameManager {
           actionDetails.data.territoryId
         ),
       requestDefendingPlayer: () =>
-        requiredGame.gameDefender(actionDetails.data.territoryId),
+        requiredGame.gameDefender(
+          actionDetails.data.territoryId,
+          actionDetails.playerId
+        ),
+      storeTroops: () =>
+        requiredGame.storeTroops(actionDetails),
     };
 
     return actionMap[actionDetails.name as ActionTypes]();

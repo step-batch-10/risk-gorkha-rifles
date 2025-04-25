@@ -1,48 +1,5 @@
 import { GameStatus, Territory } from "../types/gameTypes.ts";
 
-// {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         username: "siya",
-//         colour: "red",
-//         avatar:
-//           "url",
-//       },
-//       {
-//         id: "2",
-//         username: "shikha",
-//         colour: "green",
-//         avatar:
-//           "url",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "1",
-//         name: "intialDeploymentStart",
-//         playerId: null,
-//         currentPlayerTurn: null,
-//         data: {
-//           troopsCount: 11
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//     ],
-//   },
-
 type Data = {
   [key: string]:
     | number
@@ -104,6 +61,7 @@ export default class Game {
   private playerDetails: Player[] = [];
   private colours: string[];
   private connectedTerritories: MadhaviContinent;
+  private diceDetails: (string | number)[] = [];
 
   constructor(
     players: Set<string>,
@@ -112,6 +70,7 @@ export default class Game {
     shuffler: (arr: string[]) => string[],
     timeStamp: () => number,
     connectedTerritories: MadhaviContinent,
+    diceDetails: number[] | string[],
     colours: string[] = ["red", "green", "yellow", "black", "brown", "grey"]
   ) {
     this.players = players;
@@ -122,6 +81,7 @@ export default class Game {
     this.timeStamp = timeStamp;
     this.colours = colours;
     this.connectedTerritories = connectedTerritories;
+    this.diceDetails = diceDetails;
   }
 
   get gameActions() {
@@ -357,23 +317,40 @@ export default class Game {
     return connectedterr;
   }
 
-  private getDefenderID(defender: [string, Territory] | undefined) {
+  private getDefenderID(
+    defender: [string, Territory] | undefined,
+    playerId: string
+  ) {
     if (defender === undefined) {
       return "player not found";
     }
+    const defenderId = defender[1].owner;
+    // playerId: string,
+    // data: Data,
+    // action: string,
+    // to: string | null
 
-    return defender[1].owner;
+    this.generateAction(playerId, {}, "troopsToDefendWith", null, defenderId);
+    return defenderId;
   }
 
-  public gameDefender(defendingTerritory: string | number) {
+  public gameDefender(defendingTerritory: string | number, playerId: string) {
     const defender = Object.entries(this.territoryState).find((territory) => {
       return territory[0] === defendingTerritory;
     });
 
-    return this.getDefenderID(defender);
+    return this.getDefenderID(defender, playerId);
   }
 
   get playersData() {
     return [...this.playerDetails];
   }
+
+  public storeTroops = (actionDetails: ActionDetails) => {
+    const { troops } = actionDetails.data;
+
+    this.diceDetails.push(troops);
+
+    return { status: "success" };
+  };
 }

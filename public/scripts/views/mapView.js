@@ -72,7 +72,8 @@ export default class MapView {
     this.#eventBus.emit("defendingPlayer", territoryId);
     this.#showToast("Select the number of troops to attack with");
     setTimeout(() => {
-      prompt(`Troops count ${territoryId}`);
+      const troops = prompt(`Troops count ${territoryId}`);
+      this.#eventBus.emit("troopsToAttack", parseInt(troops));
     }, 2000);
   }
 

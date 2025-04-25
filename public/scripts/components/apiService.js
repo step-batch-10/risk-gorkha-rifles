@@ -58,15 +58,23 @@ export default class ApiService {
     return responseData.defendingPlayer;
   }
 
-  static async sendRequestToDefender(defenderId) {
-    document.cookie = `sessionId=${defenderId}; path=/`;
+  // static async sendRequestToDefender(defenderId) {
+  //   document.cookie = `sessionId=${defenderId}; path=/`;
 
-    const response = await fetch("/game/request-opponentRequest", {
+  //   const response = await fetch("/game/request-opponentRequest", {
+  //     method: "POST",
+  //     body: JSON.stringify({ defenderId, isOpponent: true }),
+  //   });
+
+  //   return response.message;
+  // }
+
+  static async troopsToAttack(troops) {
+    const response = await fetch("/troops-to-attack", {
       method: "POST",
-      body: JSON.stringify({ defenderId, isOpponent: true }),
+      body: JSON.stringify({ troopsToAttack: troops })
     });
-
-    return response.message;
+    return response;
   }
 
   static async connectedTerritories(territoryId) {

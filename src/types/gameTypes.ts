@@ -18,7 +18,13 @@ export enum ActionTypes {
   requestAttack = "requestAttack",
   requestNeighbouringTerritories = "requestNeighbouringTerritories",
   requestDefendingPlayer = "requestDefendingPlayer",
+  storeTroops = "storeTroops",
 }
+
+export type AttackDetails = { troops: number | string; attackerId: string };
+export type DefendDetails = { troops: number | string; defenderId: string };
+
+export type DiceDetails = [AttackDetails | DefendDetails];
 
 export type Continent = Record<string, string[]>;
 

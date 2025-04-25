@@ -210,6 +210,21 @@ export const getTypeCounts = (cards: CardType[]): Record<CardType, number> => {
   );
 };
 
+const storeTroops = async (context: Context) => {
+  const userId: string = context.get("userId");
+  const body = await context.req.json();
+  const gameManager: GameManager = context.get("gameManager");
+  const status = gameManager.handleGameActions({
+    playerId: userId,
+    name: "storeTroops",
+    data: {
+      troops: body.troopsToAttack,
+    },
+  });
+
+  return context.json(status);
+};
+
 export {
   joinGameHandler,
   gameActionsHandler,
@@ -223,4 +238,5 @@ export {
   cardsHandler,
   defendingTerritories,
   getDefendingPlayer,
+  storeTroops,
 };

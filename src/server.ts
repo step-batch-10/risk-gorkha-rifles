@@ -19,6 +19,7 @@ import {
   cardsHandler,
   defendingTerritories,
   getDefendingPlayer,
+  storeTroops,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -83,7 +84,8 @@ export default class Server {
     app.get("/connected-territories", (context: Context) => {
       return context.json(["siam", "mongolia", "congo", "ural"]);
     });
-
+    app.post("/troops-to-attack", storeTroops);
+    app.post("/troops-to-defend", storeTroops);
     return app;
   }
 
