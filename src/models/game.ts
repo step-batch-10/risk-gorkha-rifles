@@ -325,12 +325,11 @@ export default class Game {
       return "player not found";
     }
     const defenderId = defender[1].owner;
-    // playerId: string,
-    // data: Data,
-    // action: string,
-    // to: string | null
 
-    this.generateAction(playerId, {}, "troopsToDefendWith", null, defenderId);
+    this.actions.push(
+      this.generateAction(playerId, {}, "troopsToDefendWith", null, defenderId)
+    );
+
     return defenderId;
   }
 
@@ -350,6 +349,16 @@ export default class Game {
     const { troops } = actionDetails.data;
 
     this.diceDetails.push(troops);
+
+    return { status: "success" };
+  };
+
+  public storeTroopsToDefend = (actionDetails: ActionDetails) => {
+    const { troopsToDefend } = actionDetails.data;
+
+    this.diceDetails.push(troopsToDefend);
+
+    console.log(this.diceDetails);
 
     return { status: "success" };
   };

@@ -70,7 +70,7 @@ export default class ApiService {
   // }
 
   static async troopsToAttack(troops) {
-    const response = await fetch("/troops-to-attack", {
+    const response = await fetch("/game/troops-to-attack", {
       method: "POST",
       body: JSON.stringify({ troopsToAttack: troops })
     });
@@ -81,5 +81,12 @@ export default class ApiService {
     const response = await fetch(`/game/connected-territories?territoryId=${territoryId}`)
 
     return await response.json();
+  }
+  static async troopsToDefend(troops) {
+    const response = await fetch("/game/troops-to-defend", {
+      method: "POST",
+      body: JSON.stringify({ troopsToDefend: troops })
+    });
+    return response;
   }
 }

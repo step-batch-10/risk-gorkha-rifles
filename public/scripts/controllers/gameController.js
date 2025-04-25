@@ -208,6 +208,7 @@ export default class GameController {
   }
 
   #handleDefenderTroops() {
+
     Toastify({
       text: `Attacker select your territory to attack`,
       duration: 3000,
@@ -218,6 +219,9 @@ export default class GameController {
         background: "linear-gradient(to right, #303824, #874637)",
       },
     }).showToast();
+
+    const troopsToDefend = prompt("select the troops to defend with");
+    this.#apiService.troopsToDefend(parseInt(troopsToDefend));
   }
 
   init() {
