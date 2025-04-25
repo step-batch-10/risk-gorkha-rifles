@@ -25,10 +25,31 @@ export const main = () => {
   const user1Id = users.findIdByUsername("dummyPlayer1") || "";
   const user2Id = users.findIdByUsername("dummyPlayer2") || "";
 
-  console.log(user1Id, user2Id);
   const gameManager = new GameManager(uniqueId, getContinents, Date.now);
   gameManager.allotPlayer(user1Id, "3");
   gameManager.allotPlayer(user2Id, "3");
+
+  const id = setInterval(() => {
+    const game = gameManager.findPlayerActiveGame(user1Id);
+
+    if (game) {
+      const territory1 = game?.playerTerritories(user1Id).at(1) || "";
+      const territory2 = game?.playerTerritories(user2Id).at(1) || "";
+
+      gameManager.handleGameActions({
+        playerId: user1Id,
+        name: "updateTroops",
+        data: { territory: territory1, troopCount: 21 },
+      });
+
+      gameManager.handleGameActions({
+        playerId: user2Id,
+        name: "updateTroops",
+        data: { territory: territory2, troopCount: 21 },
+      });
+      clearInterval(id);
+    }
+  }, 2000);
 
   const server = new Server(users, session, gameManager, uniqueId);
   Deno.serve({ port: 3000 }, server.serve());
