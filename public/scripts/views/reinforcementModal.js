@@ -41,9 +41,9 @@ export default class ReinforcementModal {
   }
 
   addTerritoryListeners(currentPlayer, territories, actionData) {
-    const { newTroops } = actionData;
-    this.#totalTroops = newTroops;
-    this.#remainingTroops = newTroops;
+    const { troopCount } = actionData;
+    this.#totalTroops = troopCount;
+    this.#remainingTroops = troopCount;
 
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
@@ -79,7 +79,7 @@ export default class ReinforcementModal {
       position: "right",
       style: {
         padding: "0px",
-        background: "transparent"
+        background: "transparent",
       },
     });
   }

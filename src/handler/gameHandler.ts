@@ -219,7 +219,7 @@ export {
   requestReinforcementHandler,
   updateTroopsHandler,
   requestAttackHandler,
-  startGameHandler as deploymentStatusHandler,
+  startGameHandler,
   cardsHandler,
   defendingTerritories,
   getDefendingPlayer,

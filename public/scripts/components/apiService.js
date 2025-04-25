@@ -13,7 +13,7 @@ export default class ApiService {
       }),
     });
 
-    await fetch("/game/is-deployment-over");
+    await fetch("/game/start-game");
   }
 
   static async requestReinforcement() {

@@ -15,7 +15,7 @@ import {
   updateTroopsHandler,
   requestReinforcementHandler,
   requestAttackHandler,
-  deploymentStatusHandler,
+  startGameHandler,
   cardsHandler,
   defendingTerritories,
   getDefendingPlayer,
@@ -76,7 +76,7 @@ export default class Server {
     app.post("/update-troops", updateTroopsHandler);
     app.get("/request-reinforcement", requestReinforcementHandler);
     app.get("/request-attack", requestAttackHandler);
-    app.get("/start-game", deploymentStatusHandler);
+    app.get("/start-game", startGameHandler);
     app.get("/cards", cardsHandler);
     app.post("/request-defendTerritories", defendingTerritories);
     app.post("/request-defendingPlayer", getDefendingPlayer);
