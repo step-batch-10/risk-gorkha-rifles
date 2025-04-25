@@ -58,11 +58,11 @@ export default class GameController {
 
   #handleTroopDeployment(gameDetails) {
     const {
-      action: { currentPlayer, data },
+      action: { playerId, data },
       players,
     } = gameDetails;
     this.#viewManager.updateTerritoryDetails(data);
-    const player = players.find((player) => player.id === currentPlayer);
+    const player = players.find((player) => player.id === playerId);
     const actionerName = player ? player.username : "Unknown Player";
 
     const { troopDeployed, territory } = data;
@@ -101,7 +101,6 @@ export default class GameController {
       action.territoryState,
       action.data
     );
-    this.#updateUI(gameDetails);
   }
 
   #isValidAction(action) {
@@ -112,16 +111,17 @@ export default class GameController {
     const { status, actions, userId, players } = gameData;
 
     for (const action of actions) {
+      const { currentPlayer } = action;
       const gameDetails = { action, status, userId, players };
       if (!this.#isValidAction(action.name)) continue;
-
+      this.#updateUI(gameDetails, currentPlayer);
       this.#actionMap[action.name](gameDetails);
     }
   }
 
-  #updateUI({ action, players }) {
+  #updateUI({ action, players }, currentPlayer) {
     this.#viewManager.renderAllTerritories(action.territoryState, players);
-    this.#viewManager.renderPlayerSidebar(players);
+    this.#viewManager.renderPlayerSidebar(players, currentPlayer);
   }
 
   #handleReinforcementPhase() {

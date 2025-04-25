@@ -214,14 +214,14 @@ export default class Game {
 
     this.actions.push(
       this.generateAction(
-        playerId,
+        "",
         {
           territory: territory,
           troopCount: this.territoryState[territory].troops,
           troopDeployed: troopCount,
         },
         "updateTroops",
-        null,
+        playerId,
         null
       )
     );
@@ -253,9 +253,11 @@ export default class Game {
     this.actions.push(
       this.generateAction("", {}, "stopInitialDeployment", null, null)
     );
-    this.actions.push(this.generateAction("", {}, "startGame", null, null));
     const playerCycle = this.selectPlayerTurn(3);
     this.currentPlayer = playerCycle().id;
+    this.actions.push(
+      this.generateAction(this.currentPlayer, {}, "startGame", null, null)
+    );
     this.actions.push(
       this.generateAction(
         this.currentPlayer,

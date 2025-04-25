@@ -428,3 +428,13 @@ main {
     filter: grayscale(0%);
   }
 }
+.current-player {
+  background-color: #d4edda;
+  border: 2px solid #28a745;
+  color: #155724;
+  font-weight: 800;
+  transform: scale(1.03);
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.6);
+  transition: all 0.3s ease-in-out;
+  border-radius: 10px;
+}

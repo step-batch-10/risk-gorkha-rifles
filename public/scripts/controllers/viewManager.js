@@ -31,8 +31,8 @@ export default class ViewManager {
     this.#territoryRenderer.render(territories, players);
   }
 
-  renderPlayerSidebar(players) {
-    this.#playerSidebarRenderer.render(players);
+  renderPlayerSidebar(players, currentPlayer) {
+    this.#playerSidebarRenderer.render(players, currentPlayer);
   }
 
   renderCards(cards) {

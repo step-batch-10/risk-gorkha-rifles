@@ -11,7 +11,7 @@ import EventBus from "./components/eventBus.js";
 import CardsViewModal from "./views/cardsView.js";
 
 const initModalManager = () => {
-  const gameStartModal = new GameStartModal('startGame-popup');
+  const gameStartModal = new GameStartModal("startGame-popup");
   const reinforcementModal = new ReinforcementModal();
 
   return new ModalManager(gameStartModal, reinforcementModal);
@@ -20,8 +20,8 @@ const initModalManager = () => {
 const initViewManager = (eventBus) => {
   const mapView = new MapView(eventBus);
   const phaseView = new PhaseView(eventBus);
-  const playerSidebarView = new PlayerSidebarView('side-bar-left');
-  const cardsView = new CardsViewModal('cards-popup', 'cards-option', eventBus);
+  const playerSidebarView = new PlayerSidebarView("side-bar-left");
+  const cardsView = new CardsViewModal("cards-popup", "cards-option", eventBus);
   cardsView.init();
 
   return new ViewManager(mapView, playerSidebarView, phaseView, cardsView);
@@ -34,7 +34,13 @@ const initalizeApp = () => {
   const viewManager = initViewManager(eventBus);
   const audio = new Audio("../../assets/risk_music.mp3");
 
-  const controller = new GameController(modalManager, viewManager, ApiService, audio, eventBus);
+  const controller = new GameController(
+    modalManager,
+    viewManager,
+    ApiService,
+    audio,
+    eventBus
+  );
   controller.init();
 };
 

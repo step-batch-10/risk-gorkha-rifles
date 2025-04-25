@@ -138,7 +138,7 @@ describe("getGameActions test", () => {
       userId: "3",
       actions: [
         {
-          currentPlayer: "1",
+          currentPlayer: "",
           data: {
             territory: "India",
             troopCount: 11,
@@ -146,7 +146,7 @@ describe("getGameActions test", () => {
           },
           id: "1",
           name: "updateTroops",
-          playerId: null,
+          playerId: "1",
           to: null,
           playerStates: {
             "1": {
@@ -203,7 +203,7 @@ describe("getGameActions test", () => {
       userId: "3",
       actions: [
         {
-          currentPlayer: "1",
+          currentPlayer: "",
           data: {
             territory: "India",
             troopCount: 11,
@@ -211,7 +211,7 @@ describe("getGameActions test", () => {
           },
           id: "1",
           name: "updateTroops",
-          playerId: null,
+          playerId: "1",
           to: null,
           playerStates: {
             "1": {

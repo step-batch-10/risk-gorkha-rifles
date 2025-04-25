@@ -1,13 +1,22 @@
 export default class PlayerSidebarView {
   #sidebar;
-  #template = `<div class="avatar"><img style="border-color: {{colour}}" src="{{avatar}}"></div><div class="player-details"><p>{{username}}</p> </div>`;
+  #currentPlayer;
+  #template = `<div class="avatar {{classname}}"><img style="border-color: {{colour}}" src="{{avatar}}"></div><div class="player-details"><p>{{username}}</p> </div>`;
 
   constructor(sidebarId) {
     this.#sidebar = document.getElementById(sidebarId);
   }
 
-  #generatePlayerDetails(player) {
+  #generatePlayerDetails(player, currentPlayer) {
+    if (currentPlayer && currentPlayer !== "") {
+      this.#currentPlayer = currentPlayer;
+    }
+
+    player.classname =
+      this.#currentPlayer === player.id ? "current-player" : "";
+
     const output = Mustache.render(this.#template, player);
+
     const ele = document.createElement("div");
     ele.id = player.id;
     ele.innerHTML = output;
@@ -21,16 +30,21 @@ export default class PlayerSidebarView {
 
   #highlightCurrentPlayer(currentPlayer) {
     const ele = document.getElementById(currentPlayer);
-    ele.style.backgroundColor = "red";
+    ele.style.background = "red !important";
+    console.log(ele);
+    ele.classList.add("current-player");
   }
 
   render(players, currentPlayer) {
     this.#clear();
-    this.#highlightCurrentPlayer(currentPlayer);
 
     Object.values(players).forEach((player) => {
-      const playerObj = this.#generatePlayerDetails(player);
+      const playerObj = this.#generatePlayerDetails(player, currentPlayer);
       this.#sidebar.appendChild(playerObj);
     });
+
+    // if (currentPlayer) {
+    //   this.#highlightCurrentPlayer(currentPlayer);
+    // }
   }
 }
