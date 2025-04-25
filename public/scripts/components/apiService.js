@@ -68,4 +68,10 @@ export default class ApiService {
 
     return response.message;
   }
+
+  static async connectedTerritories(territoryId) {
+    const response = await fetch(`/game/connected-territories?territoryId=${territoryId}`)
+
+    return await response.json();
+  }
 }

@@ -58,11 +58,18 @@ export default class PhaseView {
     this.#eventBus.emit("requestReinforcement");
   }
 
-  showDraftPhaseUI() {
+  showFortificationPhase() {
+    this.#showPhaseDetailBox();
+    this.#clearPhaseButtons("draft-phase");
     this.#clearPhaseButtons("attack-phase");
 
-    const draftPhaseContainer = document.getElementById("phaseDetails-box");
-    draftPhaseContainer.style.display = "block";
+    const fortify = document.getElementById("fortify-phase");
+    fortify.style.display = "block";
+  }
+
+  showDraftPhaseUI() {
+    this.#clearPhaseButtons("attack-phase");
+    this.#showPhaseDetailBox();
 
     const reinforcementRequestButton =
       draftPhaseContainer.querySelector("#draft-action");
@@ -74,5 +81,11 @@ export default class PhaseView {
         once: true,
       }
     );
+  }
+
+  #showPhaseDetailBox() {
+    const draftPhaseContainer = document.getElementById("phaseDetails-box");
+    draftPhaseContainer.style.display = "block";
+    return draftPhaseContainer;
   }
 }

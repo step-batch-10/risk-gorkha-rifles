@@ -42,4 +42,9 @@ export default class ViewManager {
   startPlayerTurn() {
     this.#phaseView.showDraftPhaseUI();
   }
+
+  showFortificationPhase(territories) {
+    this.#phaseView.showFortificationPhase();
+    this.#territoryRenderer.startFortificationPhase(territories);
+  }
 }

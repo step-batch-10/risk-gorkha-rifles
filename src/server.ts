@@ -80,6 +80,10 @@ export default class Server {
     app.get("/cards", cardsHandler);
     app.post("/request-defendTerritories", defendingTerritories);
     app.post("/request-defendingPlayer", getDefendingPlayer);
+    app.get("/connected-territories", (context: Context) => {
+      return context.json(["siam", "mongolia", "congo", "ural"]);
+    });
+
     return app;
   }
 

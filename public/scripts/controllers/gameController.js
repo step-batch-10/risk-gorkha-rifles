@@ -12,6 +12,7 @@ export default class GameController {
     startGame: this.#startGame.bind(this),
     reinforcementPhase: this.#handleReinforcementPhase.bind(this),
     attackPhaseStart: this.#handleAttackPhase.bind(this),
+    foritfication: this.#handleForitificationPhase.bind(this)
   };
 
   #gameMetaData = {
@@ -44,15 +45,15 @@ export default class GameController {
     return this.#actionsLog.length ? this.#actionsLog.at(-1).timeStamp : 0;
   }
 
-  #pollGameData() {
-    setInterval(async () => {
-      const lastTimestamp = this.#getLastTimestamp();
+  async #pollGameData() {
+    // setInterval(async () => {
+    const lastTimestamp = this.#getLastTimestamp();
 
-      const gameData = await this.#apiService.getGameDetails(lastTimestamp);
-      this.#updateLocalState(gameData);
-      this.#handleGameData(gameData);
-      this.#viewManager.renderPlayerSidebar(gameData.players);
-    }, 1000);
+    const gameData = await this.#apiService.getGameDetails(lastTimestamp);
+    this.#updateLocalState(gameData);
+    this.#handleGameData(gameData);
+    this.#viewManager.renderPlayerSidebar(gameData.players);
+    // }, 1000);
   }
 
   #handleTroopDeployment(gameDetails) {
@@ -192,6 +193,15 @@ export default class GameController {
     }
   }
 
+  #handleForitificationPhase(gameDetails) {
+    const { action } = gameDetails;
+    this.#viewManager.showFortificationPhase(action.data.activeTerritories);
+  }
+
+  async #getConnectedTerritories(territoryId) {
+    return await this.#apiService.connectedTerritories(territoryId);
+  }
+
   init() {
     this.#pollGameData();
     this.#eventBus.on(
@@ -209,6 +219,7 @@ export default class GameController {
     );
     this.#eventBus.on("renderCards", this.#renderCards.bind(this));
     this.#eventBus.on("defendingPlayer", this.#getDefendingPlayer.bind(this));
+    this.#eventBus.on("getConnectedTerritories", this.#getConnectedTerritories.bind(this))
     this.#audio.play();
   }
 }

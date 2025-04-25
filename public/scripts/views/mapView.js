@@ -4,6 +4,13 @@ export default class MapView {
     defendingTerritory: "",
     troopsCount: "",
   };
+
+  #fortificationDetails = {
+    fromTerritory: "",
+    toTerritory: "",
+    troopCount: "",
+  };
+
   #eventBus;
   #listeners = {};
 
@@ -113,7 +120,6 @@ export default class MapView {
   updateTerritory({ territory, troopCount }) {
     const domTerritory = document.getElementById(territory);
     const troopsCountDOM = domTerritory.querySelector("tspan");
-    // const existingTroops = parseInt(troopsCountDOM.textContent, 10);
 
     troopsCountDOM.textContent = troopCount;
   }
@@ -129,5 +135,82 @@ export default class MapView {
 
   render(territories, players) {
     this.#renderTerritories(territories, players);
+  }
+
+  #unHighlightTerritories(territories) {
+    territories.forEach(territoryId => {
+      this.unHighlightTerritory(territoryId);
+    })
+  }
+
+  #selectToTerritoryClick(territoryId, territories) {
+    return () => {
+      this.#fortificationDetails.toTerritory = territoryId;
+      this.#removeClickListeners(territories);
+      this.#toggleBlinkTerritories(territories, false);
+      this.highlightTerritory(territoryId);
+
+      setTimeout(() => {
+        const troopsCount = prompt("Enter number of toops to select");
+        this.#fortificationDetails.troopCount = troopsCount;
+        console.log(this.#fortificationDetails);
+      }, 2000);
+    }
+  }
+
+  #toggleBlinkTerritories(territories, status = true) {
+    territories.forEach(territoryId => {
+      const territory = document.getElementById(territoryId);
+      const path = territory.querySelector("path");
+      if (status)
+        return path.classList.add("blink-territory");
+
+
+      return path.classList.remove("blink-territory");
+    })
+  }
+
+  #handleToTerritoryClick(territories) {
+    this.#toggleBlinkTerritories(territories);
+    territories.forEach(territoryId => {
+      const territory = document.getElementById(territoryId);
+
+      const listner = this.#selectToTerritoryClick(territoryId, territories);
+      this.#listeners[territoryId] = listner;
+
+      territory.addEventListener('click', listner);
+    })
+  }
+
+  async #handleConnectedTerritories(territoryId) {
+    const [emitResponse] = this.#eventBus.emit('getConnectedTerritories', territoryId);
+    const connectedTerritories = await emitResponse;
+
+    this.#showToast("Select to territory for fortification");
+    this.#handleToTerritoryClick(connectedTerritories);
+  }
+
+  #selectFromTerritoryClick(territoryId, territories) {
+    return () => {
+      this.#fortificationDetails.fromTerritory = territoryId
+      this.#removeClickListeners(territories);
+      this.#unHighlightTerritories(territories);
+      this.highlightTerritory(territoryId);
+      this.#handleConnectedTerritories(territoryId);
+    }
+  }
+
+  startFortificationPhase(territories) {
+    this.#removeClickListeners(territories);
+    this.#showToast("Select from territory for fortification");
+
+    territories.forEach(territoryId => {
+      this.highlightTerritory(territoryId);
+      const territory = document.getElementById(territoryId);
+      const listner = this.#selectFromTerritoryClick(territoryId, territories);
+      this.#listeners[territoryId] = listner;
+
+      territory.addEventListener("click", listner);
+    })
   }
 }

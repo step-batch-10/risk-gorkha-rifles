@@ -410,3 +410,21 @@ main {
   justify-content: center;
   align-items: center;
 }
+
+.blink-territory {
+  animation: blinkAnimation 1s infinite ease-in-out;
+}
+
+@keyframes blinkAnimation {
+  0% {
+    filter: grayscale(0%);
+  }
+
+  50% {
+    filter: grayscale(70%);
+  }
+
+  100% {
+    filter: grayscale(0%);
+  }
+}
