@@ -45,15 +45,15 @@ export default class GameController {
     return this.#actionsLog.length ? this.#actionsLog.at(-1).timeStamp : 0;
   }
 
-  async #pollGameData() {
-    // setInterval(async () => {
-    const lastTimestamp = this.#getLastTimestamp();
+  #pollGameData() {
+    setInterval(async () => {
+      const lastTimestamp = this.#getLastTimestamp();
 
-    const gameData = await this.#apiService.getGameDetails(lastTimestamp);
-    this.#updateLocalState(gameData);
-    this.#handleGameData(gameData);
-    this.#viewManager.renderPlayerSidebar(gameData.players);
-    // }, 1000);
+      const gameData = await this.#apiService.getGameDetails(lastTimestamp);
+      this.#updateLocalState(gameData);
+      this.#handleGameData(gameData);
+      this.#viewManager.renderPlayerSidebar(gameData.players);
+    }, 1000);
   }
 
   #handleTroopDeployment(gameDetails) {
