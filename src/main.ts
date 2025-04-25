@@ -2,7 +2,9 @@ import GameManager from "./models/gameManager.ts";
 import Session from "./models/session.ts";
 import Users from "./models/users.ts";
 import Server from "./server.ts";
-import { getContinents } from "./utils/continents.ts";
+import { Continent } from "./types/gameTypes.ts";
+import lodash from "npm:lodash";
+import { getContinents, neighbouringTerritories } from "./utils/continents.ts";
 
 export const uniqueId = () => {
   return Date.now().toString(36) + Math.random().toString(36);
@@ -11,7 +13,14 @@ export const uniqueId = () => {
 const main = () => {
   const session = new Session(uniqueId);
   const users = new Users(uniqueId);
-  const gameManager = new GameManager(uniqueId, getContinents, Date.now);
+  const connectedTerritories: Continent = neighbouringTerritories();
+  const gameManager = new GameManager(
+    uniqueId,
+    getContinents,
+    Date.now,
+    lodash.shuffle,
+    connectedTerritories
+  );
 
   const server = new Server(users, session, gameManager, uniqueId);
   Deno.serve({ port: 3000 }, server.serve());

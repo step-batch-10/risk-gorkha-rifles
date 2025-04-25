@@ -87,7 +87,6 @@
           if (response.status !== 200) return;
 
           const lobbyData = await response.json();
-          console.log(lobbyData);
 
           handleLobbyStatus(lobbyData);
         } catch (error) {

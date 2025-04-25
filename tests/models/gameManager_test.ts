@@ -3,6 +3,7 @@ import { describe, it } from "testing";
 import GameManager from "../../src/models/gameManager.ts";
 import Game from "../../src/models/game.ts";
 import { GameStatus } from "../../src/types/gameTypes.ts";
+import { neighbouringTerritories } from "../../src/utils/continents.ts";
 
 const iterator = () => {
   let i = 1;
@@ -14,12 +15,13 @@ export const gameManagerInstanceBuilder = (
 ) => {
   const uniqueId = (): string => "1";
   const shuffler = (ar: string[]): string[] => ar;
-
+  const connectedTerritories = neighbouringTerritories();
   const gameManager = new GameManager(
     uniqueId,
     getContinents,
     iterator(),
-    shuffler
+    shuffler,
+    connectedTerritories
   );
   return gameManager;
 };
@@ -36,7 +38,6 @@ describe("find player active game", () => {
   });
   it("should return undefined when player is not in active game", () => {
     const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
-
     const result = gameManager.findPlayerActiveGame("4");
     assertEquals(result, undefined);
   });
@@ -314,7 +315,7 @@ describe("handleGameActions test", () => {
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
     const actual = gameManager.handleGameActions({
-      name: "attackRequest",
+      name: "requestAttack",
       playerId: "1",
       data: {},
     });
@@ -391,5 +392,41 @@ describe("handleGameActions test", () => {
     };
 
     assertEquals(actual, expected);
+  });
+
+  it("should return neighbouring territories for given territory", () => {
+    const gameManager = gameManagerInstanceBuilder(() => ({
+      Asia: ["India"],
+    }));
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const actual = gameManager.handleGameActions({
+      name: "requestNeighbouringTerritories",
+      playerId: "1",
+      data: {
+        territoryId: "india",
+      },
+    });
+    assertEquals(actual, []);
+  });
+
+  it("should return the player id of the given territory", () => {
+    const gameManager = gameManagerInstanceBuilder(() => ({
+      Asia: ["India"],
+    }));
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const actual = gameManager.handleGameActions({
+      name: "requestDefendingPlayer",
+      playerId: "2",
+      data: {
+        territoryId: "India",
+      },
+    });
+
+    assertEquals(actual, "1");
   });
 });

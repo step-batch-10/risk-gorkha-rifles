@@ -62,9 +62,10 @@ export default class MapView {
 
   #handleDefendTerritoryClick(territoryId) {
     this.#attackPhaseDetails.attackingTerritory = territoryId;
+    this.#eventBus.emit("defendingPlayer", territoryId);
     this.#showToast("Select the number of troops to attack with");
     setTimeout(() => {
-      prompt("Troops count");
+      prompt(`Troops count ${territoryId}`);
     }, 2000);
   }
 
@@ -112,6 +113,7 @@ export default class MapView {
   updateTerritory({ territory, troopCount }) {
     const domTerritory = document.getElementById(territory);
     const troopsCountDOM = domTerritory.querySelector("tspan");
+    // const existingTroops = parseInt(troopsCountDOM.textContent, 10);
 
     troopsCountDOM.textContent = troopCount;
   }

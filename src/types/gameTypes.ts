@@ -14,8 +14,10 @@ export enum ActionTypes {
   updateTroops = "updateTroops",
   isDeploymentOver = "isDeploymentOver",
   reinforceRequest = "reinforceRequest",
-  attackRequest = "attackRequest",
   getCards = "getCards",
+  requestAttack = "requestAttack",
+  requestNeighbouringTerritories = "requestNeighbouringTerritories",
+  requestDefendingPlayer = "requestDefendingPlayer",
 }
 
 export type Continent = Record<string, string[]>;

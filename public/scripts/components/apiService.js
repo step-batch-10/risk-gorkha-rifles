@@ -1,482 +1,5 @@
-// const mockedData = {
-//   initialDeploymentStart: {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         username: "siya",
-//         colour: "red",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//       {
-//         id: "2",
-//         username: "shikha",
-//         colour: "green",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "1",
-//         name: "intialDeploymentStart",
-//         playerId: null,
-//         currentPlayerTurn: null,
-//         data: {
-//           troopsCount: 11,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//     ],
-//   },
-//   cardsView: {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         username: "siya",
-//         colour: "red",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//       {
-//         id: "2",
-//         username: "shikha",
-//         colour: "green",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "1",
-//         name: "intialDeploymentStop",
-//         playerId: null,
-//         currentPlayerTurn: "2",
-//         data: {
-//           troopsCount: 11,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "1",
-//           },
-//         },
-//       },
-//     ],
-//   },
-//   troopDeployment: {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         username: "siya",
-//         colour: "red",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//       {
-//         id: "2",
-//         username: "shikha",
-//         colour: "green",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "1",
-//         name: "intialDeploymentStart",
-//         playerId: null,
-//         currentPlayerTurn: null,
-//         data: {
-//           troopsCount: 11,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "2",
-//         name: "troopDeployment",
-//         playerId: "1",
-//         currentPlayerTurn: null,
-//         data: {
-//           territory: "india",
-//           troopsCount: 5,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "3",
-//         name: "troopDeployment",
-//         playerId: "2",
-//         currentPlayerTurn: null,
-//         data: {
-//           territory: "china",
-//           troopsCount: 10,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//     ],
-//   },
-//   initialDeploymentStop: {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         username: "siya",
-//         colour: "red",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//       {
-//         id: "2",
-//         username: "shikha",
-//         colour: "green",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "1",
-//         name: "intialDeploymentStart",
-//         playerId: null,
-//         currentPlayerTurn: null,
-//         data: {
-//           troopsCount: 11,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "2",
-//         name: "troopDeployment",
-//         playerId: "1",
-//         currentPlayerTurn: null,
-//         data: {
-//           territory: "india",
-//           troopsCount: 5,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "3",
-//         name: "troopDeployment",
-//         playerId: "2",
-//         currentPlayerTurn: null,
-//         data: {
-//           territory: "china",
-//           troopsCount: 10,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "4",
-//         name: "intialDeploymentStop",
-//         playerId: null,
-//         currentPlayerTurn: null,
-//         data: null,
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//     ],
-//   },
-//   startGame: {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         username: "siya",
-//         colour: "red",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//       {
-//         id: "2",
-//         username: "shikha",
-//         colour: "green",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "1",
-//         name: "intialDeploymentStart",
-//         playerId: null,
-//         currentPlayerTurn: null,
-//         data: {
-//           troopsCount: 11,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "2",
-//         name: "troopDeployment",
-//         playerId: "1",
-//         currentPlayerTurn: null,
-//         data: {
-//           territory: "india",
-//           troopsCount: 5,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "3",
-//         name: "troopDeployment",
-//         playerId: "2",
-//         currentPlayerTurn: null,
-//         data: {
-//           territory: "china",
-//           troopsCount: 10,
-//         },
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "4",
-//         name: "intialDeploymentStop",
-//         playerId: null,
-//         currentPlayerTurn: null,
-//         data: null,
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//       {
-//         id: "5",
-//         name: "startGame",
-//         playerId: null,
-//         currentPlayerTurn: null,
-//         data: null,
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//     ],
-//   },
-//   reinforcementPhase: {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         username: "siya",
-//         colour: "red",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//       {
-//         id: "2",
-//         username: "shikha",
-//         colour: "green",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "6",
-//         name: "reinforcementPhase",
-//         playerId: null,
-//         currentPlayerTurn: "2",
-//         data: null,
-//         timestamp: Date.now(),
-//         territoryState: {
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//         },
-//       },
-//     ],
-//   },
-//   attackPhaseStart: {
-//     status: "running",
-//     userId: "1",
-//     players: [
-//       {
-//         id: "1",
-//         username: "siya",
-//         colour: "red",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//       {
-//         id: "2",
-//         username: "shikha",
-//         colour: "green",
-//         avatar:
-//           "https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740",
-//       },
-//     ],
-//     actions: [
-//       {
-//         id: "1",
-//         name: "attackPhaseStart",
-//         playerId: "2",
-//         currentPlayerTurn: "2",
-//         timestamp: Date.now(),
-//         territoryState: {
-//           china: {
-//             troops: 99,
-//             owner: "2",
-//           },
-//           india: {
-//             troops: 23,
-//             owner: "1",
-//           },
-//           siam: {
-//             troops: 1,
-//             owner: "2",
-//           },
-//         },
-//       },
-//     ],
-//   },
-// };
-
 export default class ApiService {
   static async getGameDetails(timestamp) {
-    // return mockedData.cardsView;
     const response = await fetch(`/game/actions?since=${timestamp}`);
     return await response.json();
   }
@@ -500,26 +23,49 @@ export default class ApiService {
     return responseData;
   }
 
-  static requestAttack() {
-    // const attackResponse = await fetch('/game/request-attack');
-    // const responseData = await attackResponse.json();
-
-    return ["china", "siam", "india"];
-  }
-
-  static defendingTerritories() {
-    return ["mongolia", "afghanistan", "japan", "peru", "argentina"];
-  }
-
   static async getCards() {
-    // return {
-    //   infantry: 4,
-    //   cavalry: 5,
-    //   artillery: 2,
-    //   combo: 4,
-    // };
-
     const response = await fetch("/game/cards");
+
     return await response.json();
+  }
+
+  static async requestAttack() {
+    const attackResponse = await fetch("/game/request-attack");
+    const responseData = await attackResponse.json();
+
+    return responseData.attackingTerritories;
+  }
+
+  static async defendingTerritories(attackingTerritoryId) {
+    const attackResponse = await fetch("/game/request-defendTerritories", {
+      method: "POST",
+      body: JSON.stringify({ attackingTerritoryId }),
+    });
+
+    const responseData = await attackResponse.json();
+
+    return responseData.defendingTerritories;
+  }
+
+  static async defendingPlayer(defendingTerritory) {
+    const response = await fetch("/game/request-defendingPlayer", {
+      method: "POST",
+      body: JSON.stringify({ defendingTerritory }),
+    });
+
+    const responseData = await response.json();
+
+    return responseData.defendingPlayer;
+  }
+
+  static async sendRequestToDefender(defenderId) {
+    document.cookie = `sessionId=${defenderId}; path=/`;
+
+    const response = await fetch("/game/request-opponentRequest", {
+      method: "POST",
+      body: JSON.stringify({ defenderId, isOpponent: true }),
+    });
+
+    return response.message;
   }
 }

@@ -47,7 +47,6 @@ export default class ReinforcementModal {
 
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
-    console.log(territories);
 
     Object.keys(territories).forEach((territoryName) => {
       const territoryElement = document.getElementById(territoryName);
@@ -109,7 +108,6 @@ export default class ReinforcementModal {
     if (!inputField.value) return;
     ApiService.saveTroopsDeployment(territoryName, inputField.value);
 
-    console.log("Troops placed:", inputField.value, territoryName);
     toast.hideToast();
     this.#removeTerritoryHighlight();
   }
@@ -118,7 +116,6 @@ export default class ReinforcementModal {
     if (this.#remainingTroops <= 0) return;
 
     this.#remainingTroops--;
-    console.log("Remaining troops:", this.#remainingTroops);
     inputField.stepUp();
   }
 
@@ -126,7 +123,6 @@ export default class ReinforcementModal {
     if (this.#remainingTroops >= this.#totalTroops) return;
 
     this.#remainingTroops++;
-    console.log("Remaining troops:", this.#remainingTroops);
     inputField.stepDown();
   }
 

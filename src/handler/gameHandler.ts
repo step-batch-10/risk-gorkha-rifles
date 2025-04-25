@@ -36,13 +36,13 @@ const requestAttackHandler = (context: Context) => {
   const gameManager: GameManager = context.get("gameManager");
 
   const action: ActionDetails = {
-    name: ActionTypes.attackRequest,
+    name: ActionTypes.requestAttack,
     playerId: userId,
     data: {},
   };
 
   const attackingTerritories = gameManager.handleGameActions(action);
-  return context.json(attackingTerritories);
+  return context.json({ attackingTerritories });
 };
 
 const requestReinforcementHandler = (context: Context) => {
@@ -57,6 +57,40 @@ const requestReinforcementHandler = (context: Context) => {
 
   const reinforcementData = gameManager.handleGameActions(action);
   return context.json(reinforcementData);
+};
+
+const defendingTerritories = async (context: Context) => {
+  const body = await context.req.json();
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
+
+  const action: ActionDetails = {
+    name: ActionTypes.requestNeighbouringTerritories,
+    playerId: userId,
+    data: {
+      territoryId: body.attackingTerritoryId,
+    },
+  };
+  const defendingTerritories = gameManager.handleGameActions(action);
+  return context.json({ defendingTerritories });
+};
+
+const getDefendingPlayer = async (context: Context) => {
+  const body = await context.req.json();
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
+
+  const action: ActionDetails = {
+    name: ActionTypes.requestDefendingPlayer,
+    playerId: userId,
+    data: {
+      territoryId: body.defendingTerritory,
+    },
+  };
+
+  const defendingPlayer = gameManager.handleGameActions(action);
+
+  return context.json({ defendingPlayer });
 };
 
 const joinGameHandler = (context: Context) => {
@@ -187,4 +221,6 @@ export {
   requestAttackHandler,
   deploymentStatusHandler,
   cardsHandler,
+  defendingTerritories,
+  getDefendingPlayer,
 };

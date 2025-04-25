@@ -1,4 +1,5 @@
 import { GameStatus, Territory } from "../types/gameTypes.ts";
+
 // {
 //     status: "running",
 //     userId: "1",
@@ -51,6 +52,7 @@ type Data = {
 };
 
 type Continent = { name: string; extraTroops: number };
+type MadhaviContinent = Record<string, string[]>;
 
 export type PlayerState = {
   territories: string[];
@@ -99,6 +101,7 @@ export default class Game {
   private timeStamp;
   private playerDetails: Player[] = [];
   private colours: string[];
+  private connectedTerritories: MadhaviContinent;
 
   constructor(
     players: Set<string>,
@@ -106,6 +109,7 @@ export default class Game {
     uniqueId: () => string,
     shuffler: (arr: string[]) => string[],
     timeStamp: () => number,
+    connectedTerritories: MadhaviContinent,
     colours: string[] = ["red", "green", "yellow", "black", "brown", "grey"]
   ) {
     this.players = players;
@@ -115,6 +119,7 @@ export default class Game {
     this.uniqueId = uniqueId;
     this.timeStamp = timeStamp;
     this.colours = colours;
+    this.connectedTerritories = connectedTerritories;
   }
 
   get gameActions() {
@@ -304,6 +309,39 @@ export default class Game {
 
   get playerState() {
     return this.playerStates;
+  }
+
+  public neighbouringTerritories(
+    playerId: string,
+    attackingTerritory: string | number
+  ) {
+    const neighbouring = this.connectedTerritories[attackingTerritory];
+    const connectedterr = neighbouring.filter((territory) => {
+      return Object.entries(this.territoryState).filter((territoryState) => {
+        return (
+          territoryState[1].owner !== playerId &&
+          territoryState[0] === territory
+        );
+      })[0];
+    });
+
+    return connectedterr;
+  }
+
+  private getDefenderID(defender: [string, Territory] | undefined) {
+    if (defender === undefined) {
+      return "player not found";
+    }
+
+    return defender[1].owner;
+  }
+
+  public gameDefender(defendingTerritory: string | number) {
+    const defender = Object.entries(this.territoryState).find((territory) => {
+      return territory[0] === defendingTerritory;
+    });
+
+    return this.getDefenderID(defender);
   }
 
   get playersData() {

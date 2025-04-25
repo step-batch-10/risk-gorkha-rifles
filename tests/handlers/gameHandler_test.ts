@@ -304,7 +304,7 @@ describe("update troop handler", () => {
 });
 
 describe("requestReinforcementHandler", () => {
-  it("should return the player territories", async () => {
+  it("should return the available troops of that player", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -338,7 +338,8 @@ describe("requestAttack", () => {
       },
     });
 
-    assertEquals(await response.json(), ["India"]);
+    assertEquals(await response.json(), { attackingTerritories: ["India"] });
+    assertEquals(response.status, 200);
   });
 });
 
@@ -411,6 +412,64 @@ describe("deploymentStatusHandler test", () => {
     });
 
     assertEquals(await response.json(), { status: false });
+  });
+});
+
+describe("defendingTerritories", () => {
+  it("should return the neighbouring territories for the given territory", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const response = await app.request("/game/request-defendTerritories", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+      body: JSON.stringify({ attackingTerritoryId: "alaska" }),
+    });
+
+    assertEquals(await response.json(), { defendingTerritories: [] });
+    assertEquals(response.status, 200);
+  });
+});
+
+describe("requestDefendingPlayer", () => {
+  it("should return the owner for the given territory", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const response = await app.request("/game/request-defendingPlayer", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+      body: JSON.stringify({ defendingTerritory: "India" }),
+    });
+
+    assertEquals(await response.json(), { defendingPlayer: "1" });
+    assertEquals(response.status, 200);
+  });
+
+  it("should return player not found when given territory is not found", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request("/game/request-defendingPlayer", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+      body: JSON.stringify({ defendingTerritory: "alaska" }),
+    });
+
+    assertEquals(await response.json(), {
+      defendingPlayer: "player not found",
+    });
+    assertEquals(response.status, 200);
   });
 });
 

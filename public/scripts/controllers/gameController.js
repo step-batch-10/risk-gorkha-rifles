@@ -39,7 +39,6 @@ export default class GameController {
     this.#gameMetaData = { players, status, userId };
     this.#actionsLog = [...this.#actionsLog, ...actions];
 
-    console.log(this.#actionsLog);
   }
 
   #getLastTimestamp() {
@@ -159,8 +158,8 @@ export default class GameController {
     });
   }
 
-  #handleAttackPhase() {
-    const territories = this.#apiService.requestAttack();
+  async #handleAttackPhase() {
+    const territories = await this.#apiService.requestAttack();
 
     this.#viewManager.handleAttackView(territories);
   }
@@ -182,6 +181,18 @@ export default class GameController {
     this.#viewManager.renderCards(cards);
   }
 
+  async #getDefendingPlayer(defendingTerritory) {
+    const defenderId = await this.#apiService.defendingPlayer(
+      defendingTerritory
+    );
+
+    const message = await this.#apiService.sendRequestToDefender(defenderId);
+
+    if (message === "opponent found") {
+      prompt("select no of troops to defend with");
+    }
+  }
+
   init() {
     this.#pollGameData();
     this.#eventBus.on(
@@ -198,6 +209,7 @@ export default class GameController {
       this.#getDefendingTerritories.bind(this)
     );
     this.#eventBus.on("renderCards", this.#renderCards.bind(this));
+    this.#eventBus.on("defendingPlayer", this.#getDefendingPlayer.bind(this));
     this.#audio.play();
   }
 }

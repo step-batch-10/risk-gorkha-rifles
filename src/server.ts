@@ -17,6 +17,8 @@ import {
   requestAttackHandler,
   deploymentStatusHandler,
   cardsHandler,
+  defendingTerritories,
+  getDefendingPlayer,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -76,6 +78,8 @@ export default class Server {
     app.get("/request-attack", requestAttackHandler);
     app.get("/is-deployment-over", deploymentStatusHandler);
     app.get("/cards", cardsHandler);
+    app.post("/request-defendTerritories", defendingTerritories);
+    app.post("/request-defendingPlayer", getDefendingPlayer);
     return app;
   }
 

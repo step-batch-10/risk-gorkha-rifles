@@ -12,17 +12,20 @@ export default class GameManager {
   private uniqueId: () => string;
   private getContinents: () => Continent;
   private timeStamp: () => number = Date.now;
+  private connectedTerritories: Continent;
 
   constructor(
     uniqueId: () => string,
     getContinents: () => Continent,
     timeStamp: () => number,
-    shuffler: (ar: string[]) => string[] = lodash.shuffle
+    shuffler: (ar: string[]) => string[] = lodash.shuffle,
+    connectedTerritories: Continent
   ) {
     this.uniqueId = uniqueId;
     this.getContinents = getContinents;
     this.timeStamp = timeStamp;
     this.shuffler = shuffler;
+    this.connectedTerritories = connectedTerritories;
   }
 
   private createGame(players: Set<string>) {
@@ -33,7 +36,8 @@ export default class GameManager {
       continents,
       this.uniqueId,
       this.shuffler,
-      this.timeStamp
+      this.timeStamp,
+      this.connectedTerritories
     );
     game.init();
     this.games.push(game);
@@ -92,15 +96,21 @@ export default class GameManager {
   public handleGameActions(actionDetails: ActionDetails) {
     const requiredGame = this.findPlayerActiveGame(actionDetails.playerId);
     if (!requiredGame) throw "Game not found";
-
     const actionMap: Record<ActionTypes, () => any> = {
       updateTroops: () => requiredGame.updateTroops(actionDetails),
       isDeploymentOver: () => requiredGame.isDeploymentOver(),
       reinforceRequest: () =>
         requiredGame.fetchReinforcementData(actionDetails),
-      attackRequest: () =>
-        requiredGame.playerTerritories(actionDetails.playerId),
       getCards: () => requiredGame.getPlayerCards(actionDetails.playerId),
+      requestAttack: () =>
+        requiredGame.playerTerritories(actionDetails.playerId),
+      requestNeighbouringTerritories: () =>
+        requiredGame.neighbouringTerritories(
+          actionDetails.playerId,
+          actionDetails.data.territoryId
+        ),
+      requestDefendingPlayer: () =>
+        requiredGame.gameDefender(actionDetails.data.territoryId),
     };
 
     return actionMap[actionDetails.name as ActionTypes]();

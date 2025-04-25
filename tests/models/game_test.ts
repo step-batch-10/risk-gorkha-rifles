@@ -1,6 +1,7 @@
 import { assertEquals, assert, assertFalse } from "assert";
 import { describe, it } from "testing";
 import Game from "../../src/models/game.ts";
+import { neighbouringTerritories } from "../../src/utils/continents.ts";
 
 export const gameInstanceBuilder = () => {
   const continents = {
@@ -10,12 +11,15 @@ export const gameInstanceBuilder = () => {
   const shuffler = (arr: string[]): string[] => arr;
   const uniqueId = (): string => "1";
   const timeStamp = (): number => 1;
+  const connectedTerritories = neighbouringTerritories();
+
   const game = new Game(
     new Set(["1", "2"]),
     continents,
     uniqueId,
     shuffler,
     timeStamp,
+    connectedTerritories,
     ["red", "green", "yellow"]
   );
   return game;
@@ -211,11 +215,34 @@ describe("tests for isDeploymentOver", () => {
 });
 
 describe("tests for playerTerritories", () => {
-  it("should ", () => {
+  it("should return territories of the player", () => {
     const game = gameInstanceBuilder();
     game.init();
 
     assertEquals(game.playerTerritories("1"), ["alaska", "brazil"]);
     assertEquals(game.playerTerritories("2"), ["alberta", "peru"]);
+  });
+});
+
+describe("test for neighbouringTerritories", () => {
+  it("should return the neighbouring Territories which is not owned by attacker", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+
+    assertEquals(game.neighbouringTerritories("1", "alaska"), ["alberta"]);
+    assertEquals(game.neighbouringTerritories("1", "brazil"), ["peru"]);
+  });
+});
+
+describe("test for gameDefender", () => {
+  it("should return the id of defending player", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+
+    assertEquals(game.gameDefender("brazil"), "1");
+    assertEquals(game.gameDefender("alaska"), "1");
+    assertEquals(game.gameDefender("alberta"), "2");
+    assertEquals(game.gameDefender("peru"), "2");
+    assertEquals(game.gameDefender("india"), "player not found");
   });
 });
