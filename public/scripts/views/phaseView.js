@@ -24,6 +24,10 @@ export default class PhaseView {
     }).showToast();
   }
 
+  #startFortificationPhase() {
+    this.#eventBus.emit('startFortification');
+  }
+
   #showAttackPhase() {
     this.#clearPhaseButtons("draft-phase");
     this.#clearPhaseButtons("fortify-phase");
@@ -36,6 +40,7 @@ export default class PhaseView {
     const skip = document.getElementById("skip");
     skip.style.display = "flex";
     requestAction.style.display = "flex";
+    skip.addEventListener('click', this.#startFortificationPhase.bind(this))
   }
 
   #stopReinforcement() {
