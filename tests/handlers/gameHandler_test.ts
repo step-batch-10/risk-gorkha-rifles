@@ -545,6 +545,10 @@ describe('fortificationHandler', () => {
     });
 
     const response = await app.request("/game/fortification", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
       body: JSON.stringify({
         fromTerritory: 'India',
         toTerritory: 'Nepal',
