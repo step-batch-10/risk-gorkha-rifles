@@ -12,7 +12,7 @@ export default class GameController {
     startGame: this.#startGame.bind(this),
     reinforcementPhase: this.#handleReinforcementPhase.bind(this),
     attackPhaseStart: this.#handleAttackPhase.bind(this),
-    foritfication: this.#handleForitificationPhase.bind(this),
+    fortification: this.#handleForitificationPhase.bind(this),
     troopsToDefendWith: this.#handleDefenderTroops.bind(this),
     diceRoll: this.#handlerDiceRoll.bind(this)
   };
@@ -47,15 +47,15 @@ export default class GameController {
     return this.#actionsLog.length ? this.#actionsLog.at(-1).timeStamp : 0;
   }
 
-  #pollGameData() {
-    setInterval(async () => {
-      const lastTimestamp = this.#getLastTimestamp();
+  async #pollGameData() {
+    // setInterval(async () => {
+    const lastTimestamp = this.#getLastTimestamp();
 
-      const gameData = await this.#apiService.getGameDetails(lastTimestamp);
-      this.#updateLocalState(gameData);
-      this.#handleGameData(gameData);
-      this.#viewManager.renderPlayerSidebar(gameData.players);
-    }, 1000);
+    const gameData = await this.#apiService.getGameDetails(lastTimestamp);
+    this.#updateLocalState(gameData);
+    this.#handleGameData(gameData);
+    this.#viewManager.renderPlayerSidebar(gameData.players);
+    // }, 1000);
   }
 
   #handleTroopDeployment(gameDetails) {
@@ -197,6 +197,8 @@ export default class GameController {
 
   #handleForitificationPhase(gameDetails) {
     const { action } = gameDetails;
+    console.log(action);
+
     this.#viewManager.showFortificationPhase(action.data);
   }
 
