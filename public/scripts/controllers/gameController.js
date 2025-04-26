@@ -14,7 +14,7 @@ export default class GameController {
     attackPhaseStart: this.#handleAttackPhase.bind(this),
     fortification: this.#handleForitificationPhase.bind(this),
     troopsToDefendWith: this.#handleDefenderTroops.bind(this),
-    diceRoll: this.#handlerDiceRoll.bind(this)
+    diceRoll: this.#handlerDiceRoll.bind(this),
   };
 
   #gameMetaData = {
@@ -211,7 +211,6 @@ export default class GameController {
   }
 
   #handleDefenderTroops() {
-
     Toastify({
       text: `Attacker select your territory to attack`,
       duration: 3000,
@@ -241,6 +240,13 @@ export default class GameController {
     }).showToast();
   }
 
+  #startRollDice(_data) {
+    this.#modalManager.startDice([1, 1, 1], [1, 1]);
+    setTimeout(() => {
+      this.#modalManager.startDice([6, 5, 4], [2, 3]);
+    }, 2000);
+  }
+
   init() {
     this.#pollGameData();
     this.#eventBus.on(
@@ -258,10 +264,20 @@ export default class GameController {
     );
     this.#eventBus.on("renderCards", this.#renderCards.bind(this));
     this.#eventBus.on("defendingPlayer", this.#getDefendingPlayer.bind(this));
-    this.#eventBus.on("getConnectedTerritories", this.#getConnectedTerritories.bind(this));
+    this.#eventBus.on(
+      "getConnectedTerritories",
+      this.#getConnectedTerritories.bind(this)
+    );
     this.#eventBus.on("troopsToAttack", this.#troopsToAttack.bind(this));
-    this.#eventBus.on('fortification', this.#apiService.fortification.bind(this));
-    this.#eventBus.on('startFortification', this.#apiService.startFortification.bind(this));
+    this.#eventBus.on(
+      "fortification",
+      this.#apiService.fortification.bind(this)
+    );
+    this.#eventBus.on(
+      "startFortification",
+      this.#apiService.startFortification.bind(this)
+    );
+    this.#eventBus.on("roolDice", this.#startRollDice.bind(this));
     this.#audio.play();
   }
 }

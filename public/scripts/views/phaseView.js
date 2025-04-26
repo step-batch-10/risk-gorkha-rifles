@@ -62,6 +62,7 @@ export default class PhaseView {
   #handleReinforcementRequestClick() {
     this.#displayNextPhaseButton();
     this.#eventBus.emit("requestReinforcement");
+    this.#eventBus.emit("roolDice");
   }
 
   showFortificationPhase() {

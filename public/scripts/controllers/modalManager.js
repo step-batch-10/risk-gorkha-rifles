@@ -2,6 +2,16 @@ export default class ModalManager {
   #gameStartNotificationModal;
   #reinforcementPhaseModal;
 
+  // Mapping of die face values to dot positions
+  #diceDotMap = {
+    1: [4],
+    2: [0, 8],
+    3: [0, 4, 8],
+    4: [0, 2, 6, 8],
+    5: [0, 2, 4, 6, 8],
+    6: [0, 2, 3, 5, 6, 8],
+  };
+
   constructor(gameStartNotificationModal, reinforcementPhaseModal) {
     this.#gameStartNotificationModal = gameStartNotificationModal;
     this.#reinforcementPhaseModal = reinforcementPhaseModal;
@@ -25,5 +35,38 @@ export default class ModalManager {
 
   endReinforcementPhase() {
     this.#reinforcementPhaseModal.removeListeners();
+  }
+
+  #createDie(faceValue) {
+    const die = document.createElement("div");
+    die.classList.add("die");
+
+    for (let i = 0; i < 9; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("dot");
+      if (!this.#diceDotMap[faceValue].includes(i)) {
+        dot.classList.add("hidden");
+      }
+      die.appendChild(dot);
+    }
+
+    return die;
+  }
+
+  #displayDice(numbers, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ""; 
+
+    numbers.forEach((num) => {
+      if (num >= 1 && num <= 6) {
+        const die = this.#createDie(num);
+        container.appendChild(die);
+      }
+    });
+  }
+
+  startDice(attackerDice, defenderDice) {
+    this.#displayDice(attackerDice, "dice-center");
+    this.#displayDice(defenderDice, "dice-right");
   }
 }
