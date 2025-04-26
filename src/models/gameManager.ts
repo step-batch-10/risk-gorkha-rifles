@@ -132,7 +132,8 @@ export default class GameManager {
       storeTroops: () =>
         requiredGame.storeTroops(actionDetails),
       fortification: () => requiredGame.fortification(actionDetails),
-      connectedTerritories: () => requiredGame.getConnectedTerritories(actionDetails)
+      connectedTerritories: () => requiredGame.getConnectedTerritories(actionDetails),
+      startFortification: () => requiredGame.startFortification(actionDetails)
     };
 
     return actionMap[actionDetails.name as ActionTypes]();

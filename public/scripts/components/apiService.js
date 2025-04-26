@@ -96,4 +96,8 @@ export default class ApiService {
       body: JSON.stringify(fortificationDetails)
     });
   }
+
+  static async startFortification() {
+    await fetch('/game/start-fortification');
+  }
 }

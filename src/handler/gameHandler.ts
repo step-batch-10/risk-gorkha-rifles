@@ -260,6 +260,20 @@ export const connectedTerritoriesHandler = (context: Context) => {
   return context.json(connectedTerritories);
 };
 
+export const startFortification = (context: Context) => {
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
+
+  const action: ActionDetails = {
+    name: 'startFortification',
+    data: {},
+    playerId: userId
+  };
+  gameManager.handleGameActions(action);
+
+  return context.json({ actionStatus: true })
+}
+
 export {
   joinGameHandler,
   gameActionsHandler,

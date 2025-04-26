@@ -639,3 +639,21 @@ describe("storeTroopsToDefend", () => {
     assertEquals(await response.json(), { status: "success" });
   });
 });
+
+describe("startFortification test", () => {
+  it("should fire the fortification action to current user", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    const response = await app.request("/game/start-fortification", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), { actionStatus: true });
+    assertEquals(gameManager.getGameActions("1", 0).actions.at(-1)?.name, "fortification")
+  });
+});

@@ -6,7 +6,7 @@ type Data = {
   | Record<string, string>
   | string
   | Record<string, PlayerState>
-  | number[];
+  | number[] | string[]
 };
 
 type Continent = { name: string; extraTroops: number; };
@@ -31,6 +31,7 @@ export interface Action {
     territoryTroops?: number;
     playerTroops?: number;
     diceDetails?: number[];
+    activeTerritories?: string[]
   };
   currentPlayer: string;
   playerStates: Record<string, PlayerState>;
@@ -453,5 +454,23 @@ export default class Game {
         playerId
       ),
     ];
+  }
+
+  public startFortification(actionDetails: ActionDetails) {
+    const { playerId } = actionDetails;
+
+    this.actions.push(
+      this.generateAction(
+        playerId,
+        {
+          activeTerritories: this.playerState[playerId].territories
+        },
+        "fortification",
+        playerId,
+        playerId
+      )
+    );
+
+    return true;
   }
 }

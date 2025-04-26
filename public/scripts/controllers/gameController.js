@@ -261,6 +261,7 @@ export default class GameController {
     this.#eventBus.on("getConnectedTerritories", this.#getConnectedTerritories.bind(this));
     this.#eventBus.on("troopsToAttack", this.#troopsToAttack.bind(this));
     this.#eventBus.on('fortification', this.#apiService.fortification.bind(this));
+    this.#eventBus.on('startFortification', this.#apiService.startFortification.bind(this));
     this.#audio.play();
   }
 }
