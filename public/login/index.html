@@ -1,27 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RISK - Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RISK - Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="../styles/login.css" type="text/css" />
+    <script src="../scripts/login.js" type="text/javascript"></script>
+  </head>
 
-  <link rel="stylesheet" href="../styles/login.css" type="text/css">
-  <script src="../scripts/login.js" type="text/javascript"></script>
-</head>
+  <body>
+    <main class="login">
+      <form>
+        <h1>Login</h1>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Enter username"
+          maxlength="12"
+        />
+        <div class="avatar-section">
+          <div class="avatar-option">
+            <img id="avatar-one" src="../images/male-one.png" alt="Avatar 1" />
+          </div>
 
-<body>
-  <main class="login">
-    <form>
-      <h1>Login</h1>
-      <input type="text" name="username" id="username" placeholder="Enter username" maxlength="12">
-      <button type="submit">Enter Game</button>
-    </form>
-  </main>
+          <div class="avatar-option">
+            <img
+              id="avatar-two"
+              src="../images/female-one.png"
+              alt="Avatar 2"
+            />
+          </div>
 
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-</body>
-
+          <div class="avatar-option">
+            <img
+              id="avatar-three"
+              src="../images/male-two.png"
+              alt="Avatar 3"
+            />
+          </div>
+        </div>
+        <input type="hidden" name="avatarSrc" id="avatarSrc" />
+        <button type="submit">Enter Game</button>
+      </form>
+    </main>
+  </body>
 </html>

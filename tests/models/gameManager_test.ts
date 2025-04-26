@@ -113,9 +113,9 @@ describe("getGameActions test", () => {
         },
       ],
       players: [
-        { id: "1", colour: "red" },
-        { id: "2", colour: "green" },
-        { id: "3", colour: "yellow" },
+        { id: "1", colour: "#50C878" },
+        { id: "2", colour: "#87CEEB" },
+        { id: "3", colour: "#FF7F50" },
       ],
     };
     assertEquals(actual, expected);
@@ -178,9 +178,9 @@ describe("getGameActions test", () => {
         },
       ],
       players: [
-        { id: "1", colour: "red" },
-        { id: "2", colour: "green" },
-        { id: "3", colour: "yellow" },
+        { id: "1", colour: "#50C878" },
+        { id: "2", colour: "#87CEEB" },
+        { id: "3", colour: "#FF7F50" },
       ],
     };
     assertEquals(actual, expected);
@@ -243,9 +243,9 @@ describe("getGameActions test", () => {
         },
       ],
       players: [
-        { id: "1", colour: "red" },
-        { id: "2", colour: "green" },
-        { id: "3", colour: "yellow" },
+        { id: "1", colour: "#50C878" },
+        { id: "2", colour: "#87CEEB" },
+        { id: "3", colour: "#FF7F50" },
       ],
     };
     assertEquals(actual, expected);
@@ -288,9 +288,9 @@ describe("getGameActions test", () => {
       status: GameStatus.running,
       userId: "1",
       players: [
-        { id: "1", colour: "red" },
-        { id: "2", colour: "green" },
-        { id: "3", colour: "yellow" },
+        { id: "1", colour: "#50C878" },
+        { id: "2", colour: "#87CEEB" },
+        { id: "3", colour: "#FF7F50" },
       ],
       actions: [
         {
@@ -377,9 +377,9 @@ describe("getGameActions test", () => {
       status: GameStatus.running,
       userId: "1",
       players: [
-        { id: "1", colour: "red" },
-        { id: "2", colour: "green" },
-        { id: "3", colour: "yellow" },
+        { id: "1", colour: "#50C878" },
+        { id: "2", colour: "#87CEEB" },
+        { id: "3", colour: "#FF7F50" },
       ],
       actions: [
         {
@@ -427,9 +427,9 @@ describe("getGameActions test", () => {
       status: GameStatus.running,
       userId: "1",
       players: [
-        { id: "1", colour: "red" },
-        { id: "2", colour: "green" },
-        { id: "3", colour: "yellow" },
+        { id: "1", colour: "#50C878" },
+        { id: "2", colour: "#87CEEB" },
+        { id: "3", colour: "#FF7F50" },
       ],
       actions: [
         {

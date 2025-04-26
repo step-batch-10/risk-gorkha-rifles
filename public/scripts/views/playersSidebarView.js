@@ -1,7 +1,7 @@
 export default class PlayerSidebarView {
   #sidebar;
   #currentPlayer;
-  #template = `<div class="avatar {{classname}}"><img style="border-color: {{colour}}" src="{{avatar}}"></div><div class="player-details"><p>{{username}}</p> </div>`;
+  #template = `<div class="player-card {{classname}}"><div class="avatar"><img style="border-color: {{colour}}" src="{{avatar}}"></div><div class="player-details"><p>{{username}}</p> </div></div>`;
 
   constructor(sidebarId) {
     this.#sidebar = document.getElementById(sidebarId);
@@ -12,9 +12,8 @@ export default class PlayerSidebarView {
       this.#currentPlayer = currentPlayer;
     }
 
-    player.classname =
-      this.#currentPlayer === player.id ? "current-player" : "";
-
+    const isPlayerCurrent = this.#currentPlayer === player.id;
+    player.classname = isPlayerCurrent ? "current-player" : "";
     const output = Mustache.render(this.#template, player);
 
     const ele = document.createElement("div");
@@ -26,13 +25,6 @@ export default class PlayerSidebarView {
 
   #clear() {
     this.#sidebar.innerHTML = "";
-  }
-
-  #highlightCurrentPlayer(currentPlayer) {
-    const ele = document.getElementById(currentPlayer);
-    ele.style.background = "red !important";
-    console.log(ele);
-    ele.classList.add("current-player");
   }
 
   render(players, currentPlayer) {

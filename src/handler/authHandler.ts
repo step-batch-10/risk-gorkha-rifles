@@ -4,8 +4,11 @@ import { setCookie } from "hono/cookie";
 import Session from "../models/session.ts";
 
 export const loginHandler = async (context: Context) => {
-  const { username } = await context.req.json();
+  const { username, avatar } = await context.req.json();
   if (!username)
+    return context.json({ message: "Username must be filled out" }, 400);
+
+  if (!avatar)
     return context.json({ message: "Username must be filled out" }, 400);
 
   const usernameRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
@@ -22,10 +25,7 @@ export const loginHandler = async (context: Context) => {
   const users: Users = context.get("users");
 
   if (!users.findIdByUsername(username)) {
-    users.createUser(
-      username,
-      "https://sm.ign.com/ign_pk/cover/a/avatar-gen/avatar-generations_rpge.jpg"
-    );
+    users.createUser(username, avatar);
   }
 
   const userId = users.findIdByUsername(username);

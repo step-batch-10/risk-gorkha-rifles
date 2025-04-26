@@ -86,9 +86,9 @@ export default class Server {
     app.post("/request-defendingPlayer", getDefendingPlayer);
     app.post("/troops-to-attack", storeTroops);
     app.post("/troops-to-defend", storeTroops);
-    app.post('/fortification', fortificationHandler)
+    app.post("/fortification", fortificationHandler);
     app.get("/connected-territories", connectedTerritoriesHandler);
-    app.get("/start-fortification", startFortification)
+    app.get("/start-fortification", startFortification);
     return app;
   }
 

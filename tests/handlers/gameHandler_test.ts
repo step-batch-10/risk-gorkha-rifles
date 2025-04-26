@@ -59,19 +59,19 @@ describe("getGameActions", () => {
       {
         avatar: "url",
         username: "Jack",
-        colour: "red",
+        colour: "#50C878",
         id: "1",
       },
       {
         avatar: "url",
         username: "2",
-        colour: "green",
+        colour: "#87CEEB",
         id: "2",
       },
       {
         avatar: "url",
         username: "3",
-        colour: "yellow",
+        colour: "#FF7F50",
         id: "3",
       },
     ];

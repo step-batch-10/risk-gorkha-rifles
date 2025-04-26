@@ -31,7 +31,7 @@ tspan {
   text-shadow: 1px 1px 2px #000;
   fill: #fff;
   font-size: 12px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
 
 .territory-name-span {
@@ -75,33 +75,35 @@ tspan {
   width: 300px;
   height: 100vh;
   position: absolute;
-  z-index: 2;
   display: block;
   align-content: center;
   gap: 10px;
+}
 
-  & > div {
-    border: 0.5px solid black;
-    background-color: rgba(203, 229, 239, 0.2);
-    display: flex;
-    border-radius: 5px;
-    gap: 10px;
-    align-items: center;
-    padding: 5px;
-    margin: 10px;
+.player-card {
+  position: relative;
+  width: 15vw;
+  height: 7vh;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 10px;
+  color: white;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: 10px;
+}
 
-    & :first-child > img {
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-      padding: 4px;
-      border: 3px solid #000;
-    }
-  }
+.avatar img {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 5px solid;
+  background-color: #000;
+}
 
-  & :hover {
-    background-color: rgba(203, 229, 239, 0.6);
-  }
+.player-card :hover {
+  background-color: rgba(203, 229, 239, 0.6);
 }
 
 #side-bar-right {
@@ -428,13 +430,32 @@ main {
     filter: grayscale(0%);
   }
 }
+
+.player-details {
+  font-size: larger;
+}
+
+.avatar {
+  margin-right: 10px;
+}
+
 .current-player {
-  background-color: #d4edda;
-  border: 2px solid #28a745;
-  color: #155724;
-  font-weight: 800;
-  transform: scale(1.03);
-  box-shadow: 0 0 10px rgba(40, 167, 69, 0.6);
-  transition: all 0.3s ease-in-out;
-  border-radius: 10px;
+  border: 3px solid #9e8117;
+  box-shadow: 0 0 13px 5px #f9ffbb;
+
+  & > * {
+    transform: scale(1.1);
+  }
+}
+
+.troops-bg {
+  color: black;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.5);
 }

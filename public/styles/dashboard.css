@@ -152,7 +152,7 @@ main {
 #picture {
   height: 80%;
   width: 100%;
-  background-color: aquamarine;
+  background-color: rgb(200, 158, 90);
   border: 1px solid black;
 }
 

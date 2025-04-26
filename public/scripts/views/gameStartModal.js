@@ -8,7 +8,7 @@ export default class GameStartModal {
   show() {
     this.#modal.style.display = "flex";
     const startGameImage = document.getElementById("startGame-image");
-    startGameImage.style.animation = 'blink 4s linear';
+    startGameImage.style.animation = "blink 4s linear";
   }
 
   hide() {

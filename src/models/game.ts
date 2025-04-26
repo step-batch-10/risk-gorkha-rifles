@@ -2,14 +2,15 @@ import { GameStatus, Territory } from "../types/gameTypes.ts";
 
 type Data = {
   [key: string]:
-  | number
-  | Record<string, string>
-  | string
-  | Record<string, PlayerState>
-  | number[] | string[]
+    | number
+    | Record<string, string>
+    | string
+    | Record<string, PlayerState>
+    | number[]
+    | string[];
 };
 
-type Continent = { name: string; extraTroops: number; };
+type Continent = { name: string; extraTroops: number };
 type MadhaviContinent = Record<string, string[]>;
 
 export type PlayerState = {
@@ -31,7 +32,7 @@ export interface Action {
     territoryTroops?: number;
     playerTroops?: number;
     diceDetails?: number[];
-    activeTerritories?: string[]
+    activeTerritories?: string[];
   };
   currentPlayer: string;
   playerStates: Record<string, PlayerState>;
@@ -74,7 +75,14 @@ export default class Game {
     timeStamp: () => number,
     adjacentTerritories: MadhaviContinent,
     diceDetails: number[] | string[],
-    colours: string[] = ["red", "green", "yellow", "black", "brown", "grey"]
+    colours: string[] = [
+      "#50C878",
+      "#87CEEB",
+      "#FF7F50",
+      "#DAA520",
+      "brown",
+      "grey",
+    ]
   ) {
     this.players = players;
     this.continents = continents;
@@ -463,7 +471,7 @@ export default class Game {
       this.generateAction(
         playerId,
         {
-          activeTerritories: this.playerState[playerId].territories
+          activeTerritories: this.playerState[playerId].territories,
         },
         "fortification",
         playerId,

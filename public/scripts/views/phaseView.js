@@ -26,6 +26,7 @@ export default class PhaseView {
 
   #showAttackPhase() {
     this.#clearPhaseButtons("draft-phase");
+    this.#clearPhaseButtons("fortify-phase");
     const attack = document.getElementById("attack-phase");
     attack.style.display = "block";
 
@@ -69,6 +70,7 @@ export default class PhaseView {
 
   showDraftPhaseUI() {
     this.#clearPhaseButtons("attack-phase");
+    this.#clearPhaseButtons("fortify-phase");
     const draftPhaseContainer = this.#showPhaseDetailBox();
 
     const reinforcementRequestButton =
