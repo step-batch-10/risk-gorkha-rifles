@@ -532,6 +532,51 @@ describe("storeTroopsToAttack", () => {
   });
 });
 
+describe('fortificationHandler', () => {
+  it('should move the user troops from one territory to another', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    gameManager.handleGameActions({
+      playerId: "1",
+      name: "updateTroops",
+      data: { territory: 'India', troopCount: 10 },
+    });
+
+    const response = await app.request("/game/fortification", {
+      body: JSON.stringify({
+        fromTerritory: 'India',
+        toTerritory: 'Nepal',
+        troopCount: 10
+      })
+    });
+
+    assertEquals(await response.json(), true);
+  });
+
+  it('should not move the troops to another territory if enough troop snot available', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request("/game/fortification", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+      body: JSON.stringify({
+        fromTerritory: 'India',
+        toTerritory: 'Nepal',
+        troopCount: 10
+      })
+    });
+
+    assertEquals(await response.json(), false);
+  });
+});
+
 describe("storeTroopsToDefend", () => {
   it("should return success message when defender select the troops to defend with ", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
@@ -545,7 +590,6 @@ describe("storeTroopsToDefend", () => {
       },
       body: JSON.stringify({ troopsToDefend: 3 }),
     });
-
     assertEquals(await response.json(), { status: "success" });
   });
 });

@@ -19,7 +19,7 @@ export enum ActionTypes {
   requestNeighbouringTerritories = "requestNeighbouringTerritories",
   requestDefendingPlayer = "requestDefendingPlayer",
   storeTroops = "storeTroops",
-
+  fortification = "fortification"
 }
 
 export type AttackDetails = { troops: number | string; attackerId: string };
@@ -32,3 +32,9 @@ export type Continent = Record<string, string[]>;
 export type Territory = { owner: string; troops: number };
 
 export type CardType = "infantry" | "cavalry" | "artillery" | "hybrid";
+
+export type FortificationDetails = {
+  from: string,
+  to: string,
+  troopsCount: number
+}

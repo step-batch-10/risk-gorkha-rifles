@@ -43,8 +43,8 @@ export default class ViewManager {
     this.#phaseView.showDraftPhaseUI();
   }
 
-  showFortificationPhase(territories) {
+  showFortificationPhase(actionData) {
     this.#phaseView.showFortificationPhase();
-    this.#territoryRenderer.startFortificationPhase(territories);
+    this.#territoryRenderer.startFortificationPhase(actionData.activeTerritories);
   }
 }

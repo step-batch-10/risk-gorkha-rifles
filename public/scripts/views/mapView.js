@@ -141,7 +141,7 @@ export default class MapView {
   #unHighlightTerritories(territories) {
     territories.forEach(territoryId => {
       this.unHighlightTerritory(territoryId);
-    })
+    });
   }
 
   #selectToTerritoryClick(territoryId, territories) {
@@ -154,9 +154,9 @@ export default class MapView {
       setTimeout(() => {
         const troopsCount = prompt("Enter number of toops to select");
         this.#fortificationDetails.troopCount = troopsCount;
-        console.log(this.#fortificationDetails);
+        this.#eventBus.emit('fortification', this.#fortificationDetails);
       }, 2000);
-    }
+    };
   }
 
   #toggleBlinkTerritories(territories, status = true) {
@@ -168,7 +168,7 @@ export default class MapView {
 
 
       return path.classList.remove("blink-territory");
-    })
+    });
   }
 
   #handleToTerritoryClick(territories) {
@@ -180,7 +180,7 @@ export default class MapView {
       this.#listeners[territoryId] = listner;
 
       territory.addEventListener('click', listner);
-    })
+    });
   }
 
   async #handleConnectedTerritories(territoryId) {
@@ -193,12 +193,12 @@ export default class MapView {
 
   #selectFromTerritoryClick(territoryId, territories) {
     return () => {
-      this.#fortificationDetails.fromTerritory = territoryId
+      this.#fortificationDetails.fromTerritory = territoryId;
       this.#removeClickListeners(territories);
       this.#unHighlightTerritories(territories);
       this.highlightTerritory(territoryId);
       this.#handleConnectedTerritories(territoryId);
-    }
+    };
   }
 
   startFortificationPhase(territories) {
@@ -212,6 +212,6 @@ export default class MapView {
       this.#listeners[territoryId] = listner;
 
       territory.addEventListener("click", listner);
-    })
+    });
   }
 }

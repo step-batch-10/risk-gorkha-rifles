@@ -197,7 +197,7 @@ export default class GameController {
 
   #handleForitificationPhase(gameDetails) {
     const { action } = gameDetails;
-    this.#viewManager.showFortificationPhase(action.data.activeTerritories);
+    this.#viewManager.showFortificationPhase(action.data);
   }
 
   async #getConnectedTerritories(territoryId) {
@@ -258,6 +258,7 @@ export default class GameController {
     this.#eventBus.on("defendingPlayer", this.#getDefendingPlayer.bind(this));
     this.#eventBus.on("getConnectedTerritories", this.#getConnectedTerritories.bind(this));
     this.#eventBus.on("troopsToAttack", this.#troopsToAttack.bind(this));
+    this.#eventBus.on('fortification', this.#apiService.fortification.bind(this));
     this.#audio.play();
   }
 }

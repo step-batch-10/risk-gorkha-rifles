@@ -1,6 +1,6 @@
 import { assertEquals, assert, assertFalse } from "assert";
 import { describe, it } from "testing";
-import Game from "../../src/models/game.ts";
+import Game, { ActionDetails } from "../../src/models/game.ts";
 import { neighbouringTerritories } from "../../src/utils/continents.ts";
 
 export const gameInstanceBuilder = () => {
@@ -282,5 +282,80 @@ describe("test for storeTroopsToDefend", () => {
     assertEquals(game.storeTroops(actionDetails), {
       status: "success",
     });
+  });
+});
+
+describe("Game - fortification", () => {
+  it("should transfer troops from one territory to another", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+
+    const actionDetails: ActionDetails = {
+      playerId: "1",
+      name: "fortification",
+      data: {
+        fromTerritory: "alaska",
+        toTerritory: "peru",
+        troopCount: 5,
+      },
+    };
+
+    game.updateTroops({
+      playerId: "1",
+      name: "updateTroops",
+      data: { territory: "alaska", troopCount: 10 },
+    });
+
+    const result = game.fortification(actionDetails);
+
+    assertEquals(result, true);
+    assertEquals(game.getTerritoryState(),
+      {alaska: {
+          owner: "1",
+          troops: 6,
+        },
+        alberta: {
+          owner: "2",
+          troops: 1,
+        },
+        brazil: {
+          owner: "1",
+          troops: 1,
+        },
+        peru: {
+          owner: "2",
+          troops: 6,
+        },
+      });
+    assertEquals(game.gameActions.at(-1)?.name, "updateTroops");
+    assertEquals(game.gameActions.at(-1)?.data, {
+      territory: "peru",
+      troopCount: 6
+    });
+  });
+
+  it("should not transfer troops if insufficient troops in the source territory", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+
+    const actionDetails: ActionDetails = {
+      playerId: "1",
+      name: "fortification",
+      data: {
+        fromTerritory: "alaska",
+        toTerritory: "brazil",
+        troopCount: 5,
+      },
+    };
+
+    const result = game.fortification(actionDetails);
+
+    assertEquals(result, false);
+    assertEquals(game.getTerritoryState(), {
+      alaska: { owner: "1", troops: 1 },
+      alberta: { owner: "2", troops: 1 },
+      brazil: { owner: "1", troops: 1 },
+      peru: { owner: "2", troops: 1 }
+    })
   });
 });

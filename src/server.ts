@@ -20,6 +20,7 @@ import {
   defendingTerritories,
   getDefendingPlayer,
   storeTroops,
+  fortificationHandler,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -86,6 +87,7 @@ export default class Server {
     });
     app.post("/troops-to-attack", storeTroops);
     app.post("/troops-to-defend", storeTroops);
+    app.post('/fortification', fortificationHandler)
     return app;
   }
 

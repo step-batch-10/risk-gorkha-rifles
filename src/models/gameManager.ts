@@ -131,7 +131,7 @@ export default class GameManager {
         ),
       storeTroops: () =>
         requiredGame.storeTroops(actionDetails),
-
+      fortification: () => requiredGame.fortification(actionDetails)
     };
 
     return actionMap[actionDetails.name as ActionTypes]();

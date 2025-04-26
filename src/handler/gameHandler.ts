@@ -6,6 +6,7 @@ import {
   AllotStatus,
   LobbyStatus,
   CardType,
+  FortificationDetails,
 } from "../types/gameTypes.ts";
 import { ActionDetails } from "../models/game.ts";
 
@@ -223,6 +224,22 @@ const storeTroops = async (context: Context) => {
   });
 
   return context.json(status);
+};
+
+export const fortificationHandler = async (context: Context) => {
+  const fortificationDetails: FortificationDetails = await context.req.json();
+  const userId: string = context.get('userId');
+  const gameManager: GameManager = context.get('gameManager');
+
+  const actionDetails: ActionDetails = {
+    name: 'fortification',
+    playerId: userId,
+    data: fortificationDetails
+  };
+
+  const fortificationResponse = await gameManager.handleGameActions(actionDetails);
+
+  return context.json(fortificationResponse);
 };
 
 export {

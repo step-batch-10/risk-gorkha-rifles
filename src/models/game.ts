@@ -2,14 +2,14 @@ import { GameStatus, Territory } from "../types/gameTypes.ts";
 
 type Data = {
   [key: string]:
-    | number
-    | Record<string, string>
-    | string
-    | Record<string, PlayerState>
-    | number[];
+  | number
+  | Record<string, string>
+  | string
+  | Record<string, PlayerState>
+  | number[];
 };
 
-type Continent = { name: string; extraTroops: number };
+type Continent = { name: string; extraTroops: number; };
 type MadhaviContinent = Record<string, string[]>;
 
 export type PlayerState = {
@@ -372,4 +372,34 @@ export default class Game {
 
     return { status: "success" };
   };
+
+  public fortification({ data, playerId }: ActionDetails) {
+    const { fromTerritory, toTerritory, troopCount } = data;
+
+    if (this.territoryState[fromTerritory].troops < Number(troopCount)) {
+      return false;
+    }
+
+    this.territoryState[fromTerritory].troops -= Number(troopCount);
+    this.territoryState[toTerritory].troops += Number(troopCount);
+
+    this.actions.push(
+      this.generateAction(
+        "",
+        {
+          territory: toTerritory,
+          troopCount: this.territoryState[toTerritory].troops,
+        },
+        "updateTroops",
+        playerId,
+        null
+      )
+    );
+
+    return true;
+  }
+
+  public getTerritoryState() {
+    return this.territoryState;
+  }
 }
