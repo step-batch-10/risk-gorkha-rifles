@@ -13,7 +13,8 @@ export default class GameController {
     reinforcementPhase: this.#handleReinforcementPhase.bind(this),
     attackPhaseStart: this.#handleAttackPhase.bind(this),
     foritfication: this.#handleForitificationPhase.bind(this),
-    troopsToDefendWith: this.#handleDefenderTroops.bind(this)
+    troopsToDefendWith: this.#handleDefenderTroops.bind(this),
+    diceRoll: this.#handlerDiceRoll.bind(this)
   };
 
   #gameMetaData = {
@@ -222,6 +223,20 @@ export default class GameController {
 
     const troopsToDefend = prompt("select the troops to defend with");
     this.#apiService.troopsToDefend(parseInt(troopsToDefend));
+  }
+
+  #handlerDiceRoll(data) {
+    console.log(data.data);
+    Toastify({
+      text: `Dice are rolling`,
+      duration: 3000,
+      gravity: "top",
+      position: "left",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #303824, #874637)",
+      },
+    }).showToast();
   }
 
   init() {

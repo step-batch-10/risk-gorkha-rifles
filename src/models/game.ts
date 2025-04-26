@@ -5,7 +5,8 @@ type Data = {
     | number
     | Record<string, string>
     | string
-    | Record<string, PlayerState>;
+    | Record<string, PlayerState>
+    | number[];
 };
 
 type Continent = { name: string; extraTroops: number };
@@ -29,6 +30,7 @@ export interface Action {
     initialState?: Record<string, PlayerState>;
     territoryTroops?: number;
     playerTroops?: number;
+    diceDetails?: number[];
   };
   currentPlayer: string;
   playerStates: Record<string, PlayerState>;
@@ -345,20 +347,28 @@ export default class Game {
     return [...this.playerDetails];
   }
 
+  // private diceAction = (userId: string) => {
+  //   if (this.diceDetails.length === 2) {
+  //     const attackerDice: number[] = Array(Number(this.diceDetails[0])).fill(3);
+  //     const defenderDice: number[] = Array(Number(this.diceDetails[1])).fill(2);
+
+  //     this.actions.push(
+  //       this.generateAction(
+  //         userId,
+  //         { attackerDice, defenderDice },
+  //         "diceRoll",
+  //         null,
+  //         null
+  //       )
+  //     );
+  //   }
+  // };
+
   public storeTroops = (actionDetails: ActionDetails) => {
     const { troops } = actionDetails.data;
 
     this.diceDetails.push(troops);
-
-    return { status: "success" };
-  };
-
-  public storeTroopsToDefend = (actionDetails: ActionDetails) => {
-    const { troopsToDefend } = actionDetails.data;
-
-    this.diceDetails.push(troopsToDefend);
-
-    console.log(this.diceDetails);
+    // this.diceAction(actionDetails.playerId);
 
     return { status: "success" };
   };

@@ -69,7 +69,7 @@ export default class PhaseView {
 
   showDraftPhaseUI() {
     this.#clearPhaseButtons("attack-phase");
-    this.#showPhaseDetailBox();
+    const draftPhaseContainer = this.#showPhaseDetailBox();
 
     const reinforcementRequestButton =
       draftPhaseContainer.querySelector("#draft-action");
