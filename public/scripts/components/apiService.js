@@ -58,46 +58,38 @@ export default class ApiService {
     return responseData.defendingPlayer;
   }
 
-  // static async sendRequestToDefender(defenderId) {
-  //   document.cookie = `sessionId=${defenderId}; path=/`;
-
-  //   const response = await fetch("/game/request-opponentRequest", {
-  //     method: "POST",
-  //     body: JSON.stringify({ defenderId, isOpponent: true }),
-  //   });
-
-  //   return response.message;
-  // }
-
   static async troopsToAttack(troops) {
     const response = await fetch("/game/troops-to-attack", {
       method: "POST",
-      body: JSON.stringify({ troopsToAttack: troops })
+      body: JSON.stringify({ troops }),
     });
     return response;
   }
 
   static async connectedTerritories(territoryId) {
-    const response = await fetch(`/game/connected-territories?territoryId=${territoryId}`);
+    const response = await fetch(
+      `/game/connected-territories?territoryId=${territoryId}`
+    );
 
     return await response.json();
   }
+
   static async troopsToDefend(troops) {
     const response = await fetch("/game/troops-to-defend", {
       method: "POST",
-      body: JSON.stringify({ troopsToDefend: troops })
+      body: JSON.stringify({ troops }),
     });
     return response;
   }
 
   static async fortification(fortificationDetails) {
-    await fetch('/game/fortification', {
-      method: 'POST',
-      body: JSON.stringify(fortificationDetails)
+    await fetch("/game/fortification", {
+      method: "POST",
+      body: JSON.stringify(fortificationDetails),
     });
   }
 
   static async startFortification() {
-    await fetch('/game/start-fortification');
+    await fetch("/game/start-fortification");
   }
 }

@@ -64,8 +64,8 @@ export default class ReinforcementModal {
           <input type="number" id="number-input" disabled value="0" min="0" max="100" />
           <div class="decrement-button" id="increment">+</div>
         </div>
+        </div>
         <div id="place-troops-btn">Place</div>
-      </div>
     `;
   }
 
@@ -122,6 +122,7 @@ export default class ReinforcementModal {
     this.#remainingTroops++;
     inputField.stepDown();
   }
+
 
   #showTroopDeploymentToast(territoryId) {
     const existingToast = document.getElementById("troop-toast-box");

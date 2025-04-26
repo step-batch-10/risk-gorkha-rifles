@@ -219,7 +219,7 @@ const storeTroops = async (context: Context) => {
     playerId: userId,
     name: "storeTroops",
     data: {
-      troops: body.troopsToAttack,
+      troops: body.troops,
     },
   });
 

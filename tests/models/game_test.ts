@@ -20,6 +20,7 @@ export const gameInstanceBuilder = () => {
     shuffler,
     timeStamp,
     connectedTerritories,
+    [],
     ["red", "green", "yellow"]
   );
   return game;
@@ -43,8 +44,8 @@ describe("testing init", () => {
     const game = gameInstanceBuilder();
     game.init();
     const expected = [
-      { id: "1", colour: "#50C878" },
-      { id: "2", colour: "#87CEEB" },
+      { id: "1", colour: "red" },
+      { id: "2", colour: "green" },
     ];
 
     assertEquals(game.playersData, expected);
@@ -278,6 +279,16 @@ describe("test for storeTroopsToDefend", () => {
         troops: 1,
       },
     };
+
+    const actionDetails2 = {
+      playerId: "2",
+      name: "storeTroops",
+      data: {
+        troops: 1,
+      },
+    };
+
+    game.storeTroops(actionDetails2);
 
     assertEquals(game.storeTroops(actionDetails), {
       status: "success",

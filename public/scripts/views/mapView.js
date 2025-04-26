@@ -71,8 +71,9 @@ export default class MapView {
     this.#attackPhaseDetails.attackingTerritory = territoryId;
     this.#eventBus.emit("defendingPlayer", territoryId);
     this.#showToast("Select the number of troops to attack with");
+
     setTimeout(() => {
-      const troops = prompt(`Troops count ${territoryId}`);
+      const troops = prompt("no of troops to Attack with..");
       this.#eventBus.emit("troopsToAttack", parseInt(troops));
     }, 2000);
   }
@@ -179,6 +180,7 @@ export default class MapView {
       const territory = document.getElementById(territoryId);
 
       const listner = this.#selectToTerritoryClick(territoryId, territories);
+      this.#handleConnectedTerritories(territoryId);
       this.#listeners[territoryId] = listner;
 
       territory.addEventListener("click", listner);

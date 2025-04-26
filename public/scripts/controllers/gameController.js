@@ -12,7 +12,7 @@ export default class GameController {
     startGame: this.#startGame.bind(this),
     reinforcementPhase: this.#handleReinforcementPhase.bind(this),
     attackPhaseStart: this.#handleAttackPhase.bind(this),
-    fortification: this.#handleForitificationPhase.bind(this),
+    foritfication: this.#handleForitificationPhase.bind(this),
     troopsToDefendWith: this.#handleDefenderTroops.bind(this),
     diceRoll: this.#handlerDiceRoll.bind(this),
   };
@@ -222,12 +222,15 @@ export default class GameController {
       },
     }).showToast();
 
-    const troopsToDefend = prompt("select the troops to defend with");
-    this.#apiService.troopsToDefend(parseInt(troopsToDefend));
+    setTimeout(() => {
+      const troopsToDefend = prompt("select the troops to defend with");
+      this.#apiService.troopsToDefend(parseInt(troopsToDefend));
+    }, 4000);
   }
 
-  #handlerDiceRoll(data) {
-    console.log(data.data);
+  #handlerDiceRoll(actions) {
+    const data = actions.action.data;
+    console.log(data);
     Toastify({
       text: `Dice are rolling`,
       duration: 3000,
@@ -238,13 +241,11 @@ export default class GameController {
         background: "linear-gradient(to right, #303824, #874637)",
       },
     }).showToast();
-  }
 
-  #startRollDice(_data) {
     this.#modalManager.startDice([1, 1, 1], [1, 1]);
     setTimeout(() => {
-      this.#modalManager.startDice([6, 5, 4], [2, 3]);
-    }, 2000);
+      this.#modalManager.startDice(data.attackerDice, data.defenderDice);
+    }, 3000);
   }
 
   init() {
@@ -277,7 +278,6 @@ export default class GameController {
       "startFortification",
       this.#apiService.startFortification.bind(this)
     );
-    this.#eventBus.on("roolDice", this.#startRollDice.bind(this));
     this.#audio.play();
   }
 }

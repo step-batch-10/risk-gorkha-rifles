@@ -356,28 +356,35 @@ export default class Game {
     return [...this.playerDetails];
   }
 
-  // private diceAction = (userId: string) => {
-  //   if (this.diceDetails.length === 2) {
-  //     const attackerDice: number[] = Array(Number(this.diceDetails[0])).fill(3);
-  //     const defenderDice: number[] = Array(Number(this.diceDetails[1])).fill(2);
+  private diceAction = (userId: string) => {
+    console.log("inside diceAction");
 
-  //     this.actions.push(
-  //       this.generateAction(
-  //         userId,
-  //         { attackerDice, defenderDice },
-  //         "diceRoll",
-  //         null,
-  //         null
-  //       )
-  //     );
-  //   }
-  // };
+    if (this.diceDetails.length === 2) {
+      const attackerDice: number[] = Array(Number(this.diceDetails[0])).fill(3);
+      const defenderDice: number[] = Array(Number(this.diceDetails[1])).fill(2);
+
+      this.actions.push(
+        this.generateAction(
+          userId,
+          { attackerDice, defenderDice },
+          "diceRoll",
+          null,
+          null
+        )
+      );
+    }
+  };
 
   public storeTroops = (actionDetails: ActionDetails) => {
+    console.log(this.diceDetails);
+
     const { troops } = actionDetails.data;
+    console.log(troops);
 
     this.diceDetails.push(troops);
-    // this.diceAction(actionDetails.playerId);
+    console.log(this.diceDetails);
+
+    this.diceAction(actionDetails.playerId);
 
     return { status: "success" };
   };
