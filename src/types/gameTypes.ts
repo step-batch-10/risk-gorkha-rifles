@@ -19,7 +19,8 @@ export enum ActionTypes {
   requestNeighbouringTerritories = "requestNeighbouringTerritories",
   requestDefendingPlayer = "requestDefendingPlayer",
   storeTroops = "storeTroops",
-  fortification = "fortification"
+  fortification = "fortification",
+  connectedTerritories = "connectedTerritories"
 }
 
 export type AttackDetails = { troops: number | string; attackerId: string };

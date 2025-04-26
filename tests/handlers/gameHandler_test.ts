@@ -498,19 +498,61 @@ describe("cardsHandler", () => {
 });
 
 describe("connectedTerritoriesHandler", () => {
-  it("should return the connected territories (dummy)", async () => {
-    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+  it("should return the connected territories", async () => {
+    const session = new Session(uniqueId());
+    const users = new Users(uniqueId());
+    const gameManager = gameManagerInstanceBuilder(() => ({
+      Asia: ["india", "china", "nepal"],
+    }));
+    const sessionId = "1";
+
+    session.createSession(sessionId);
+    users.createUser("jack", "url");
+
+    const server = new Server(users, session, gameManager, uniqueId());
+    server.serve();
+
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
-    const response = await app.request("/game/connected-territories", {
+
+    const response = await server.getApp.request("/game/connected-territories?territoryId=india", {
       method: "GET",
       headers: {
         Cookie: `sessionId=1`,
       },
     });
 
-    assertEquals(await response.json(), ["siam", "mongolia", "congo", "ural"]);
+    assertEquals(await response.json(), ["india"]);
+  });
+
+  it("should return 400 if territoryId not given", async () => {
+    const session = new Session(uniqueId());
+    const users = new Users(uniqueId());
+    const gameManager = gameManagerInstanceBuilder(() => ({
+      Asia: ["india", "china", "nepal"],
+    }));
+    const sessionId = "1";
+
+    session.createSession(sessionId);
+    users.createUser("jack", "url");
+
+    const server = new Server(users, session, gameManager, uniqueId());
+    server.serve();
+
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await server.getApp.request("/game/connected-territories?territoryId", {
+      method: "GET",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(response.status, 400);
+    assertEquals(await response.json(), { message: "Territory Id not given" });
   });
 });
 

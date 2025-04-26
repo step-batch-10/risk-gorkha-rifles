@@ -310,7 +310,8 @@ describe("Game - fortification", () => {
 
     assertEquals(result, true);
     assertEquals(game.getTerritoryState(),
-      {alaska: {
+      {
+        alaska: {
           owner: "1",
           troops: 6,
         },
@@ -357,5 +358,44 @@ describe("Game - fortification", () => {
       brazil: { owner: "1", troops: 1 },
       peru: { owner: "2", troops: 1 }
     })
+  });
+});
+
+describe('Game - getConnectedTerritories', () => {
+  it('should find the connected territories of a player', () => {
+    const continents = {
+      NorthAmerica: ["alaska", "brazil", "dummy"],
+      SouthAmerica: ["alberta", "peru", "lorem"],
+    };
+    const shuffler = (arr: string[]): string[] => arr;
+    const uniqueId = (): string => "1";
+    const timeStamp = (): number => 1;
+    const connectedTerritories = {
+      "alaska": ["dummy", "brazil", "lorem"],
+      "dummy": ["peru", "alberta"],
+      "brazil": ["alaska", "lorem"],
+      "alberta": ["dummy"],
+      "peru": ["dummy"],
+      "lorem": ["alaska"]
+    };
+
+    const game = new Game(
+      new Set(["1", "2"]),
+      continents,
+      uniqueId,
+      shuffler,
+      timeStamp,
+      connectedTerritories,
+      ["red", "green", "yellow"]
+    );
+    game.init();
+
+    const action: ActionDetails = {
+      playerId: "1",
+      name: "connectedTerritories",
+      data: { territoryId: "alaska" }
+    }
+
+    assertEquals(game.getConnectedTerritories(action), ["alaska", "dummy", "peru"]);
   });
 });

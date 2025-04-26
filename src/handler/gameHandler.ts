@@ -242,6 +242,24 @@ export const fortificationHandler = async (context: Context) => {
   return context.json(fortificationResponse);
 };
 
+export const connectedTerritoriesHandler = (context: Context) => {
+  const territoryId: string = context.req.query("territoryId") || "";
+
+  if (!territoryId)
+    return context.json({ message: "Territory Id not given" }, 400);
+
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
+  const action: ActionDetails = {
+    playerId: userId,
+    name: "connectedTerritories",
+    data: { territoryId },
+  };
+
+  const connectedTerritories = gameManager.handleGameActions(action);
+  return context.json(connectedTerritories);
+};
+
 export {
   joinGameHandler,
   gameActionsHandler,

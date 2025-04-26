@@ -62,7 +62,7 @@ export default class Game {
   private timeStamp;
   private playerDetails: Player[] = [];
   private colours: string[];
-  private connectedTerritories: MadhaviContinent;
+  private adjacentTerritories: MadhaviContinent;
   private diceDetails: (string | number)[] = [];
 
   constructor(
@@ -71,7 +71,7 @@ export default class Game {
     uniqueId: () => string,
     shuffler: (arr: string[]) => string[],
     timeStamp: () => number,
-    connectedTerritories: MadhaviContinent,
+    adjacentTerritories: MadhaviContinent,
     diceDetails: number[] | string[],
     colours: string[] = ["red", "green", "yellow", "black", "brown", "grey"]
   ) {
@@ -82,7 +82,7 @@ export default class Game {
     this.uniqueId = uniqueId;
     this.timeStamp = timeStamp;
     this.colours = colours;
-    this.connectedTerritories = connectedTerritories;
+    this.adjacentTerritories = adjacentTerritories;
     this.diceDetails = diceDetails;
   }
 
@@ -306,7 +306,7 @@ export default class Game {
     playerId: string,
     attackingTerritory: string | number
   ) {
-    const neighbouring = this.connectedTerritories[attackingTerritory];
+    const neighbouring = this.adjacentTerritories[attackingTerritory];
     const connectedterr = neighbouring.filter((territory) => {
       return Object.entries(this.territoryState).filter((territoryState) => {
         return (
@@ -401,5 +401,57 @@ export default class Game {
 
   public getTerritoryState() {
     return this.territoryState;
+  }
+
+  private findConnectedTerritoriesDFS(
+    territories: Record<string, string[]>,
+    territory: string,
+    visited: Set<string>,
+    owners: Record<string, string>,
+    owner: string
+  ): Set<string> {
+    visited.add(territory);
+
+    for (const neighbor of territories[territory]) {
+      if (owners[neighbor] === owner && !visited.has(neighbor)) {
+        this.findConnectedTerritoriesDFS(
+          territories,
+          neighbor,
+          visited,
+          owners,
+          owner
+        );
+      }
+    }
+
+    return visited;
+  }
+
+  private owners(): Record<string, string> {
+    return Object.entries(this.territoryState).reduce(
+      (acc: Record<string, string>, [territory, { owner }]) => {
+        acc[territory] = owner;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+  }
+
+  public getConnectedTerritories(actionDetails: ActionDetails): string[] {
+    const {
+      playerId,
+      data: { territoryId },
+    } = actionDetails;
+    const owners = this.owners();
+
+    return [
+      ...this.findConnectedTerritoriesDFS(
+        this.adjacentTerritories,
+        territoryId as string,
+        new Set(),
+        owners,
+        playerId
+      ),
+    ];
   }
 }
