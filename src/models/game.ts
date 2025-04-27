@@ -33,6 +33,7 @@ export interface Action {
     playerTroops?: number;
     diceDetails?: number[];
     activeTerritories?: string[];
+    troopDeployed?: number;
   };
   currentPlayer: string;
   playerStates: Record<string, PlayerState>;
@@ -405,6 +406,7 @@ export default class Game {
         {
           territory: toTerritory,
           troopCount: this.territoryState[toTerritory].troops,
+          troopDeployed: troopCount,
         },
         "updateTroops",
         playerId,

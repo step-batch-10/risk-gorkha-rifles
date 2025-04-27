@@ -342,7 +342,8 @@ describe("Game - fortification", () => {
     assertEquals(game.gameActions.at(-1)?.data, {
       territory: "peru",
       troopCount: 6,
-    });
+      troopDeployed: 5,
+    }); 
   });
 
   it("should not transfer troops if insufficient troops in the source territory", () => {
