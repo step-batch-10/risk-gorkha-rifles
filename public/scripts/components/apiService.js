@@ -92,4 +92,33 @@ export default class ApiService {
   static async startFortification() {
     await fetch("/game/start-fortification");
   }
+
+  static async getGamePlayers() {
+    try {
+      const response = await fetch('/game/players');
+
+      return await response.json();
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  static async fetchMessages(since) {    
+    try {
+      const response = await fetch(`/game/messages?since=${since}`);
+
+      return await response.json();
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  static async sendMessages(message, recipientId) {
+    await fetch('/game/messages', {
+      method: 'POST',
+      body: JSON.stringify({ message, recipientId })
+    });
+  }
 }

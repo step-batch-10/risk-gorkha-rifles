@@ -850,3 +850,29 @@ describe('getMessages', () => {
     });
   });
 });
+
+describe('getGamePlayers', () => {
+  it('should return the list of players in the game', async () => {
+    const { app, gameManager, users } = createServerWithLoggedInUser("Jack");
+    users.createUser("2", "url2");
+    users.createUser("3", "url2");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request('/game/players', {
+      method: 'GET',
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(response.status, 200);
+    assertEquals(await response.json(),
+      [
+        { "username": "Jack", "avatar": "url", "userId": "1" },
+        { "username": "2", "avatar": "url2", "userId": "2" },
+        { "username": "3", "avatar": "url2", "userId": "3" }
+      ]);
+  });
+});

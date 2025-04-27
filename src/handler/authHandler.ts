@@ -33,5 +33,6 @@ export const loginHandler = async (context: Context) => {
   const sessionId = sessions.createSession(userId);
 
   setCookie(context, "sessionId", sessionId);
+  setCookie(context, "userId", userId as string);
   return context.redirect("/", 302);
 };

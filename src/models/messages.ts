@@ -51,10 +51,13 @@ export default class Messages {
   }
 
   public getPersonalMessages(gameId: string, recipientId: string, since?: number): Message[] {
-    if (!(gameId in this.messages)) return [];
+    if (!this.messages[gameId]) return [];
 
     return this.messages[gameId]
-      .filter(message => message.recipientId === recipientId)
-      .filter(message => since === undefined || message.timestamp > since);
+      .filter(({ recipientId: msgRecipientId, playerId, timestamp }) => {
+        const isValidRecipient = msgRecipientId === recipientId || playerId === recipientId;
+        const isAfterSince = !since || timestamp > since;
+        return msgRecipientId && isValidRecipient && isAfterSince;
+      });
   }
 }

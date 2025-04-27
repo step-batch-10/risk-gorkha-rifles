@@ -2,15 +2,15 @@ import { GameStatus, Territory } from "../types/gameTypes.ts";
 
 type Data = {
   [key: string]:
-    | number
-    | Record<string, string>
-    | string
-    | Record<string, PlayerState>
-    | number[]
-    | string[];
+  | number
+  | Record<string, string>
+  | string
+  | Record<string, PlayerState>
+  | number[]
+  | string[];
 };
 
-type Continent = { name: string; extraTroops: number };
+type Continent = { name: string; extraTroops: number; };
 type MadhaviContinent = Record<string, string[]>;
 
 export type PlayerState = {
@@ -482,5 +482,9 @@ export default class Game {
     );
 
     return true;
+  }
+
+  public getGamePlayers() {
+    return [...this.players];
   }
 }

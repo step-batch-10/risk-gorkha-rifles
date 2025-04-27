@@ -9,6 +9,7 @@ import ViewManager from "./controllers/viewManager.js";
 import PhaseView from "./views/phaseView.js";
 import EventBus from "./components/eventBus.js";
 import CardsViewModal from "./views/cardsView.js";
+import ChatBox from "./views/chatBoxManager.js";
 
 const initModalManager = () => {
   const gameStartModal = new GameStartModal("startGame-popup");
@@ -33,13 +34,14 @@ const initalizeApp = () => {
   const modalManager = initModalManager();
   const viewManager = initViewManager(eventBus);
   const audio = new Audio("../../assets/risk_music.mp3");
-
+  
   const controller = new GameController(
     modalManager,
     viewManager,
     ApiService,
     audio,
-    eventBus
+    eventBus,
+    ChatBox
   );
   controller.init();
 };

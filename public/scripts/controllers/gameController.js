@@ -4,6 +4,7 @@ export default class GameController {
   #viewManager;
   #audio;
   #eventBus;
+  #ChatBox;
 
   #actionMap = {
     startInitialDeployment: this.#handleIntialDeploymentStart.bind(this),
@@ -12,7 +13,7 @@ export default class GameController {
     startGame: this.#startGame.bind(this),
     reinforcementPhase: this.#handleReinforcementPhase.bind(this),
     attackPhaseStart: this.#handleAttackPhase.bind(this),
-    foritfication: this.#handleForitificationPhase.bind(this),
+    fortification: this.#handleForitificationPhase.bind(this),
     troopsToDefendWith: this.#handleDefenderTroops.bind(this),
     diceRoll: this.#handlerDiceRoll.bind(this),
   };
@@ -25,12 +26,13 @@ export default class GameController {
 
   #actionsLog = [];
 
-  constructor(modalManager, viewManager, apiService, audio, eventBus) {
+  constructor(modalManager, viewManager, apiService, audio, eventBus, ChatBox) {
     this.#modalManager = modalManager;
     this.#viewManager = viewManager;
     this.#apiService = apiService;
     this.#audio = audio;
     this.#eventBus = eventBus;
+    this.#ChatBox = ChatBox;
   }
 
   #startGame() {
@@ -248,8 +250,22 @@ export default class GameController {
     }, 3000);
   }
 
+  async #initChatBox() {
+    const players = await this.#apiService.getGamePlayers();
+
+    const chatBox = new this.#ChatBox({
+      fetchMessagesApi: this.#apiService.fetchMessages,
+      sendMessageApi: this.#apiService.sendMessages,
+      players,
+      pollInterval: 3000,
+    });
+    chatBox.init();
+  }
+
   init() {
     this.#pollGameData();
+    this.#initChatBox();
+
     this.#eventBus.on(
       "requestReinforcement",
       this.#requestReinforcement.bind(this)

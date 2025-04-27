@@ -25,6 +25,7 @@ import {
   startFortification,
   saveMessage,
   getMessages,
+  getGamePlayers,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -93,6 +94,7 @@ export default class Server {
     app.get("/start-fortification", startFortification);
     app.post("/messages", saveMessage);
     app.get("/messages", getMessages);
+    app.get("/players", getGamePlayers);
     return app;
   }
 

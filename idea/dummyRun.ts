@@ -1,4 +1,5 @@
 import GameManager from "../src/models/gameManager.ts";
+import Messages from "../src/models/messages.ts";
 import Session from "../src/models/session.ts";
 import Users from "../src/models/users.ts";
 import Server from "../src/server.ts";
@@ -27,24 +28,25 @@ export const main = () => {
   );
 
   const user1Id = users.findIdByUsername("dummyPlayer1") || "";
-  const user2Id = users.findIdByUsername("dummyPlayer2") || "";
-
+  // const user2Id = users.findIdByUsername("dummyPlayer2") || "";
+  const messages = new Messages(Date.now, uniqueId);
   const gameManager = new GameManager(
     uniqueId,
     getContinents,
     Date.now,
     lodash.shuffle,
-    neighbouringTerritories()
+    neighbouringTerritories(),
+    messages
   );
   gameManager.allotPlayer(user1Id, "3");
-  gameManager.allotPlayer(user2Id, "3");
+  // gameManager.allotPlayer(user2Id, "3");
 
   const id = setInterval(() => {
     const game = gameManager.findPlayerActiveGame(user1Id);
 
     if (game) {
       const territory1 = game?.playerTerritories(user1Id).at(1) || "";
-      const territory2 = game?.playerTerritories(user2Id).at(1) || "";
+      // const territory2 = game?.playerTerritories(user2Id).at(1) || "";
 
       gameManager.handleGameActions({
         playerId: user1Id,
@@ -52,11 +54,11 @@ export const main = () => {
         data: { territory: territory1, troopCount: 21 },
       });
 
-      gameManager.handleGameActions({
-        playerId: user2Id,
-        name: "updateTroops",
-        data: { territory: territory2, troopCount: 21 },
-      });
+      // gameManager.handleGameActions({
+      //   playerId: user2Id,
+      //   name: "updateTroops",
+      //   data: { territory: territory2, troopCount: 21 },
+      // });
       clearInterval(id);
     }
   }, 2000);

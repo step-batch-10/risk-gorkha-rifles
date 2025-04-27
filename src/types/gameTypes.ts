@@ -22,6 +22,7 @@ export enum ActionTypes {
   fortification = "fortification",
   connectedTerritories = "connectedTerritories",
   startFortification = "startFortification",
+  getGamePlayers = "getGamePlayers"
 }
 
 export type AttackDetails = { troops: number | string; attackerId: string };

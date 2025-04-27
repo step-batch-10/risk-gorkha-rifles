@@ -296,13 +296,34 @@ export const getMessages = (context: Context) => {
   const userId: string = context.get('userId');
   const gameManager: GameManager = context.get('gameManager');
 
-  const gameMessages = gameManager.getMessages(userId);
+  const gameMessages = gameManager.getMessages(userId, since);
   const personalMessages = gameManager.getPersonalMessages(userId, since);
 
   return context.json({
     gameMessages,
     personalMessages,
   });
+};
+
+export const getGamePlayers = (context: Context) => {
+  const users: Users = context.get('users');
+  const userId: string = context.get('userId');
+  const gameManager: GameManager = context.get('gameManager');
+  const action: ActionDetails = {
+    playerId: userId,
+    data: {},
+    name: 'getGamePlayers'
+  };
+
+  const gamePlayers: string[] = gameManager.handleGameActions(action);
+  const playersDetails = gamePlayers.map((playerId) => {
+    return {
+      ...users.findById(playerId),
+      userId: playerId
+    };
+  });
+
+  return context.json(playersDetails);
 };
 
 export {
