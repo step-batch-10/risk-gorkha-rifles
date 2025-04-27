@@ -10,12 +10,14 @@ import PhaseView from "./views/phaseView.js";
 import EventBus from "./components/eventBus.js";
 import CardsViewModal from "./views/cardsView.js";
 import ChatBox from "./views/chatBoxManager.js";
+import { AttackDefenceModal } from "./views/attackAndDefendTroopsModal.js";
 
-const initModalManager = () => {
+const initModalManager = (eventBus) => {
   const gameStartModal = new GameStartModal("startGame-popup");
   const reinforcementModal = new ReinforcementModal();
+  const troopsSelection = new AttackDefenceModal(eventBus);
 
-  return new ModalManager(gameStartModal, reinforcementModal);
+  return new ModalManager(gameStartModal, reinforcementModal, troopsSelection);
 };
 
 const initViewManager = (eventBus) => {
@@ -31,10 +33,10 @@ const initViewManager = (eventBus) => {
 const initalizeApp = () => {
   const eventBus = new EventBus();
 
-  const modalManager = initModalManager();
+  const modalManager = initModalManager(eventBus);
   const viewManager = initViewManager(eventBus);
   const audio = new Audio("../../assets/risk_music.mp3");
-  
+
   const controller = new GameController(
     modalManager,
     viewManager,

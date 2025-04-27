@@ -65,7 +65,7 @@ export default class PhaseView {
   }
 
   showFortificationPhase() {
-    this.#showPhaseDetailBox();
+    // this.#showPhaseDetailBox();
     this.#clearPhaseButtons("draft-phase");
     this.#clearPhaseButtons("attack-phase");
 

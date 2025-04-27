@@ -586,4 +586,33 @@ main {
   background: #344e41;
   color: white;
   border-radius: 4px;
+#submit-button {
+  padding: 8px 16px;
+  background-color: rgb(173, 125, 14);
+  color: black;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+#troops-input {
+  width: 200px;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  color: black;
+}
+
+#troops-to-defend,
+#troops-to-attack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  gap: 10px;
+  border: 1px solid rgba(173, 125, 14, 0.8);
+  background-color: rgba(94, 72, 57, 0.8);
 }

@@ -75,7 +75,7 @@ export default class GameController {
       text: `${actionerName} placed ${troopDeployed} in ${territory}`,
       duration: 3000,
       gravity: "top",
-       position: "center",
+      position: "center",
       stopOnFocus: true,
       style: {
         background: "linear-gradient(to right, #3e2514, #c99147)",
@@ -88,7 +88,7 @@ export default class GameController {
       text: `Initial deployment is over`,
       duration: 3000,
       gravity: "top",
-       position: "center",
+      position: "center",
       stopOnFocus: true,
       style: {
         background: "linear-gradient(to right, #3e2514, #c99147)",
@@ -129,7 +129,6 @@ export default class GameController {
 
   #handleReinforcementPhase() {
     setTimeout(() => {
-      console.log;
       this.#viewManager.startPlayerTurn();
     }, 5000);
   }
@@ -186,20 +185,11 @@ export default class GameController {
   }
 
   async #getDefendingPlayer(defendingTerritory) {
-    const defenderId = await this.#apiService.defendingPlayer(
-      defendingTerritory
-    );
-
-    const message = await this.#apiService.sendRequestToDefender(defenderId);
-
-    if (message === "opponent found") {
-      prompt("select no of troops to defend with");
-    }
+    await this.#apiService.defendingPlayer(defendingTerritory);
   }
 
   #handleForitificationPhase(gameDetails) {
     const { action } = gameDetails;
-    console.log(action);
 
     this.#viewManager.showFortificationPhase(action.data);
   }
@@ -214,7 +204,7 @@ export default class GameController {
 
   #handleDefenderTroops() {
     Toastify({
-      text: `Attacker select your territory to attack`,
+      text: `Attacker selected your territory to attack`,
       duration: 3000,
       gravity: "top",
       position: "left",
@@ -223,16 +213,11 @@ export default class GameController {
         background: "linear-gradient(to right, #303824, #874637)",
       },
     }).showToast();
-
-    setTimeout(() => {
-      const troopsToDefend = prompt("select the troops to defend with");
-      this.#apiService.troopsToDefend(parseInt(troopsToDefend));
-    }, 4000);
+    this.#modalManager.troopsToDefendWith();
   }
 
   #handlerDiceRoll(actions) {
     const data = actions.action.data;
-    console.log(data);
     Toastify({
       text: `Dice are rolling`,
       duration: 3000,
@@ -261,6 +246,17 @@ export default class GameController {
     });
     chatBox.init();
   }
+  #sendDefenderTroops(troops) {
+    this.#apiService.troopsToDefend(troops);
+  }
+
+  #handleAttackerTroops() {
+    this.#modalManager.troopsToAttackWith();
+  }
+
+  #sendAttackerTroops(troops) {
+    this.#apiService.troopsToAttack(troops);
+  }
 
   init() {
     this.#pollGameData();
@@ -285,7 +281,8 @@ export default class GameController {
       "getConnectedTerritories",
       this.#getConnectedTerritories.bind(this)
     );
-    this.#eventBus.on("troopsToAttack", this.#troopsToAttack.bind(this));
+    this.#eventBus.on("troopsToAttack", this.#handleAttackerTroops.bind(this));
+    this.#eventBus.on("sendAttckerTroops", this.#sendAttackerTroops.bind(this));
     this.#eventBus.on(
       "fortification",
       this.#apiService.fortification.bind(this)
@@ -293,6 +290,10 @@ export default class GameController {
     this.#eventBus.on(
       "startFortification",
       this.#apiService.startFortification.bind(this)
+    );
+    this.#eventBus.on(
+      "sendDefenderTroops",
+      this.#sendDefenderTroops.bind(this)
     );
     this.#audio.play();
   }

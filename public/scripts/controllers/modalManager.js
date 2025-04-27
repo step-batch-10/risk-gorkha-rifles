@@ -1,8 +1,8 @@
 export default class ModalManager {
   #gameStartNotificationModal;
   #reinforcementPhaseModal;
+  #troopsSelection;
 
-  // Mapping of die face values to dot positions
   #diceDotMap = {
     1: [4],
     2: [0, 8],
@@ -12,9 +12,14 @@ export default class ModalManager {
     6: [0, 2, 3, 5, 6, 8],
   };
 
-  constructor(gameStartNotificationModal, reinforcementPhaseModal) {
+  constructor(
+    gameStartNotificationModal,
+    reinforcementPhaseModal,
+    troopsSelection
+  ) {
     this.#gameStartNotificationModal = gameStartNotificationModal;
     this.#reinforcementPhaseModal = reinforcementPhaseModal;
+    this.#troopsSelection = troopsSelection;
   }
 
   showGameStartNotificationModal() {
@@ -55,7 +60,7 @@ export default class ModalManager {
 
   #displayDice(numbers, containerId) {
     const container = document.getElementById(containerId);
-    container.innerHTML = ""; 
+    container.innerHTML = "";
 
     numbers.forEach((num) => {
       if (num >= 1 && num <= 6) {
@@ -68,5 +73,13 @@ export default class ModalManager {
   startDice(attackerDice, defenderDice) {
     this.#displayDice(attackerDice, "dice-center");
     this.#displayDice(defenderDice, "dice-right");
+  }
+
+  troopsToDefendWith() {
+    return this.#troopsSelection.showTroopsToDefend();
+  }
+
+  troopsToAttackWith() {
+    return this.#troopsSelection.showTroopsToAttack();
   }
 }
