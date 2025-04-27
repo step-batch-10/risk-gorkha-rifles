@@ -271,8 +271,39 @@ export const startFortification = (context: Context) => {
   };
   gameManager.handleGameActions(action);
 
-  return context.json({ actionStatus: true })
-}
+  return context.json({ actionStatus: true });
+};
+
+export const saveMessage = async (context: Context) => {
+  const userId: string = context.get('userId');
+  const gameManager: GameManager = context.get('gameManager');
+  const { message, recipientId } = await context.req.json();
+
+  if (!message)
+    return context.json({ messageStatus: false, error: "Message content is required" }, 400);
+
+  gameManager.saveMessage(userId, message, recipientId);
+
+  return context.json({
+    messageStatus: true
+
+  });
+};
+
+export const getMessages = (context: Context) => {
+  const since: number = Number(context.req.query("since")) || 0;
+
+  const userId: string = context.get('userId');
+  const gameManager: GameManager = context.get('gameManager');
+
+  const gameMessages = gameManager.getMessages(userId);
+  const personalMessages = gameManager.getPersonalMessages(userId, since);
+
+  return context.json({
+    gameMessages,
+    personalMessages,
+  });
+};
 
 export {
   joinGameHandler,

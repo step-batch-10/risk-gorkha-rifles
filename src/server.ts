@@ -23,6 +23,8 @@ import {
   fortificationHandler,
   connectedTerritoriesHandler,
   startFortification,
+  saveMessage,
+  getMessages,
 } from "./handler/gameHandler.ts";
 import { getCookie } from "hono/cookie";
 
@@ -89,6 +91,8 @@ export default class Server {
     app.post("/fortification", fortificationHandler);
     app.get("/connected-territories", connectedTerritoriesHandler);
     app.get("/start-fortification", startFortification);
+    app.post("/messages", saveMessage);
+    app.get("/messages", getMessages);
     return app;
   }
 

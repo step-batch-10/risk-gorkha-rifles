@@ -358,8 +358,6 @@ export default class Game {
   }
 
   private diceAction = (userId: string) => {
-    console.log("inside diceAction");
-
     if (this.diceDetails.length === 2) {
       const attackerDice: number[] = Array(Number(this.diceDetails[0])).fill(3);
       const defenderDice: number[] = Array(Number(this.diceDetails[1])).fill(2);
@@ -377,14 +375,9 @@ export default class Game {
   };
 
   public storeTroops = (actionDetails: ActionDetails) => {
-    console.log(this.diceDetails);
-
     const { troops } = actionDetails.data;
-    console.log(troops);
 
     this.diceDetails.push(troops);
-    console.log(this.diceDetails);
-
     this.diceAction(actionDetails.playerId);
 
     return { status: "success" };

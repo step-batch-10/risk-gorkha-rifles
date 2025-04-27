@@ -654,6 +654,199 @@ describe("startFortification test", () => {
     });
 
     assertEquals(await response.json(), { actionStatus: true });
-    assertEquals(gameManager.getGameActions("1", 0).actions.at(-1)?.name, "fortification")
+    assertEquals(gameManager.getGameActions("1", 0).actions.at(-1)?.name, "fortification");
+  });
+});
+
+describe('saveMessage', () => {
+  it('should return 400 if message not given in request body', async () => {
+    const { app } = createServerWithLoggedInUser("Jack");
+
+    const response = await app.request('/game/messages', {
+      method: 'POST',
+      body: JSON.stringify({}),
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(response.status, 400);
+    assertEquals(await response.json(), { messageStatus: false, error: "Message content is required" });
+  });
+
+  it('should send the message to all players', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request('/game/messages', {
+      method: 'POST',
+      body: JSON.stringify({ message: "Hello" }),
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    const messages = gameManager.getMessages("1");
+
+    assertEquals(response.status, 200);
+    assertEquals(await response.json(), { messageStatus: true });
+    assertEquals(messages, [
+      {
+        id: "1",
+        message: "Hello",
+        playerId: "1",
+        recipientId: undefined,
+        timestamp: 1
+      }
+    ]);
+  });
+
+  it('should succesfully send the message to individual players', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request('/game/messages', {
+      method: 'POST',
+      body: JSON.stringify({ message: "Hello", recipientId: "1" }),
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    const messages = gameManager.getPersonalMessages("1", 0);
+
+    assertEquals(response.status, 200);
+    assertEquals(await response.json(), { messageStatus: true });
+    assertEquals(messages, [
+      {
+        id: "1",
+        message: "Hello",
+        playerId: "1",
+        recipientId: "1",
+        timestamp: 1
+      }
+    ]);
+  });
+});
+
+describe('getMessages', () => {
+  it('should return the game messages', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+    gameManager.saveMessage("1", "hello");
+    gameManager.saveMessage("3", "hello again");
+
+    const response = await app.request('/game/messages', {
+      method: 'GET',
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), {
+      gameMessages: [
+        {
+          id: "1",
+          message: "hello",
+          playerId: "1",
+          timestamp: 1,
+        },
+        {
+          id: "1",
+          message: "hello again",
+          playerId: "3",
+          timestamp: 1,
+        },
+      ],
+      personalMessages: []
+    });
+  });
+
+  it('should return the direct messages', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    gameManager.saveMessage("2", "hello", "1");
+    gameManager.saveMessage("3", "hello again", "1");
+
+    const response = await app.request('/game/messages', {
+      method: 'GET',
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), {
+      personalMessages: [
+        {
+          id: "1",
+          message: "hello",
+          playerId: "2",
+          recipientId: "1",
+          timestamp: 1,
+        },
+        {
+          id: "1",
+          message: "hello again",
+          playerId: "3",
+          recipientId: "1",
+          timestamp: 1,
+        },
+      ],
+      gameMessages: []
+    });
+  });
+
+  it('should return both public and direct messages', async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    gameManager.saveMessage("2", "hello", "1");
+    gameManager.saveMessage("3", "hello again", "1");
+    gameManager.saveMessage("2", "hello public");
+
+    const response = await app.request('/game/messages', {
+      method: 'GET',
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+    });
+
+    assertEquals(await response.json(), {
+      personalMessages: [
+        {
+          id: "1",
+          message: "hello",
+          playerId: "2",
+          recipientId: "1",
+          timestamp: 1,
+        },
+        {
+          id: "1",
+          message: "hello again",
+          playerId: "3",
+          recipientId: "1",
+          timestamp: 1,
+        },
+      ],
+      gameMessages: [
+        {
+          id: "1",
+          message: "hello public",
+          playerId: "2",
+          timestamp: 1,
+        },
+      ]
+    });
   });
 });

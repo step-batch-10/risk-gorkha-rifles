@@ -3,6 +3,7 @@ import { Continent, GameStatus, LobbyStatus } from "../types/gameTypes.ts";
 import lodash from "npm:lodash";
 import { Action } from "./game.ts";
 import { ActionTypes } from "../types/gameTypes.ts";
+import Messages from "./messages.ts";
 
 export default class GameManager {
   private shuffler: (ar: string[]) => string[];
@@ -13,19 +14,40 @@ export default class GameManager {
   private getContinents: () => Continent;
   private timeStamp: () => number = Date.now;
   private connectedTerritories: Continent;
+  private messages: Messages;
 
   constructor(
     uniqueId: () => string,
     getContinents: () => Continent,
     timeStamp: () => number,
     shuffler: (ar: string[]) => string[] = lodash.shuffle,
-    connectedTerritories: Continent
+    connectedTerritories: Continent,
+    messages: Messages = new Messages(() => 1, () => "1")
   ) {
     this.uniqueId = uniqueId;
     this.getContinents = getContinents;
     this.timeStamp = timeStamp;
     this.shuffler = shuffler;
     this.connectedTerritories = connectedTerritories;
+    this.messages = messages;
+  }
+
+  public saveMessage(playerId: string, message: string, recipientId?: string) {
+    const gameId = this.gameSessions[playerId];
+
+    return this.messages.saveMessage(gameId, message, playerId, recipientId);
+  }
+
+  public getMessages(playerId: string, since: number = 0) {
+    const gameId = this.gameSessions[playerId];
+
+    return this.messages.getGameMessages(gameId, since);
+  }
+
+  public getPersonalMessages(playerId: string, since: number) {
+    const gameId = this.gameSessions[playerId];
+
+    return this.messages.getPersonalMessages(gameId, playerId, since);
   }
 
   private createGame(players: Set<string>) {
