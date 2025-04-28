@@ -14,14 +14,19 @@ const showToast = (message) => {
   }).showToast();
 };
 
-const handleLogin = async (username, src) => {
+const handleLogin = async (userName, avatarSrc) => {
+  const { username, avatar } =
+    avatarSrc === ""
+      ? { username: userName, avatar: "/images/no-avatar.png" }
+      : { username: userName, avatar: avatarSrc };
+
   try {
     const response = await fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, avatar: src }),
+      body: JSON.stringify({ username, avatar }),
     });
 
     if (!response.redirected) {
@@ -54,10 +59,11 @@ const handleFormSubmit = (event) => {
   const usernameInput = event.target.querySelector("#username").value;
   const src = document.getElementById("avatarSrc").value;
 
-  if (!usernameInput || !src) {
-    showToast("Username and avatar must be filled out");
+  if (!usernameInput) {
+    showToast("Username must be filled out");
     return;
   }
+
   const usernameRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
   if (!usernameRegex.test(usernameInput)) {

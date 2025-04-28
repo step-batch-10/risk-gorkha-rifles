@@ -8,9 +8,6 @@ export const loginHandler = async (context: Context) => {
   if (!username)
     return context.json({ message: "Username must be filled out" }, 400);
 
-  if (!avatar)
-    return context.json({ message: "Username must be filled out" }, 400);
-
   const usernameRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
   if (!usernameRegex.test(username)) {
     return context.json(

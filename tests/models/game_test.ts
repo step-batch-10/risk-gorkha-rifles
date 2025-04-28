@@ -343,7 +343,7 @@ describe("Game - fortification", () => {
       territory: "peru",
       troopCount: 6,
       troopDeployed: 5,
-    }); 
+    });
   });
 
   it("should not transfer troops if insufficient troops in the source territory", () => {
