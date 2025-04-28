@@ -6,7 +6,7 @@ export enum GameStatus {
 export enum AllotStatus {
   waitingLobby = "waitingLobby",
   gameRoom = "gameRoom",
-}
+} 
 
 export type LobbyStatus = { status: boolean; players: string[] };
 
