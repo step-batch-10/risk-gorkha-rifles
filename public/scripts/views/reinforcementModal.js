@@ -76,7 +76,7 @@ export default class ReinforcementModal {
       escapeMarkup: false,
       close: false,
       gravity: "bottom",
-      position: "right",
+       position: "center",
       style: {
         padding: "0px",
         background: "transparent",

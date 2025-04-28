@@ -75,7 +75,7 @@ export default class GameController {
       text: `${actionerName} placed ${troopDeployed} in ${territory}`,
       duration: 3000,
       gravity: "top",
-      position: "right",
+       position: "center",
       stopOnFocus: true,
       style: {
         background: "linear-gradient(to right, #3e2514, #c99147)",
@@ -88,7 +88,7 @@ export default class GameController {
       text: `Initial deployment is over`,
       duration: 3000,
       gravity: "top",
-      position: "right",
+       position: "center",
       stopOnFocus: true,
       style: {
         background: "linear-gradient(to right, #3e2514, #c99147)",

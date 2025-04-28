@@ -10,6 +10,8 @@ const getUserIdFromCookies = () => {
 };
 
 export default class ChatBox {
+  #unseenCount = 0;
+
   constructor({ players, fetchMessagesApi, sendMessageApi, pollInterval = 3000 }) {
     this.fetchMessagesApi = fetchMessagesApi;
     this.sendMessageApi = sendMessageApi;
@@ -18,25 +20,66 @@ export default class ChatBox {
     this.messages = { global: [], personal: {} };
     this.lastTimestamp = 0;
     this.players = players;
-    this.myPlayerId = getUserIdFromCookies();    
+    this.myPlayerId = getUserIdFromCookies();
   }
 
   init() {
     this.renderChatBox();
     this.registerEvents();
     this.startPolling();
+    this.renderChatIcon();
+  }
+
+  #renderNotification() {
+    const notificationCountElem = document.querySelector("#chat-notification-box");
+
+    notificationCountElem.textContent = this.#unseenCount;
+
+    if (this.#unseenCount === 0) {
+      notificationCountElem.style.display = "none";
+      return;
+    }
+
+    notificationCountElem.style.display = "block";
+  }
+
+  toggleChatBox() {
+    const chatBox = document.getElementById("chat-container");
+    chatBox.classList.toggle("hidden-chat");
+    this.#unseenCount = 0;
+    this.#renderNotification();
+  }
+
+  renderChatIcon() {
+    const chatIconContainer = document.createElement("div");
+    chatIconContainer.classList.add("chat-icon-container");
+    const chatIcon = `<img src="/images/chat-icon.png" />`;
+    chatIconContainer.innerHTML = chatIcon;
+    chatIconContainer.addEventListener('click', () => this.toggleChatBox());
+
+    document.body.appendChild(chatIconContainer);
   }
 
   renderChatBox() {
+    const notificationCountElem = document.createElement("div");
+    notificationCountElem.setAttribute("id", "chat-notification-box");
+    notificationCountElem.classList.add('notification-count');
+    document.body.appendChild(notificationCountElem);
+
+
     const container = document.createElement('div');
+    container.setAttribute("id", "chat-container");
     container.classList.add('chat-container');
+    container.classList.add('hidden-chat');
 
     container.innerHTML = `
           <div class="chat-tabs">
-              <button class="tab-btn active" data-tab="global">Global Chat</button>
+              <button class="tab-btn active" data-tab="global">
+              <img class="globe-img-chat" src='/images/globe.png' />
+              Global</button>
               ${this.players.filter(player => player.userId !== this.myPlayerId).map(player => `
                   <button class="tab-btn" data-tab="${player.userId}">
-                      <img src="${player.avatar}" class="avatar"> ${player.username}
+                      <img src="${player.avatar}" class="chat-avatar"> ${player.username}
                   </button>
               `).join('')}
           </div>
@@ -118,11 +161,27 @@ export default class ChatBox {
     await this.fetchMessages();
   }
 
+  #updateNotificationCount(gameMessages, personalMessages) {
+    gameMessages.forEach(msg => {
+      if (msg.playerId !== this.myPlayerId) {
+        this.#unseenCount++;
+      }
+    });
+
+    personalMessages.forEach(msg => {
+      if (msg.playerId !== this.myPlayerId) {
+        this.#unseenCount++;
+      }
+    });
+
+    this.#renderNotification();
+  }
+
   async fetchMessages() {
     try {
       const res = await this.fetchMessagesApi(this.lastTimestamp);
       const { gameMessages, personalMessages } = res;
-      console.log(personalMessages);
+      this.#updateNotificationCount(gameMessages, personalMessages);
 
       gameMessages.forEach(msg => {
         this.messages.global.push({
