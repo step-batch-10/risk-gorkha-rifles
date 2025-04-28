@@ -623,7 +623,7 @@ main {
 .help-modal {
   width: 1000px;
   height: 0px;
-  background-image: url(../images/instruction-bg.png);
+  background-image: url(/images/instruction-bg.png);
   background-size: contain;
   background-size: 100% auto;
   position: fixed;
@@ -634,12 +634,14 @@ main {
   padding: 0px;
   background-repeat: no-repeat;
   overflow: hidden;
-  transition-duration: 300ms;
+  transition-duration: 800ms;
+  opacity: 0;
 }
 
 .help-modal-opened {
   height: 800px;
   padding: 1rem 1.5rem;
+  opacity: 1;
 }
 
 .help-modal-heading {
@@ -672,4 +674,61 @@ main {
 .scrollable-help-modal > ol > li {
   margin: 10px 0px;
   font-size: 20px;
+}
+
+/* Players Stats */
+
+.player-stats {
+  width: 300px;
+  height: 0px;
+  background-image: url('/images/players-bg.png');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  position: fixed;
+  top: 50%;
+  left: 20%;
+  padding: 0px;
+  transform: translate(-20%, -50%);
+  text-align: center;
+  transition-duration: 400ms;
+  overflow: hidden;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-stats img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 1rem 0px;
+  object-fit: cover;
+}
+
+.player-stats-opened {
+  height: 425px;
+  padding: 2rem;
+  opacity: 1;
+}
+
+.player-stats > h3 {
+  color: #7f5539;
+  font-size: 26px;
+}
+
+.player-stats-details > ul {
+  list-style-type: none;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player-stats-details > ul > li {
+  width: 100%;
+  text-align: left;
+  font-size: 20px;
+  color: #bc4749;
 }

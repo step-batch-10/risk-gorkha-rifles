@@ -3,6 +3,19 @@ export default class ViewManager {
   #playerSidebarRenderer;
   #phaseView;
   #cardsView;
+  #players;
+  #playerStates;
+
+  #keyActions = {
+    keydown: {
+      help: ['i', 'I', '?'],
+      playerCards: ['1', '2', '3'],
+    },
+    keyup: {
+      help: ['i', 'I', '?'],
+      playerCards: ['1', '2', '3'],
+    },
+  };
 
   constructor(territoryRenderer, playerSidebarRenderer, phaseView, cardsView) {
     this.#territoryRenderer = territoryRenderer;
@@ -12,20 +25,79 @@ export default class ViewManager {
     this.#registerKeyboardEvents();
   }
 
-  #registerKeyboardEvents() {
+  updatePlayerStats(players, playerStates) {
+    this.#players = players;
+    this.#playerStates = playerStates;
+  }
+
+  #showPlayerCard(playerIndex) {
+    const playerStatsElem = document.getElementById('player-stats');
+    const playerDetailsElem = document.getElementById('player-stats-details');
+
+    if (!playerStatsElem || !playerDetailsElem) {
+      console.error('Player stats elements not found in the DOM.');
+      return;
+    }
+
+    const player = this.#players?.[playerIndex];
+    const playerStats = this.#playerStates?.[player?.id];
+
+    if (!player || !playerStats) {
+      console.error('Invalid player or player stats data.');
+      return;
+    }
+
+    playerStatsElem.classList.add('player-stats-opened');
+    playerStatsElem.querySelector('h3').textContent = player.username;
+    playerStatsElem.querySelector('img').src = player.avatar;
+
+    playerDetailsElem.innerHTML = `
+      <ul>
+        <li>Continents: ${playerStats.continents.length}</li>
+        <li>Territories: ${playerStats.territories.length}</li>
+        <li>Territory Cards: ${playerStats.cards.length}</li>
+      </ul>
+    `;
+  }
+
+  #removePlayerCard() {
+    const playerStatsElem = document.getElementById('player-stats');
+    playerStatsElem.classList.remove('player-stats-opened');
+  }
+
+  #togglePlayerCard = (playerIndex, isOpen) => {
+    if (isOpen) {
+      this.#showPlayerCard(playerIndex);
+    } else {
+      this.#removePlayerCard();
+    }
+  };
+
+  #toggleHelpModal = (isOpen) => {
     const helpModal = document.getElementById('help-modal');
 
-    globalThis.document.addEventListener('keydown', (e) => {
-      if (e.key === 'i' || e.key === 'I' || e.key === '?') {
-        helpModal.classList.add('help-modal-opened');
-      }
-    });
+    helpModal.classList.toggle('help-modal-opened', isOpen);
+  };
 
-    globalThis.document.addEventListener('keyup', (e) => {
-      if (e.key === 'i' || e.key === 'I' || e.key === '?') {
-        helpModal.classList.remove('help-modal-opened');
+  #registerKeyboardEvents() {
+    const handleKeyEvent = (eventType, e) => {
+      if (this.#keyActions[eventType].help.includes(e.key)) {
+        return this.#toggleHelpModal(eventType === 'keydown');
       }
-    });
+
+      if (this.#keyActions[eventType].playerCards.includes(e.key)) {
+        const playerIndex = parseInt(e.key) - 1;
+        return this.#togglePlayerCard(playerIndex, eventType === 'keydown');
+      }
+    };
+
+    globalThis.document.addEventListener('keydown', (e) =>
+      handleKeyEvent('keydown', e)
+    );
+
+    globalThis.document.addEventListener('keyup', (e) =>
+      handleKeyEvent('keyup', e)
+    );
   }
 
   highlightTerritory(territoryId) {

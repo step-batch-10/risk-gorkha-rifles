@@ -113,8 +113,10 @@ export default class GameController {
 
   #handleGameData(gameData) {
     const { status, actions, userId, players } = gameData;
+
     for (const action of actions) {
       const { currentPlayer } = action;
+
       const gameDetails = { action, status, userId, players };
       if (!this.#isValidAction(action.name)) continue;
       this.#updateUI(gameDetails, currentPlayer);
@@ -123,6 +125,7 @@ export default class GameController {
   }
 
   #updateUI({ action, players }, currentPlayer) {
+    this.#viewManager.updatePlayerStats(players, action.playerStates);
     this.#viewManager.renderAllTerritories(action.territoryState, players);
     this.#viewManager.renderPlayerSidebar(players, currentPlayer);
   }
