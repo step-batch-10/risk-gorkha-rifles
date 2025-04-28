@@ -1,112 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RISK | Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap"
+      rel="stylesheet"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RISK | Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
 
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="stylesheet" href="/styles/dashboard.css" />
 
-  <link rel="stylesheet" href="/styles/style.css" />
-  <link rel="stylesheet" href="/styles/dashboard.css" />
+    <script src="/scripts/dashboard.js"></script>
+  </head>
 
-  <script src="/scripts/dashboard.js"></script>
-</head>
-
-<body>
-  <header>
-    <div id="profile">
-      <div id="profile-picture"></div>
-      <div id="player-details">
-        <p id="player-name"></p>
+  <body>
+    <header>
+      <div id="profile">
+        <div id="profile-picture"></div>
+        <div id="player-details">
+          <p id="player-name"></p>
+        </div>
       </div>
-    </div>
-    <div>
-      <h1>RISK</h1>
-    </div>
-    <div id="right-top">
-      <div id="leaderboard"></div>
-      <div id="settings"></div>
-    </div>
-  </header>
-
-  <main>
-    <div id="start-game">
-      <div id="create">
-        <button>CREATE</button>
-      </div>
-      <div id="join">
-        <button id="join-button">JOIN</button>
-      </div>
-    </div>
-  </main>
-
-  <div id="host-game" class="popup">
-    <div class="popup-content">
-      <h2>Select Number of Players</h2>
-      <select id="player-count-for-create">
-        <option value="">--Select Players--</option>
-        <option value="3">3 Players</option>
-        <option value="4">4 Players</option>
-        <option value="5">5 Players</option>
-        <option value="6">6 Players</option>
-      </select>
       <div>
-        <button class="start-game">Start Game</button>
+        <h1>RISK</h1>
+      </div>
+      <div id="right-top">
+        <div id="leaderboard"></div>
+        <div id="settings"></div>
+      </div>
+    </header>
+
+    <main>
+      <div id="start-game">
+        <div id="create">
+          <button>CREATE</button>
+        </div>
+        <div id="join">
+          <button id="join-button">JOIN</button>
+        </div>
+      </div>
+    </main>
+
+    <div id="host-game" class="popup">
+      <div class="popup-content">
+        <h2>Select Number of Players</h2>
+        <select id="player-count-for-create">
+          <option value="">--Select Players--</option>
+          <option value="3">3 Players</option>
+          <option value="4">4 Players</option>
+          <option value="5">5 Players</option>
+          <option value="6">6 Players</option>
+        </select>
+        <div>
+          <button class="start-game">Start Game</button>
+          <button class="close">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="join-game" class="popup">
+      <div class="popup-content">
+        <h2>Select number of players</h2>
+        <select id="player-count-for-join">
+          <option value="">--Select Players--</option>
+          <option value="3">3 Players</option>
+        </select>
+        <div>
+          <button id="join-game-button">Join Game</button>
+          <button class="close">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="player-profile" class="popup">
+      <div class="horizontal-rectangle">
+        <div id="details">
+          <div id="picture-and-name">
+            <div id="picture"></div>
+            <h2 id="player-name"></h2>
+          </div>
+          <div id="player-stats">
+            <h2>Matches Played: <span id="matches-played"></span></h2>
+            <h2>Matches Won: <span id="matches-won"></span></h2>
+          </div>
+        </div>
+        <div id="button">
+          <button class="close">CLOSE</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="leader-board" class="popup">
+      <div class="horizontal-rectangle">
+        <div id="leaderboard-list">
+          <h2>LEADERBOARD</h2>
+
+          <ol id="list">
+            <li>priyankush : 40</li>
+            <li>akbar : 25</li>
+          </ol>
+
+          <button class="close">close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settingsPopUp" class="popup">
+      <div class="horizontal-rectangle">
+        <h2>Settings</h2>
+        <div id="sound">
+          <span>Sound</span>
+          <div class="toggle-container">
+            <input
+              type="checkbox"
+              id="toggle"
+              class="toggle-checkbox"
+              checked
+            />
+            <label for="toggle" class="toggle-label">
+              <span class="toggle-circle"></span>
+            </label>
+          </div>
+        </div>
+        <span style="text-align: center">change track</span>
+        <div class="track-change">
+          <button class="arrow" id="prevTrack">&#8592; Previous</button>
+          <button class="arrow" id="nextTrack">Next &#8594;</button>
+        </div>
         <button class="close">Close</button>
       </div>
     </div>
-  </div>
-
-  <div id="join-game" class="popup">
-    <div class="popup-content">
-      <h2>Select number of players</h2>
-      <select id="player-count-for-join">
-        <option value="">--Select Players--</option>
-        <option value="3">3 Players</option>
-      </select>
-      <div>
-        <button id="join-game-button">Join Game</button>
-        <button class="close">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="player-profile" class="popup">
-    <div class="horizontal-rectangle">
-      <div id="details">
-        <div id="picture-and-name">
-          <div id="picture"></div>
-          <h2 id="player-name"></h2>
-        </div>
-        <div id="player-stats">
-          <h2>Matches Played: <span id="matches-played"></span></h2>
-          <h2>Matches Won: <span id="matches-won"></span></h2>
-        </div>
-      </div>
-      <div id="button">
-        <button class="close">CLOSE</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="leader-board" class="popup">
-    <div class="horizontal-rectangle">
-      <div id="leaderboard-list">
-        <h2>LEADERBOARD</h2>
-
-        <ol id="list">
-          <li>priyankush : 40</li>
-          <li>akbar : 25</li>
-        </ol>
-
-        <button class="close">close</button>
-      </div>
-    </div>
-  </div>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-</body>
-
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+  </body>
 </html>

@@ -140,6 +140,7 @@ main {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   border-radius: 10px;
   display: flex;
+  align-items: center;
   flex-direction: column;
 }
 
@@ -211,4 +212,66 @@ button:hover {
 
 #player-name {
   text-align: center;
+}
+
+#settingsPopUp {
+  & > * {
+    gap: 15px;
+  }
+  & h2 {
+    text-align: center;
+    font-size: 50px;
+  }
+  & #sound {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 40%;
+  }
+  & span {
+    font-size: 30px;
+    color: #333;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.toggle-container {
+  position: relative;
+  display: inline-block;
+}
+
+.toggle-checkbox {
+  display: none;
+}
+
+.toggle-label {
+  display: inline-block;
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background-color: #ddd;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-circle {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  transition: left 0.3s ease;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #4caf50;
+}
+
+.toggle-checkbox:checked + .toggle-label .toggle-circle {
+  left: 35px;
 }
