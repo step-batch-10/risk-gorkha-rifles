@@ -2,7 +2,7 @@
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
-  font-family: "yatra one";
+  font-family: 'yatra one';
 }
 
 :root {
@@ -12,7 +12,7 @@
 body {
   width: 100vw;
   height: 100vh;
-  background-image: url("../images/game-background.png");
+  background-image: url('../images/game-background.png');
   background-size: cover;
   overflow: hidden;
 }
@@ -46,7 +46,7 @@ tspan {
     transition-duration: 300ms;
     stroke: #000;
     stroke-width: 0.5;
-    filter: url("#filter_texture");
+    filter: url('#filter_texture');
 
     &:hover {
       filter: brightness(100%);
@@ -334,7 +334,7 @@ main {
   left: 1%;
   height: 140px;
   width: 100px;
-  background-image: url("../images/card.png");
+  background-image: url('../images/card.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -478,7 +478,7 @@ main {
 .chat-container {
   width: 400px;
   height: 400px;
-  background-color: rgba(58, 90, 64, .8);
+  background-color: rgba(58, 90, 64, 0.8);
   position: fixed;
   top: 70px;
   right: 80px;
@@ -586,6 +586,8 @@ main {
   background: #344e41;
   color: white;
   border-radius: 4px;
+}
+
 #submit-button {
   padding: 8px 16px;
   background-color: rgb(173, 125, 14);
@@ -615,4 +617,59 @@ main {
   gap: 10px;
   border: 1px solid rgba(173, 125, 14, 0.8);
   background-color: rgba(94, 72, 57, 0.8);
+}
+
+/* Help modal  */
+.help-modal {
+  width: 1000px;
+  height: 0px;
+  background-image: url(../images/instruction-bg.png);
+  background-size: contain;
+  background-size: 100% auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 1rem;
+  padding: 0px;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  transition-duration: 300ms;
+}
+
+.help-modal-opened {
+  height: 800px;
+  padding: 1rem 1.5rem;
+}
+
+.help-modal-heading {
+  color: #fdf0d5;
+  text-transform: uppercase;
+}
+
+.scrollable-help-modal {
+  width: 80%;
+  height: 400px;
+  position: absolute;
+  top: 40%;
+  overflow: hidden;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.scrollable-help-modal > ol {
+  list-style-position: inside;
+  color: #fdf0d5;
+  overflow-y: scroll;
+  height: 90%;
+  margin-top: 20px;
+}
+
+.scrollable-help-modal > ol::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable-help-modal > ol > li {
+  margin: 10px 0px;
+  font-size: 20px;
 }

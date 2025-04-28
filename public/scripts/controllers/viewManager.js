@@ -9,6 +9,23 @@ export default class ViewManager {
     this.#playerSidebarRenderer = playerSidebarRenderer;
     this.#phaseView = phaseView;
     this.#cardsView = cardsView;
+    this.#registerKeyboardEvents();
+  }
+
+  #registerKeyboardEvents() {
+    const helpModal = document.getElementById('help-modal');
+
+    globalThis.document.addEventListener('keydown', (e) => {
+      if (e.key === 'i' || e.key === 'I' || e.key === '?') {
+        helpModal.classList.add('help-modal-opened');
+      }
+    });
+
+    globalThis.document.addEventListener('keyup', (e) => {
+      if (e.key === 'i' || e.key === 'I' || e.key === '?') {
+        helpModal.classList.remove('help-modal-opened');
+      }
+    });
   }
 
   highlightTerritory(territoryId) {
@@ -45,6 +62,8 @@ export default class ViewManager {
 
   showFortificationPhase(actionData) {
     this.#phaseView.showFortificationPhase();
-    this.#territoryRenderer.startFortificationPhase(actionData.activeTerritories);
+    this.#territoryRenderer.startFortificationPhase(
+      actionData.activeTerritories
+    );
   }
 }

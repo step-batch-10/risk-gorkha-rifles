@@ -51,7 +51,7 @@
         border-radius: 10px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows:   repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
         padding: 5px;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
       }
@@ -59,7 +59,7 @@
       .dot {
         width: 10px;
         height: 10px;
-        background-color:rgba(255, 255, 255, 0.661);
+        background-color: rgba(255, 255, 255, 0.661);
         border-radius: 50%;
         justify-self: center;
         align-self: center;
@@ -1102,9 +1102,66 @@
     <div id="dice-center" class="dice-container"></div>
     <div id="dice-right" class="dice-container"></div>
 
-    <script>
-      // Define the positions for dots on a 3x3 grid
-    </script>
+    <div class="help-modal" id="help-modal">
+      <div class="scrollable-help-modal">
+        <h1 class="help-modal-heading">Hola Master,</h1>
+        <hr />
+        <ol>
+          <li>
+            <strong>Set Up the World:</strong> Unfold the board. Each player
+            chooses a color and places their armies on territories. Shuffle and
+            deal territory cards if drafting.
+          </li>
+
+          <li>
+            <strong>Start Strong:</strong> Each player places all their armies,
+            one at a time, on any territory they control to reinforce it.
+          </li>
+
+          <li>
+            <strong>Beginning of Turn:</strong> At the start of your turn, count
+            the number of territories you control. Divide by 3 (minimum 3
+            troops) to get your reinforcements.
+          </li>
+
+          <li>
+            <strong>Deploy Reinforcements:</strong> Place your new troops onto
+            your territories however you like — stack up or spread out!
+          </li>
+
+          <li>
+            <strong>Attack!</strong> You may attack neighboring enemy
+            territories. Roll dice to battle. Highest roll wins each battle!
+          </li>
+
+          <li>
+            <strong>Advance or Hold:</strong> After winning a territory, you may
+            move armies into it. You can keep attacking or end your turn.
+          </li>
+
+          <li>
+            <strong>Fortify Your Position:</strong> At the end of your turn,
+            move armies from one territory to a connected territory once (called
+            fortifying).
+          </li>
+
+          <li>
+            <strong>Collect a Risk Card:</strong> If you conquered at least one
+            territory this turn, draw a Risk card for future reinforcements.
+          </li>
+
+          <li>
+            <strong>Trade Risk Cards:</strong> On your turn, trade sets of cards
+            for extra troops to boost your armies even more.
+          </li>
+
+          <li>
+            <strong>Conquer the World:</strong> Keep expanding your empire. The
+            last player standing — the one who controls every territory — wins!
+          </li>
+        </ol>
+      </div>
+    </div>
 
     <script
       type="text/javascript"
