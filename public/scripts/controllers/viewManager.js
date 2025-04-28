@@ -9,14 +9,14 @@ export default class ViewManager {
 
   #keyActions = {
     keydown: {
-      help: ['m', 'M', 'h', 'H'],
-      playerCards: ['1', '2', '3'],
-      shortcuts: ['i', 'I', '?'],
+      help: ["m", "M", "h", "H"],
+      playerCards: ["1", "2", "3"],
+      shortcuts: ["i", "I", "?"],
     },
     keyup: {
-      help: ['m', 'M', 'h', 'H'],
-      playerCards: ['1', '2', '3'],
-      shortcuts: ['i', 'I', '?'],
+      help: ["m", "M", "h", "H"],
+      playerCards: ["1", "2", "3"],
+      shortcuts: ["i", "I", "?"],
     },
   };
 
@@ -27,6 +27,59 @@ export default class ViewManager {
     this.#cardsView = cardsView;
     this.#registerKeyboardEvents();
     this.#cavalryView = cavalryView;
+    this.#registerSettings();
+  }
+
+  #changeTrack(audio, audios, index)  {
+    const songIndex = Math.abs(index) % audios.length;
+    const path = audios.at(songIndex);
+
+    audio.pause(audio, audios, index);
+    audio.src = `../../assets/${path}`;
+    audio.play();
+  }
+
+  #registerSettings() {
+    let currentAudio = 0;
+    const audios = ["risk_music1.mp3", "risk_music2.mp3"];
+    const audio = new Audio(`../../assets/${audios.at(0)}`);
+    audio.play();
+    const settings = document.getElementById("settings");
+    const soundToggle = document.getElementById("toggle");
+    const previosTrack = document.getElementById("prevTrack");
+    const nextTrack = document.getElementById("nextTrack");
+    settings.addEventListener("click", () => {
+      settings.addEventListener("click", () => {
+        const settingsPopUp = document.getElementById("settingsPopUp");
+        settingsPopUp.style.display = "flex";
+        const close = settingsPopUp.querySelector(".close");
+
+        close.onclick = () => {
+          settingsPopUp.style.display = "none";
+        };
+      });
+    });
+    soundToggle.addEventListener("click", this.#handleSound(audio));
+
+    previosTrack.addEventListener("click", () => {
+      currentAudio -= 1;
+      if (soundToggle.checked) this.#changeTrack(audio, audios, currentAudio);
+    });
+
+    nextTrack.addEventListener("click", () => {
+      currentAudio += 1;
+      if (soundToggle.checked) this.#changeTrack(audio, audios, currentAudio);
+    });
+  }
+
+  #handleSound(audio) {
+    return (e) => {
+      if (e.target.checked) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    };
   }
 
   updatePlayerStats(players, playerStates) {
@@ -39,11 +92,11 @@ export default class ViewManager {
   }
 
   #showPlayerCard(playerIndex) {
-    const playerStatsElem = document.getElementById('player-stats');
-    const playerDetailsElem = document.getElementById('player-stats-details');
+    const playerStatsElem = document.getElementById("player-stats");
+    const playerDetailsElem = document.getElementById("player-stats-details");
 
     if (!playerStatsElem || !playerDetailsElem) {
-      console.error('Player stats elements not found in the DOM.');
+      console.error("Player stats elements not found in the DOM.");
       return;
     }
 
@@ -51,13 +104,13 @@ export default class ViewManager {
     const playerStats = this.#playerStates?.[player?.id];
 
     if (!player || !playerStats) {
-      console.error('Invalid player or player stats data.');
+      console.error("Invalid player or player stats data.");
       return;
     }
 
-    playerStatsElem.classList.add('player-stats-opened');
-    playerStatsElem.querySelector('h3').textContent = player.username;
-    playerStatsElem.querySelector('img').src = player.avatar;
+    playerStatsElem.classList.add("player-stats-opened");
+    playerStatsElem.querySelector("h3").textContent = player.username;
+    playerStatsElem.querySelector("img").src = player.avatar;
 
     playerDetailsElem.innerHTML = `
       <ul>
@@ -69,8 +122,8 @@ export default class ViewManager {
   }
 
   #removePlayerCard() {
-    const playerStatsElem = document.getElementById('player-stats');
-    playerStatsElem.classList.remove('player-stats-opened');
+    const playerStatsElem = document.getElementById("player-stats");
+    playerStatsElem.classList.remove("player-stats-opened");
   }
 
   #togglePlayerCard = (playerIndex, isOpen) => {
@@ -82,39 +135,39 @@ export default class ViewManager {
   };
 
   #toggleHelpModal = (isOpen) => {
-    const helpModal = document.getElementById('help-modal');
+    const helpModal = document.getElementById("help-modal");
 
-    helpModal.classList.toggle('help-modal-opened', isOpen);
+    helpModal.classList.toggle("help-modal-opened", isOpen);
   };
 
   #toggleShortcutsModal = (isOpen) => {
-    const shortcutsModal = document.getElementById('shortcuts-modal');
+    const shortcutsModal = document.getElementById("shortcuts-modal");
 
-    shortcutsModal.classList.toggle('help-modal-opened', isOpen);
+    shortcutsModal.classList.toggle("help-modal-opened", isOpen);
   };
 
   #registerKeyboardEvents() {
     const handleKeyEvent = (eventType, e) => {
       if (this.#keyActions[eventType].help.includes(e.key)) {
-        return this.#toggleHelpModal(eventType === 'keydown');
+        return this.#toggleHelpModal(eventType === "keydown");
       }
 
       if (this.#keyActions[eventType].shortcuts.includes(e.key)) {
-        return this.#toggleShortcutsModal(eventType === 'keydown');
+        return this.#toggleShortcutsModal(eventType === "keydown");
       }
 
       if (this.#keyActions[eventType].playerCards.includes(e.key)) {
         const playerIndex = parseInt(e.key) - 1;
-        return this.#togglePlayerCard(playerIndex, eventType === 'keydown');
+        return this.#togglePlayerCard(playerIndex, eventType === "keydown");
       }
     };
 
-    globalThis.document.addEventListener('keydown', (e) =>
-      handleKeyEvent('keydown', e)
+    globalThis.document.addEventListener("keydown", (e) =>
+      handleKeyEvent("keydown", e)
     );
 
-    globalThis.document.addEventListener('keyup', (e) =>
-      handleKeyEvent('keyup', e)
+    globalThis.document.addEventListener("keyup", (e) =>
+      handleKeyEvent("keyup", e)
     );
   }
 

@@ -37,13 +37,11 @@ const initalizeApp = () => {
 
   const modalManager = initModalManager(eventBus);
   const viewManager = initViewManager(eventBus);
-  const audio = new Audio("../../assets/risk_music.mp3");
 
   const controller = new GameController(
     modalManager,
     viewManager,
     ApiService,
-    audio,
     eventBus,
     ChatBox
   );

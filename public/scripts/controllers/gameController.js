@@ -2,7 +2,6 @@ export default class GameController {
   #modalManager;
   #apiService;
   #viewManager;
-  #audio;
   #eventBus;
   #ChatBox;
 
@@ -27,11 +26,10 @@ export default class GameController {
 
   #actionsLog = [];
 
-  constructor(modalManager, viewManager, apiService, audio, eventBus, ChatBox) {
+  constructor(modalManager, viewManager, apiService, eventBus, ChatBox) {
     this.#modalManager = modalManager;
     this.#viewManager = viewManager;
     this.#apiService = apiService;
-    this.#audio = audio;
     this.#eventBus = eventBus;
     this.#ChatBox = ChatBox;
   }
@@ -310,6 +308,5 @@ export default class GameController {
       "sendDefenderTroops",
       this.#sendDefenderTroops.bind(this)
     );
-    this.#audio.play();
   }
 }

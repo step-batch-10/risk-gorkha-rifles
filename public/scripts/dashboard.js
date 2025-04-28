@@ -109,63 +109,16 @@ const renderDashBoard = ({ username, avatar }) => {
   );
 };
 
-const handleSettings = (_e) => {
-  const settingsPopUp = document.getElementById("settingsPopUp");
-  settingsPopUp.style.display = "flex";
-  const close = settingsPopUp.querySelector(".close");
-
-  close.onclick = () => {
-    settingsPopUp.style.display = "none";
-  };
-};
-
-const hanlderSound = (audio) => (e) => {
-  if (e.target.checked) {
-    audio.play();
-  } else {
-    audio.pause();
-  }
-};
-
-const changeTrack = (audio, audios, index) => {
-  const songIndex = Math.abs(index) % audios.length;
-  const path = audios.at(songIndex);
-
-  audio.pause();
-  audio.src = `../assets/${path}`;
-  audio.play();
-};
-
 const main = async () => {
   const response = await fetch("/game/profile-details");
   const playerDetails = await response.json();
-  let currentAudio = 0;
-  const audios = ["risk_music1.mp3", "risk_music2.mp3"];
-  const audio = new Audio(`../assets/${audios.at(0)}`);
-  audio.play();
 
   renderDashBoard(playerDetails);
   const join = document.querySelector("#join-button");
   const profile = document.querySelector("#profile");
-  const settings = document.getElementById("settings");
-  const soundToggle = document.getElementById("toggle");
-  const previosTrack = document.getElementById("prevTrack");
-  const nextTrack = document.getElementById("nextTrack");
 
   profile.addEventListener("click", handleProfile);
   join.addEventListener("click", handlePopup);
-  settings.addEventListener("click", handleSettings);
-  soundToggle.addEventListener("click", hanlderSound(audio));
-
-  previosTrack.addEventListener("click", () => {
-    currentAudio -= 1;
-    if (soundToggle.checked) changeTrack(audio, audios, currentAudio);
-  });
-
-  nextTrack.addEventListener("click", () => {
-    currentAudio += 1;
-    if (soundToggle.checked) changeTrack(audio, audios, currentAudio);
-  });
 };
 
 globalThis.onload = main;
