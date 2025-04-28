@@ -22,7 +22,10 @@ export default class GameManager {
     timeStamp: () => number,
     shuffler: (ar: string[]) => string[] = lodash.shuffle,
     connectedTerritories: Continent,
-    messages: Messages = new Messages(() => 1, () => "1")
+    messages: Messages = new Messages(
+      () => 1,
+      () => "1"
+    )
   ) {
     this.uniqueId = uniqueId;
     this.getContinents = getContinents;
@@ -60,7 +63,7 @@ export default class GameManager {
       this.shuffler,
       this.timeStamp,
       this.connectedTerritories,
-      []
+      () => Math.ceil(Math.random() * 6)
     );
     game.init();
     this.games.push(game);
@@ -142,21 +145,18 @@ export default class GameManager {
       requestAttack: () =>
         requiredGame.playerTerritories(actionDetails.playerId),
       requestNeighbouringTerritories: () =>
-        requiredGame.neighbouringTerritories(
+        requiredGame.getNeighbouringTerritories(
           actionDetails.playerId,
           actionDetails.data.territoryId
         ),
       requestDefendingPlayer: () =>
-        requiredGame.gameDefender(
-          actionDetails.data.territoryId,
-          actionDetails.playerId
-        ),
-      storeTroops: () =>
-        requiredGame.storeTroops(actionDetails),
+        requiredGame.extractDefenderId(actionDetails),
+      storeTroops: () => requiredGame.storeTroops(actionDetails),
       fortification: () => requiredGame.fortification(actionDetails),
-      connectedTerritories: () => requiredGame.getConnectedTerritories(actionDetails),
+      connectedTerritories: () =>
+        requiredGame.getConnectedTerritories(actionDetails),
       startFortification: () => requiredGame.startFortification(actionDetails),
-      getGamePlayers: () => requiredGame.getGamePlayers()
+      getGamePlayers: () => requiredGame.getGamePlayers(),
     };
 
     return actionMap[actionDetails.name as ActionTypes]();

@@ -1,4 +1,5 @@
 import { GameStatus, Territory } from "../types/gameTypes.ts";
+import _ from "lodash";
 
 type Data = {
   [key: string]:
@@ -7,7 +8,8 @@ type Data = {
     | string
     | Record<string, PlayerState>
     | number[]
-    | string[];
+    | string[]
+    | number[][];
 };
 
 type Continent = { name: string; extraTroops: number };
@@ -52,7 +54,14 @@ export interface Player {
   colour: string;
 }
 
+type BattleDetails = {
+  territoryId?: string | number;
+  troopCount?: string | number;
+  diceOutcome?: number[];
+};
+
 export default class Game {
+  private diceRoller: () => number;
   private currentPlayer: string = "";
   private players: Set<string>;
   private gameStatus: GameStatus;
@@ -66,7 +75,8 @@ export default class Game {
   private playerDetails: Player[] = [];
   private colours: string[];
   private adjacentTerritories: MadhaviContinent;
-  private diceDetails: (string | number)[] = [];
+  // private diceDetails: (string | number)[] = [];
+  private activeBattle: Record<string, BattleDetails> = {};
 
   constructor(
     players: Set<string>,
@@ -75,10 +85,10 @@ export default class Game {
     shuffler: (arr: string[]) => string[],
     timeStamp: () => number,
     adjacentTerritories: MadhaviContinent,
-    diceDetails: number[] | string[],
+    diceRoller: () => number,
     colours: string[] = [
       "#50C878",
-      "#87CEEB",
+      "#DAA520",
       "#FF7F50",
       "#DAA520",
       "brown",
@@ -93,7 +103,7 @@ export default class Game {
     this.timeStamp = timeStamp;
     this.colours = colours;
     this.adjacentTerritories = adjacentTerritories;
-    this.diceDetails = diceDetails;
+    this.diceRoller = diceRoller;
   }
 
   get gameActions() {
@@ -312,72 +322,144 @@ export default class Game {
     return this.playerStates;
   }
 
-  public neighbouringTerritories(
+  public getNeighbouringTerritories(
     playerId: string,
     attackingTerritory: string | number
   ) {
+    this.activeBattle[playerId] = { territoryId: attackingTerritory };
     const neighbouring = this.adjacentTerritories[attackingTerritory];
-    const connectedterr = neighbouring.filter((territory) => {
-      return Object.entries(this.territoryState).filter((territoryState) => {
-        return (
-          territoryState[1].owner !== playerId &&
-          territoryState[0] === territory
+    const neighbouringTerritories = neighbouring.filter(
+      (neighbouringTerritory) => {
+        const [territoryDetails] = Object.entries(this.territoryState).filter(
+          ([territory, { owner }]) => {
+            return (
+              owner !== playerId &&
+              territory.toLowerCase() === neighbouringTerritory
+            );
+          }
         );
-      })[0];
-    });
+        return territoryDetails;
+      }
+    );
 
-    return connectedterr;
+    return neighbouringTerritories;
   }
 
-  private getDefenderID(
+  private getDefenderId(
     defender: [string, Territory] | undefined,
     playerId: string
   ) {
     if (defender === undefined) {
       return "player not found";
     }
-    const defenderId = defender[1].owner;
 
+    const [territory, { owner }] = defender;
+    const defenderId = owner;
     this.actions.push(
       this.generateAction(playerId, {}, "troopsToDefendWith", null, defenderId)
     );
 
+    this.activeBattle[defenderId] = { territoryId: territory };
     return defenderId;
   }
 
-  public gameDefender(defendingTerritory: string | number, playerId: string) {
-    const defender = Object.entries(this.territoryState).find((territory) => {
-      return territory[0] === defendingTerritory;
-    });
+  public extractDefenderId(actionDetails: ActionDetails) {
+    const { playerId, data } = actionDetails;
+    const defendingTerritory = data.territoryId;
 
-    return this.getDefenderID(defender, playerId);
+    const defender = Object.entries(this.territoryState).find(
+      ([territoryName]) => {
+        return territoryName === defendingTerritory;
+      }
+    );
+
+    return this.getDefenderId(defender, playerId);
   }
 
   get playersData() {
     return [...this.playerDetails];
   }
 
+  private determineAttackResult = (attacker: number[], defender: number[]) => {
+    const troopsLost = { attackerTroops: 0, defenderTroops: 0 };
+    const diceDifference = _.zipWith(
+      attacker,
+      defender,
+      (a: number, b: number) => a - b
+    );
+
+    diceDifference.forEach((x: number) => {
+      x > 0
+        ? (troopsLost.defenderTroops += 1)
+        : (troopsLost.attackerTroops += 1);
+    });
+
+    return troopsLost;
+  };
+
+  private descending(a: number, b: number) {
+    return b - a;
+  }
+
+  private battleOutcome(
+    attackingTerritory: string | number,
+    defendingTerritory: string | number,
+    attacker: number[],
+    defender: number[]
+  ) {
+    const sortedAttacker = [...attacker].sort(this.descending);
+    const sortedDefender = [...defender].sort(this.descending);
+
+    const sliceLength = Math.min(sortedAttacker.length, sortedDefender.length);
+    const attackerSlice = sortedAttacker.slice(0, sliceLength);
+    const defenderSlice = sortedDefender.slice(0, sliceLength);
+
+    const { attackerTroops, defenderTroops } = this.determineAttackResult(
+      attackerSlice,
+      defenderSlice
+    );
+
+    this.territoryState[attackingTerritory].troops -= attackerTroops;
+    this.territoryState[defendingTerritory].troops -= defenderTroops;
+    const winner = attackerTroops > defenderTroops ? "Defender" : "Attacker";
+
+    return { attackerTroops, defenderTroops, winner };
+  }
+
   private diceAction = (userId: string) => {
-    if (this.diceDetails.length === 2) {
-      const attackerDice: number[] = Array(Number(this.diceDetails[0])).fill(3);
-      const defenderDice: number[] = Array(Number(this.diceDetails[1])).fill(2);
+    const dices: number[][] = [];
+
+    for (const { diceOutcome } of Object.values(this.activeBattle)) {
+      dices.push(diceOutcome || []);
+    }
+
+    const [attacker, defender] = Object.values(this.activeBattle);
+    if (dices.every((dice) => dice.length !== 0)) {
+      const result = this.battleOutcome(
+        attacker.territoryId as string,
+        defender.territoryId as string,
+        dices[0],
+        dices[1]
+      );
 
       this.actions.push(
-        this.generateAction(
-          userId,
-          { attackerDice, defenderDice },
-          "diceRoll",
-          null,
-          null
-        )
+        this.generateAction(userId, { dices }, "diceRoll", null, null)
+      );
+      this.actions.push(
+        this.generateAction(userId, result, "combatResult", null, null)
       );
     }
   };
 
   public storeTroops = (actionDetails: ActionDetails) => {
-    const { troops } = actionDetails.data;
+    const { playerId, data } = actionDetails;
+    const troops = data.troops;
 
-    this.diceDetails.push(troops);
+    this.activeBattle[playerId].troopCount = troops;
+
+    this.activeBattle[playerId].diceOutcome = Array.from({
+      length: Number(troops),
+    }).map(() => this.diceRoller()) as number[];
 
     this.diceAction(actionDetails.playerId);
 

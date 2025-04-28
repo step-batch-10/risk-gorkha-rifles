@@ -15,7 +15,7 @@ export default class GameController {
     attackPhaseStart: this.#handleAttackPhase.bind(this),
     fortification: this.#handleForitificationPhase.bind(this),
     troopsToDefendWith: this.#handleDefenderTroops.bind(this),
-    diceRoll: this.#handlerDiceRoll.bind(this),
+    diceRoll: this.#handleDiceRoll.bind(this),
   };
 
   #gameMetaData = {
@@ -219,8 +219,8 @@ export default class GameController {
     this.#modalManager.troopsToDefendWith();
   }
 
-  #handlerDiceRoll(actions) {
-    const data = actions.action.data;
+  #handleDiceRoll({ action }) {
+    const { dices } = action.data;
     Toastify({
       text: `Dice are rolling`,
       duration: 3000,
@@ -233,8 +233,9 @@ export default class GameController {
     }).showToast();
 
     this.#modalManager.startDice([1, 1, 1], [1, 1]);
+    const [attackerDice, defenderDice] = dices;
     setTimeout(() => {
-      this.#modalManager.startDice(data.attackerDice, data.defenderDice);
+      this.#modalManager.startDice(attackerDice, defenderDice);
     }, 3000);
   }
 

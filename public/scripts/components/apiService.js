@@ -75,6 +75,8 @@ export default class ApiService {
   }
 
   static async troopsToDefend(troops) {
+    console.log("troops", troops);
+
     const response = await fetch("/game/troops-to-defend", {
       method: "POST",
       body: JSON.stringify({ troops }),
@@ -95,7 +97,7 @@ export default class ApiService {
 
   static async getGamePlayers() {
     try {
-      const response = await fetch('/game/players');
+      const response = await fetch("/game/players");
 
       return await response.json();
     } catch (error) {
@@ -104,7 +106,7 @@ export default class ApiService {
     }
   }
 
-  static async fetchMessages(since) {    
+  static async fetchMessages(since) {
     try {
       const response = await fetch(`/game/messages?since=${since}`);
 
@@ -116,9 +118,9 @@ export default class ApiService {
   }
 
   static async sendMessages(message, recipientId) {
-    await fetch('/game/messages', {
-      method: 'POST',
-      body: JSON.stringify({ message, recipientId })
+    await fetch("/game/messages", {
+      method: "POST",
+      body: JSON.stringify({ message, recipientId }),
     });
   }
 }

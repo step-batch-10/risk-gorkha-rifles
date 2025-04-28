@@ -3,7 +3,7 @@ import { describe, it } from "testing";
 import Game, { ActionDetails } from "../../src/models/game.ts";
 import { neighbouringTerritories } from "../../src/utils/continents.ts";
 
-export const gameInstanceBuilder = () => {
+export const gameInstanceBuilder = (diceFn = () => 1) => {
   const continents = {
     NorthAmerica: ["alaska", "alberta"],
     SouthAmerica: ["brazil", "peru"],
@@ -20,7 +20,7 @@ export const gameInstanceBuilder = () => {
     shuffler,
     timeStamp,
     connectedTerritories,
-    [],
+    diceFn,
     ["red", "green", "yellow"]
   );
   return game;
@@ -232,8 +232,8 @@ describe("test for neighbouringTerritories", () => {
     const game = gameInstanceBuilder();
     game.init();
 
-    assertEquals(game.neighbouringTerritories("1", "alaska"), ["alberta"]);
-    assertEquals(game.neighbouringTerritories("1", "brazil"), ["peru"]);
+    assertEquals(game.getNeighbouringTerritories("1", "alaska"), ["alberta"]);
+    assertEquals(game.getNeighbouringTerritories("1", "brazil"), ["peru"]);
   });
 });
 
@@ -242,11 +242,23 @@ describe("test for gameDefender", () => {
     const game = gameInstanceBuilder();
     game.init();
 
-    assertEquals(game.gameDefender("brazil", "1"), "1");
-    assertEquals(game.gameDefender("alaska", "1"), "1");
-    assertEquals(game.gameDefender("alberta", "2"), "2");
-    assertEquals(game.gameDefender("peru", "2"), "2");
-    assertEquals(game.gameDefender("india", "3748"), "player not found");
+    const action = {
+      playerId: "1",
+      name: "requestingDefendingPlayer",
+      data: {
+        territoryId: "brazil",
+      },
+    };
+    const action2 = {
+      playerId: "1",
+      name: "requestingDefendingPlayer",
+      data: {
+        territoryId: "india",
+      },
+    };
+
+    assertEquals(game.extractDefenderId(action), "1");
+    assertEquals(game.extractDefenderId(action2), "player not found");
   });
 });
 
@@ -254,6 +266,15 @@ describe("test for storeTroopsToAttack", () => {
   it("should return the success message", () => {
     const game = gameInstanceBuilder();
     game.init();
+    game?.getNeighbouringTerritories("1", "alaska");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "alberta",
+      },
+    });
+
     const actionDetails = {
       playerId: "1",
       name: "storeTroops",
@@ -269,9 +290,144 @@ describe("test for storeTroopsToAttack", () => {
 });
 
 describe("test for storeTroopsToDefend", () => {
+  it("should return the success message when attacker wins", () => {
+    const iterator = () => {
+      let i = 1;
+      return () => i++;
+    };
+
+    const game = gameInstanceBuilder(iterator());
+    game.init();
+    game?.getNeighbouringTerritories("1", "alaska");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "alberta",
+      },
+    });
+
+    const actionDetails_1 = {
+      playerId: "1",
+      name: "storeTroops",
+      data: {
+        troops: 2,
+      },
+    };
+    const actionDetails_2 = {
+      playerId: "2",
+      name: "storeTroops",
+      data: {
+        troops: 1,
+      },
+    };
+    game.storeTroops(actionDetails_1);
+
+    assertEquals(game.storeTroops(actionDetails_2), {
+      status: "success",
+    });
+  });
+
+  it("should return the success message when defender wins", () => {
+    const iterator = () => {
+      let i = 6;
+      return () => i--;
+    };
+
+    const game = gameInstanceBuilder(iterator());
+    game.init();
+    game?.getNeighbouringTerritories("1", "alaska");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "alberta",
+      },
+    });
+
+    const actionDetails_1 = {
+      playerId: "1",
+      name: "storeTroops",
+      data: {
+        troops: 2,
+      },
+    };
+    const actionDetails_2 = {
+      playerId: "2",
+      name: "storeTroops",
+      data: {
+        troops: 1,
+      },
+    };
+    game.storeTroops(actionDetails_1);
+
+    assertEquals(game.storeTroops(actionDetails_2), {
+      status: "success",
+    });
+  });
+
   it("should return the success message", () => {
     const game = gameInstanceBuilder();
     game.init();
+    game?.getNeighbouringTerritories("1", "alaska");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "alberta",
+      },
+    });
+
+    const actionDetails = {
+      playerId: "2",
+      name: "storeTroops",
+      data: {
+        troops: 1,
+      },
+    };
+
+    assertEquals(game.storeTroops(actionDetails), {
+      status: "success",
+    });
+  });
+
+  it("should return the success message", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    game?.getNeighbouringTerritories("1", "alaska");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "alberta",
+      },
+    });
+
+    const actionDetails = {
+      playerId: "2",
+      name: "storeTroops",
+      data: {
+        troops: 1,
+      },
+    };
+
+    assertEquals(game.storeTroops(actionDetails), {
+      status: "success",
+    });
+  });
+
+  it("should return the success message when two players have given troop count", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    game?.getNeighbouringTerritories("1", "alaska");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "alberta",
+      },
+    });
+
     const actionDetails = {
       playerId: "1",
       name: "storeTroops",
@@ -279,6 +435,15 @@ describe("test for storeTroopsToDefend", () => {
         troops: 1,
       },
     };
+
+    game?.getNeighbouringTerritories("2", "peru");
+    game?.extractDefenderId({
+      playerId: "2",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "brazil",
+      },
+    });
 
     const actionDetails2 = {
       playerId: "2",
@@ -288,9 +453,8 @@ describe("test for storeTroopsToDefend", () => {
       },
     };
 
-    game.storeTroops(actionDetails2);
-
-    assertEquals(game.storeTroops(actionDetails), {
+    game.storeTroops(actionDetails);
+    assertEquals(game.storeTroops(actionDetails2), {
       status: "success",
     });
   });
@@ -397,6 +561,7 @@ describe("Game - getConnectedTerritories", () => {
       shuffler,
       timeStamp,
       connectedTerritories,
+      () => 1,
       ["red", "green", "yellow"]
     );
     game.init();

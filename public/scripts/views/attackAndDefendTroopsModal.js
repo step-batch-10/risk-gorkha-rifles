@@ -44,6 +44,8 @@ export class AttackDefenceModal {
     );
     console.log("inside the troops to defend");
     const input = document.getElementById("troops-input");
+    console.log("troops to defend", input);
+
     const button = document.getElementById("submit-button");
 
     button.addEventListener("click", () => {

@@ -213,13 +213,16 @@ export const getTypeCounts = (cards: CardType[]): Record<CardType, number> => {
 
 const storeTroops = async (context: Context) => {
   const userId: string = context.get("userId");
-  const body = await context.req.json();
+  const { troops } = await context.req.json();
+  console.log("*".repeat(80));
+  console.log(await context.req.json());
+  console.log("*".repeat(80));
   const gameManager: GameManager = context.get("gameManager");
   const status = gameManager.handleGameActions({
     playerId: userId,
     name: "storeTroops",
     data: {
-      troops: body.troops,
+      troops,
     },
   });
 
@@ -228,16 +231,18 @@ const storeTroops = async (context: Context) => {
 
 export const fortificationHandler = async (context: Context) => {
   const fortificationDetails: FortificationDetails = await context.req.json();
-  const userId: string = context.get('userId');
-  const gameManager: GameManager = context.get('gameManager');
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
 
   const actionDetails: ActionDetails = {
-    name: 'fortification',
+    name: "fortification",
     playerId: userId,
-    data: fortificationDetails
+    data: fortificationDetails,
   };
 
-  const fortificationResponse = await gameManager.handleGameActions(actionDetails);
+  const fortificationResponse = await gameManager.handleGameActions(
+    actionDetails
+  );
 
   return context.json(fortificationResponse);
 };
@@ -265,9 +270,9 @@ export const startFortification = (context: Context) => {
   const gameManager: GameManager = context.get("gameManager");
 
   const action: ActionDetails = {
-    name: 'startFortification',
+    name: "startFortification",
     data: {},
-    playerId: userId
+    playerId: userId,
   };
   gameManager.handleGameActions(action);
 
@@ -275,26 +280,28 @@ export const startFortification = (context: Context) => {
 };
 
 export const saveMessage = async (context: Context) => {
-  const userId: string = context.get('userId');
-  const gameManager: GameManager = context.get('gameManager');
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
   const { message, recipientId } = await context.req.json();
 
   if (!message)
-    return context.json({ messageStatus: false, error: "Message content is required" }, 400);
+    return context.json(
+      { messageStatus: false, error: "Message content is required" },
+      400
+    );
 
   gameManager.saveMessage(userId, message, recipientId);
 
   return context.json({
-    messageStatus: true
-
+    messageStatus: true,
   });
 };
 
 export const getMessages = (context: Context) => {
   const since: number = Number(context.req.query("since")) || 0;
 
-  const userId: string = context.get('userId');
-  const gameManager: GameManager = context.get('gameManager');
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
 
   const gameMessages = gameManager.getMessages(userId, since);
   const personalMessages = gameManager.getPersonalMessages(userId, since);
@@ -306,20 +313,20 @@ export const getMessages = (context: Context) => {
 };
 
 export const getGamePlayers = (context: Context) => {
-  const users: Users = context.get('users');
-  const userId: string = context.get('userId');
-  const gameManager: GameManager = context.get('gameManager');
+  const users: Users = context.get("users");
+  const userId: string = context.get("userId");
+  const gameManager: GameManager = context.get("gameManager");
   const action: ActionDetails = {
     playerId: userId,
     data: {},
-    name: 'getGamePlayers'
+    name: "getGamePlayers",
   };
 
   const gamePlayers: string[] = gameManager.handleGameActions(action);
   const playersDetails = gamePlayers.map((playerId) => {
     return {
       ...users.findById(playerId),
-      userId: playerId
+      userId: playerId,
     };
   });
 

@@ -114,7 +114,7 @@ describe("getGameActions test", () => {
       ],
       players: [
         { id: "1", colour: "#50C878" },
-        { id: "2", colour: "#87CEEB" },
+        { id: "2", colour: "#DAA520" },
         { id: "3", colour: "#FF7F50" },
       ],
     };
@@ -179,7 +179,7 @@ describe("getGameActions test", () => {
       ],
       players: [
         { id: "1", colour: "#50C878" },
-        { id: "2", colour: "#87CEEB" },
+        { id: "2", colour: "#DAA520" },
         { id: "3", colour: "#FF7F50" },
       ],
     };
@@ -244,7 +244,7 @@ describe("getGameActions test", () => {
       ],
       players: [
         { id: "1", colour: "#50C878" },
-        { id: "2", colour: "#87CEEB" },
+        { id: "2", colour: "#DAA520" },
         { id: "3", colour: "#FF7F50" },
       ],
     };
@@ -289,7 +289,7 @@ describe("getGameActions test", () => {
       userId: "1",
       players: [
         { id: "1", colour: "#50C878" },
-        { id: "2", colour: "#87CEEB" },
+        { id: "2", colour: "#DAA520" },
         { id: "3", colour: "#FF7F50" },
       ],
       actions: [
@@ -378,7 +378,7 @@ describe("getGameActions test", () => {
       userId: "1",
       players: [
         { id: "1", colour: "#50C878" },
-        { id: "2", colour: "#87CEEB" },
+        { id: "2", colour: "#DAA520" },
         { id: "3", colour: "#FF7F50" },
       ],
       actions: [
@@ -428,7 +428,7 @@ describe("getGameActions test", () => {
       userId: "1",
       players: [
         { id: "1", colour: "#50C878" },
-        { id: "2", colour: "#87CEEB" },
+        { id: "2", colour: "#DAA520" },
         { id: "3", colour: "#FF7F50" },
       ],
       actions: [

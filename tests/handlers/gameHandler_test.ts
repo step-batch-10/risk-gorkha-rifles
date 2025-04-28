@@ -18,7 +18,7 @@ export const createServerWithLoggedInUser = (
   const session = new Session(uniqueIdGenerator());
   const users = new Users(uniqueIdGenerator());
   const gameManager = gameManagerInstanceBuilder(() => ({
-    Asia: ["India", "China", "Nepal"],
+    Asia: ["india", "china", "nepal"],
   }));
   const sessionId = "1";
 
@@ -65,7 +65,7 @@ describe("getGameActions", () => {
       {
         avatar: "url",
         username: "2",
-        colour: "#87CEEB",
+        colour: "#DAA520",
         id: "2",
       },
       {
@@ -92,28 +92,28 @@ describe("getGameActions", () => {
               availableTroops: 21,
               cards: [],
               continents: [],
-              territories: ["India"],
+              territories: ["india"],
             },
             "2": {
               availableTroops: 21,
               cards: [],
               continents: [],
-              territories: ["China"],
+              territories: ["china"],
             },
             "3": {
               availableTroops: 21,
               cards: [],
               continents: [],
-              territories: ["Nepal"],
+              territories: ["nepal"],
             },
           },
           territoryState: {
-            China: {
+            china: {
               owner: "2",
               troops: 1,
             },
-            India: { owner: "1", troops: 1 },
-            Nepal: {
+            india: { owner: "1", troops: 1 },
+            nepal: {
               owner: "3",
               troops: 1,
             },
@@ -285,7 +285,7 @@ describe("update troop handler", () => {
       headers: {
         Cookie: `sessionId=${sessionId}`,
       },
-      body: JSON.stringify({ territory: "India", troopCount: 10 }),
+      body: JSON.stringify({ territory: "india", troopCount: 10 }),
     });
 
     const actual = await response.json();
@@ -293,7 +293,7 @@ describe("update troop handler", () => {
     const expected = {
       territory: { owner: "1", troops: 11 },
       player: {
-        territories: ["India"],
+        territories: ["india"],
         continents: [],
         availableTroops: 11,
         cards: [],
@@ -320,7 +320,7 @@ describe("requestReinforcementHandler", () => {
 
     assertEquals(await response.json(), {
       newTroops: 3,
-      territories: ["India"],
+      territories: ["india"],
     });
   });
 });
@@ -339,7 +339,7 @@ describe("requestAttack", () => {
       },
     });
 
-    assertEquals(await response.json(), { attackingTerritories: ["India"] });
+    assertEquals(await response.json(), { attackingTerritories: ["india"] });
     assertEquals(response.status, 200);
   });
 });
@@ -364,7 +364,7 @@ describe("deploymentStatusHandler test", () => {
         Cookie: `sessionId=${sessionId}`,
       },
       body: JSON.stringify({
-        territory: "India",
+        territory: "india",
         troopCount: 21,
       }),
     });
@@ -375,7 +375,7 @@ describe("deploymentStatusHandler test", () => {
         Cookie: `sessionId=${session2Id}`,
       },
       body: JSON.stringify({
-        territory: "China",
+        territory: "china",
         troopCount: 21,
       }),
     });
@@ -386,7 +386,7 @@ describe("deploymentStatusHandler test", () => {
         Cookie: `sessionId=${session3Id}`,
       },
       body: JSON.stringify({
-        territory: "Nepal",
+        territory: "nepal",
         troopCount: 21,
       }),
     });
@@ -447,7 +447,7 @@ describe("requestDefendingPlayer", () => {
       headers: {
         Cookie: `sessionId=1`,
       },
-      body: JSON.stringify({ defendingTerritory: "India" }),
+      body: JSON.stringify({ defendingTerritory: "india" }),
     });
 
     assertEquals(await response.json(), { defendingPlayer: "1" });
@@ -471,6 +471,7 @@ describe("requestDefendingPlayer", () => {
     assertEquals(await response.json(), {
       defendingPlayer: "player not found",
     });
+
     assertEquals(response.status, 200);
   });
 });
@@ -516,12 +517,15 @@ describe("connectedTerritoriesHandler", () => {
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
 
-    const response = await server.getApp.request("/game/connected-territories?territoryId=india", {
-      method: "GET",
-      headers: {
-        Cookie: `sessionId=1`,
-      },
-    });
+    const response = await server.getApp.request(
+      "/game/connected-territories?territoryId=india",
+      {
+        method: "GET",
+        headers: {
+          Cookie: `sessionId=1`,
+        },
+      }
+    );
 
     assertEquals(await response.json(), ["india"]);
   });
@@ -544,12 +548,15 @@ describe("connectedTerritoriesHandler", () => {
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
 
-    const response = await server.getApp.request("/game/connected-territories?territoryId", {
-      method: "GET",
-      headers: {
-        Cookie: `sessionId=1`,
-      },
-    });
+    const response = await server.getApp.request(
+      "/game/connected-territories?territoryId",
+      {
+        method: "GET",
+        headers: {
+          Cookie: `sessionId=1`,
+        },
+      }
+    );
 
     assertEquals(response.status, 400);
     assertEquals(await response.json(), { message: "Territory Id not given" });
@@ -557,11 +564,22 @@ describe("connectedTerritoriesHandler", () => {
 });
 
 describe("storeTroopsToAttack", () => {
-  it("should store the troops count of the attacker and should return success message", async () => {
+  it("should should store the troops count ohe troops count of the attacker and should return success message", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
+
+    const game = gameManager.findPlayerActiveGame("1");
+    game?.getNeighbouringTerritories("1", "india");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "china",
+      },
+    });
+
     const response = await app.request("/game/troops-to-attack", {
       method: "POST",
       headers: {
@@ -574,8 +592,8 @@ describe("storeTroopsToAttack", () => {
   });
 });
 
-describe('fortificationHandler', () => {
-  it('should move the user troops from one territory to another', async () => {
+describe("fortificationHandler", () => {
+  it("should move the user troops from one territory to another", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -583,7 +601,7 @@ describe('fortificationHandler', () => {
     gameManager.handleGameActions({
       playerId: "1",
       name: "updateTroops",
-      data: { territory: 'India', troopCount: 10 },
+      data: { territory: "india", troopCount: 10 },
     });
 
     const response = await app.request("/game/fortification", {
@@ -592,16 +610,16 @@ describe('fortificationHandler', () => {
         Cookie: `sessionId=1`,
       },
       body: JSON.stringify({
-        fromTerritory: 'India',
-        toTerritory: 'Nepal',
-        troopCount: 10
-      })
+        fromTerritory: "india",
+        toTerritory: "nepal",
+        troopCount: 10,
+      }),
     });
 
     assertEquals(await response.json(), true);
   });
 
-  it('should not move the troops to another territory if enough troop snot available', async () => {
+  it("should not move the troops to another territory if enough troop snot available", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -613,10 +631,10 @@ describe('fortificationHandler', () => {
         Cookie: `sessionId=1`,
       },
       body: JSON.stringify({
-        fromTerritory: 'India',
-        toTerritory: 'Nepal',
-        troopCount: 10
-      })
+        fromTerritory: "india",
+        toTerritory: "nepal",
+        troopCount: 10,
+      }),
     });
 
     assertEquals(await response.json(), false);
@@ -629,13 +647,25 @@ describe("storeTroopsToDefend", () => {
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
+
+    const game = gameManager.findPlayerActiveGame("1");
+    game?.getNeighbouringTerritories("1", "india");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "china",
+      },
+    });
+
     const response = await app.request("/game/troops-to-defend", {
       method: "POST",
       headers: {
         Cookie: `sessionId=1`,
       },
-      body: JSON.stringify({ troopsToDefend: 3 }),
+      body: JSON.stringify({ troops: 2 }),
     });
+
     assertEquals(await response.json(), { status: "success" });
   });
 });
@@ -654,16 +684,19 @@ describe("startFortification test", () => {
     });
 
     assertEquals(await response.json(), { actionStatus: true });
-    assertEquals(gameManager.getGameActions("1", 0).actions.at(-1)?.name, "fortification");
+    assertEquals(
+      gameManager.getGameActions("1", 0).actions.at(-1)?.name,
+      "fortification"
+    );
   });
 });
 
-describe('saveMessage', () => {
-  it('should return 400 if message not given in request body', async () => {
+describe("saveMessage", () => {
+  it("should return 400 if message not given in request body", async () => {
     const { app } = createServerWithLoggedInUser("Jack");
 
-    const response = await app.request('/game/messages', {
-      method: 'POST',
+    const response = await app.request("/game/messages", {
+      method: "POST",
       body: JSON.stringify({}),
       headers: {
         Cookie: `sessionId=1`,
@@ -671,17 +704,20 @@ describe('saveMessage', () => {
     });
 
     assertEquals(response.status, 400);
-    assertEquals(await response.json(), { messageStatus: false, error: "Message content is required" });
+    assertEquals(await response.json(), {
+      messageStatus: false,
+      error: "Message content is required",
+    });
   });
 
-  it('should send the message to all players', async () => {
+  it("should send the message to all players", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
 
-    const response = await app.request('/game/messages', {
-      method: 'POST',
+    const response = await app.request("/game/messages", {
+      method: "POST",
       body: JSON.stringify({ message: "Hello" }),
       headers: {
         Cookie: `sessionId=1`,
@@ -698,19 +734,19 @@ describe('saveMessage', () => {
         message: "Hello",
         playerId: "1",
         recipientId: undefined,
-        timestamp: 1
-      }
+        timestamp: 1,
+      },
     ]);
   });
 
-  it('should succesfully send the message to individual players', async () => {
+  it("should succesfully send the message to individual players", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
 
-    const response = await app.request('/game/messages', {
-      method: 'POST',
+    const response = await app.request("/game/messages", {
+      method: "POST",
       body: JSON.stringify({ message: "Hello", recipientId: "1" }),
       headers: {
         Cookie: `sessionId=1`,
@@ -727,14 +763,14 @@ describe('saveMessage', () => {
         message: "Hello",
         playerId: "1",
         recipientId: "1",
-        timestamp: 1
-      }
+        timestamp: 1,
+      },
     ]);
   });
 });
 
-describe('getMessages', () => {
-  it('should return the game messages', async () => {
+describe("getMessages", () => {
+  it("should return the game messages", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -742,8 +778,8 @@ describe('getMessages', () => {
     gameManager.saveMessage("1", "hello");
     gameManager.saveMessage("3", "hello again");
 
-    const response = await app.request('/game/messages', {
-      method: 'GET',
+    const response = await app.request("/game/messages", {
+      method: "GET",
       headers: {
         Cookie: `sessionId=1`,
       },
@@ -764,11 +800,11 @@ describe('getMessages', () => {
           timestamp: 1,
         },
       ],
-      personalMessages: []
+      personalMessages: [],
     });
   });
 
-  it('should return the direct messages', async () => {
+  it("should return the direct messages", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -777,8 +813,8 @@ describe('getMessages', () => {
     gameManager.saveMessage("2", "hello", "1");
     gameManager.saveMessage("3", "hello again", "1");
 
-    const response = await app.request('/game/messages', {
-      method: 'GET',
+    const response = await app.request("/game/messages", {
+      method: "GET",
       headers: {
         Cookie: `sessionId=1`,
       },
@@ -801,11 +837,11 @@ describe('getMessages', () => {
           timestamp: 1,
         },
       ],
-      gameMessages: []
+      gameMessages: [],
     });
   });
 
-  it('should return both public and direct messages', async () => {
+  it("should return both public and direct messages", async () => {
     const { app, gameManager } = createServerWithLoggedInUser("Jack");
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -815,8 +851,8 @@ describe('getMessages', () => {
     gameManager.saveMessage("3", "hello again", "1");
     gameManager.saveMessage("2", "hello public");
 
-    const response = await app.request('/game/messages', {
-      method: 'GET',
+    const response = await app.request("/game/messages", {
+      method: "GET",
       headers: {
         Cookie: `sessionId=1`,
       },
@@ -846,13 +882,13 @@ describe('getMessages', () => {
           playerId: "2",
           timestamp: 1,
         },
-      ]
+      ],
     });
   });
 });
 
-describe('getGamePlayers', () => {
-  it('should return the list of players in the game', async () => {
+describe("getGamePlayers", () => {
+  it("should return the list of players in the game", async () => {
     const { app, gameManager, users } = createServerWithLoggedInUser("Jack");
     users.createUser("2", "url2");
     users.createUser("3", "url2");
@@ -860,19 +896,18 @@ describe('getGamePlayers', () => {
     gameManager.allotPlayer("2", "3");
     gameManager.allotPlayer("3", "3");
 
-    const response = await app.request('/game/players', {
-      method: 'GET',
+    const response = await app.request("/game/players", {
+      method: "GET",
       headers: {
         Cookie: `sessionId=1`,
       },
     });
 
     assertEquals(response.status, 200);
-    assertEquals(await response.json(),
-      [
-        { "username": "Jack", "avatar": "url", "userId": "1" },
-        { "username": "2", "avatar": "url2", "userId": "2" },
-        { "username": "3", "avatar": "url2", "userId": "3" }
-      ]);
+    assertEquals(await response.json(), [
+      { username: "Jack", avatar: "url", userId: "1" },
+      { username: "2", avatar: "url2", userId: "2" },
+      { username: "3", avatar: "url2", userId: "3" },
+    ]);
   });
 });

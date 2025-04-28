@@ -42,7 +42,7 @@ export default class ModalManager {
     this.#reinforcementPhaseModal.removeListeners();
   }
 
-  #createDie(faceValue) {
+  createDice(faceValue) {
     const die = document.createElement("div");
     die.classList.add("die");
 
@@ -64,7 +64,7 @@ export default class ModalManager {
 
     numbers.forEach((num) => {
       if (num >= 1 && num <= 6) {
-        const die = this.#createDie(num);
+        const die = this.createDice(num);
         container.appendChild(die);
       }
     });
