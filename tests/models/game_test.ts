@@ -584,3 +584,36 @@ describe("Game - getConnectedTerritories", () => {
     ]);
   });
 });
+
+describe("test for validPlayerTerritories", () => {
+  it("should return empty array when there is troop count isone", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    const actionDetails = {
+      playerId: "1",
+      name: "requestAttack",
+      data: {},
+    };
+    assertEquals(game.validPlayerTerritories(actionDetails), []);
+  });
+
+  it("should return empty array with territories when the troop is > 1", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    game.updateTroops({
+      playerId: "1",
+      name: "updateTroops",
+      data: {
+        territory: "alaska",
+        troopCount: 2,
+      },
+    });
+
+    const actionDetails = {
+      playerId: "1",
+      name: "requestAttack",
+      data: {},
+    };
+    assertEquals(game.validPlayerTerritories(actionDetails), ["alaska"]);
+  });
+});

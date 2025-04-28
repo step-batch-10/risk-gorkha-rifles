@@ -65,7 +65,7 @@ describe("allotPlayer method", () => {
 describe("getGameActions test", () => {
   it("should return  actions when actions are present", () => {
     console.log("inside test");
-    
+
     const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -82,7 +82,7 @@ describe("getGameActions test", () => {
           playerId: null,
           to: null,
           currentCavalryPos: 0,
-          bonusTroops:[0,10,20,30,40,50,60],
+          bonusTroops: [0, 10, 20, 30, 40, 50, 60],
           data: {
             troopCount: 21,
           },
@@ -145,7 +145,7 @@ describe("getGameActions test", () => {
         {
           currentPlayer: "",
           currentCavalryPos: 0,
-          bonusTroops:[0,10,20,30,40,50,60],
+          bonusTroops: [0, 10, 20, 30, 40, 50, 60],
           data: {
             territory: "India",
             troopCount: 11,
@@ -212,7 +212,7 @@ describe("getGameActions test", () => {
         {
           currentPlayer: "",
           currentCavalryPos: 0,
-          bonusTroops:[0,10,20,30,40,50,60],
+          bonusTroops: [0, 10, 20, 30, 40, 50, 60],
           data: {
             territory: "India",
             troopCount: 11,
@@ -305,7 +305,7 @@ describe("getGameActions test", () => {
         {
           currentPlayer: "1",
           currentCavalryPos: 0,
-          bonusTroops:[0,10,20,30,40,50,60],
+          bonusTroops: [0, 10, 20, 30, 40, 50, 60],
           data: {},
           id: "1",
           name: "reinforcementPhase",
@@ -624,10 +624,13 @@ describe("handleGameActions test", () => {
       playerId: "1",
       data: {},
     });
+    gameManager.handleGameActions({
+      name: "updateTroops",
+      playerId: "1",
+      data: { territoryId: "india", troopsCount: 3 },
+    });
 
-    const expected = ["India"];
-
-    assertEquals(actual, expected);
+    assertEquals(actual, []);
   });
 
   it("should return the territories of the player for reinforcement request", () => {

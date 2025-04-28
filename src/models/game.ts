@@ -323,6 +323,20 @@ export default class Game {
     return this.playerStates[playerId].territories;
   }
 
+  public validPlayerTerritories(actionDetails: ActionDetails) {
+    const { playerId } = actionDetails;
+    console.log(this.territoryState, "territories");
+    const validTerritories = Object.entries(this.territoryState).filter(
+      ([_territory, { owner, troops }]) => {
+        return owner === playerId && troops > 1;
+      }
+    );
+    console.log(validTerritories);
+
+    const territories = validTerritories.map((terrritory) => terrritory[0]);
+    return territories;
+  }
+
   public getPlayerCards(playerId: string) {
     return this.playerStates[playerId].cards;
   }

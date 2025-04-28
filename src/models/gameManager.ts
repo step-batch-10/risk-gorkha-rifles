@@ -147,8 +147,7 @@ export default class GameManager {
       reinforceRequest: () =>
         requiredGame.fetchReinforcementData(actionDetails),
       getCards: () => requiredGame.getPlayerCards(actionDetails.playerId),
-      requestAttack: () =>
-        requiredGame.playerTerritories(actionDetails.playerId),
+      requestAttack: () => requiredGame.validPlayerTerritories(actionDetails),
       requestNeighbouringTerritories: () =>
         requiredGame.getNeighbouringTerritories(
           actionDetails.playerId,
