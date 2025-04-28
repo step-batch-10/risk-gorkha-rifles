@@ -732,3 +732,20 @@ main {
   font-size: 20px;
   color: #bc4749;
 }
+
+/* Shortcuts Modal */
+.shortcuts-modal {
+  font-size: 20px;
+  color: #fff;
+}
+
+.shortcuts-modal th {
+  font-size: 30px;
+}
+
+.shortcuts-modal td,
+th {
+  padding: 1rem;
+  text-align: center;
+  border-radius: 7px;
+}

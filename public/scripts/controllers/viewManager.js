@@ -8,12 +8,14 @@ export default class ViewManager {
 
   #keyActions = {
     keydown: {
-      help: ['i', 'I', '?'],
+      help: ['m', 'M', 'h', 'H'],
       playerCards: ['1', '2', '3'],
+      shortcuts: ['i', 'I', '?'],
     },
     keyup: {
-      help: ['i', 'I', '?'],
+      help: ['m', 'M', 'h', 'H'],
       playerCards: ['1', '2', '3'],
+      shortcuts: ['i', 'I', '?'],
     },
   };
 
@@ -79,10 +81,20 @@ export default class ViewManager {
     helpModal.classList.toggle('help-modal-opened', isOpen);
   };
 
+  #toggleShortcutsModal = (isOpen) => {
+    const shortcutsModal = document.getElementById('shortcuts-modal');
+
+    shortcutsModal.classList.toggle('help-modal-opened', isOpen);
+  };
+
   #registerKeyboardEvents() {
     const handleKeyEvent = (eventType, e) => {
       if (this.#keyActions[eventType].help.includes(e.key)) {
         return this.#toggleHelpModal(eventType === 'keydown');
+      }
+
+      if (this.#keyActions[eventType].shortcuts.includes(e.key)) {
+        return this.#toggleShortcutsModal(eventType === 'keydown');
       }
 
       if (this.#keyActions[eventType].playerCards.includes(e.key)) {
