@@ -16,11 +16,12 @@ export default class GameController {
     fortification: this.#handleForitificationPhase.bind(this),
     troopsToDefendWith: this.#handleDefenderTroops.bind(this),
     diceRoll: this.#handleDiceRoll.bind(this),
+    combatResult: this.#handleCombatResult.bind(this),
   };
 
   #gameMetaData = {
-    status: 'running',
-    userId: '1',
+    status: "running",
+    userId: "1",
     players: [],
   };
 
@@ -67,18 +68,18 @@ export default class GameController {
     } = gameDetails;
     this.#viewManager.updateTerritoryDetails(data);
     const player = players.find((player) => player.id === playerId);
-    const actionerName = player ? player.username : 'Unknown Player';
+    const actionerName = player ? player.username : "Unknown Player";
 
     const { troopDeployed, territory } = data;
 
     Toastify({
       text: `${actionerName} placed ${troopDeployed} in ${territory}`,
       duration: 3000,
-      gravity: 'top',
-      position: 'center',
+      gravity: "top",
+      position: "center",
       stopOnFocus: true,
       style: {
-        background: 'linear-gradient(to right, #3e2514, #c99147)',
+        background: "linear-gradient(to right, #3e2514, #c99147)",
       },
     }).showToast();
   }
@@ -87,11 +88,11 @@ export default class GameController {
     Toastify({
       text: `Initial deployment is over`,
       duration: 3000,
-      gravity: 'top',
-      position: 'center',
+      gravity: "top",
+      position: "center",
       stopOnFocus: true,
       style: {
-        background: 'linear-gradient(to right, #3e2514, #c99147)',
+        background: "linear-gradient(to right, #3e2514, #c99147)",
       },
     }).showToast();
     this.#modalManager.endReinforcementPhase();
@@ -142,11 +143,11 @@ export default class GameController {
     Toastify({
       text: `You received ${newTroops} troops.`,
       duration: 3000,
-      gravity: 'top',
-      position: 'left',
+      gravity: "top",
+      position: "left",
       stopOnFocus: true,
       style: {
-        background: 'linear-gradient(to right, #303824, #874637)',
+        background: "linear-gradient(to right, #303824, #874637)",
       },
     }).showToast();
 
@@ -201,19 +202,15 @@ export default class GameController {
     return await this.#apiService.connectedTerritories(territoryId);
   }
 
-  async #troopsToAttack(troops) {
-    await this.#apiService.troopsToAttack(troops);
-  }
-
   #handleDefenderTroops() {
     Toastify({
       text: `Attacker selected your territory to attack`,
       duration: 3000,
-      gravity: 'top',
-      position: 'left',
+      gravity: "top",
+      position: "left",
       stopOnFocus: true,
       style: {
-        background: 'linear-gradient(to right, #303824, #874637)',
+        background: "linear-gradient(to right, #303824, #874637)",
       },
     }).showToast();
     this.#modalManager.troopsToDefendWith();
@@ -224,11 +221,11 @@ export default class GameController {
     Toastify({
       text: `Dice are rolling`,
       duration: 3000,
-      gravity: 'top',
-      position: 'left',
+      gravity: "top",
+      position: "left",
       stopOnFocus: true,
       style: {
-        background: 'linear-gradient(to right, #303824, #874637)',
+        background: "linear-gradient(to right, #303824, #874637)",
       },
     }).showToast();
 
@@ -262,41 +259,54 @@ export default class GameController {
     this.#apiService.troopsToAttack(troops);
   }
 
+  #handleCombatResult({ action }) {
+    const { attackerTroops, defenderTroops, winner } = action.data;
+    setTimeout(() => {
+      this.#modalManager.renderCombatResult(
+        attackerTroops,
+        defenderTroops,
+        winner
+      );
+
+      this.#modalManager.removeDice();
+    }, 4000);
+  }
+
   init() {
     this.#pollGameData();
     this.#initChatBox();
 
     this.#eventBus.on(
-      'requestReinforcement',
+      "requestReinforcement",
       this.#requestReinforcement.bind(this)
     );
-    this.#eventBus.on('attackPhaseStarted', this.#handleAttackPhase.bind(this));
+    this.#eventBus.on("attackPhaseStarted", this.#handleAttackPhase.bind(this));
     this.#eventBus.on(
-      'stopReinforcement',
+      "stopReinforcement",
       this.#stopReinforcementPhase.bind(this)
     );
     this.#eventBus.on(
-      'getDefendingTerritories',
+      "getDefendingTerritories",
       this.#getDefendingTerritories.bind(this)
     );
-    this.#eventBus.on('renderCards', this.#renderCards.bind(this));
-    this.#eventBus.on('defendingPlayer', this.#getDefendingPlayer.bind(this));
+    this.#eventBus.on("renderCards", this.#renderCards.bind(this));
+    this.#eventBus.on("defendingPlayer", this.#getDefendingPlayer.bind(this));
     this.#eventBus.on(
-      'getConnectedTerritories',
+      "getConnectedTerritories",
       this.#getConnectedTerritories.bind(this)
     );
-    this.#eventBus.on('troopsToAttack', this.#handleAttackerTroops.bind(this));
-    this.#eventBus.on('sendAttckerTroops', this.#sendAttackerTroops.bind(this));
+    this.#eventBus.on("troopsToAttack", this.#handleAttackerTroops.bind(this));
+    this.#eventBus.on("sendAttckerTroops", this.#sendAttackerTroops.bind(this));
     this.#eventBus.on(
-      'fortification',
+      "fortification",
       this.#apiService.fortification.bind(this)
     );
     this.#eventBus.on(
-      'startFortification',
+      "startFortification",
       this.#apiService.startFortification.bind(this)
     );
     this.#eventBus.on(
-      'sendDefenderTroops',
+      "sendDefenderTroops",
       this.#sendDefenderTroops.bind(this)
     );
     this.#audio.play();

@@ -421,7 +421,7 @@ export default class Game {
 
     this.territoryState[attackingTerritory].troops -= attackerTroops;
     this.territoryState[defendingTerritory].troops -= defenderTroops;
-    const winner = attackerTroops > defenderTroops ? "Defender" : "Attacker";
+    const winner = attackerTroops >= defenderTroops ? "Defender" : "Attacker";
 
     return { attackerTroops, defenderTroops, winner };
   }
@@ -448,6 +448,8 @@ export default class Game {
       this.actions.push(
         this.generateAction(userId, result, "combatResult", null, null)
       );
+
+      this.activeBattle = {};
     }
   };
 

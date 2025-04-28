@@ -1,4 +1,4 @@
-import { Actions } from "../../src/models/actoins.ts";
+import { Actions } from "../../src/models/actions.ts";
 import { assertEquals } from "assert";
 import { describe, it } from "testing";
 import { OutgoingActionDetails } from "../../src/types/gameTypes.ts";

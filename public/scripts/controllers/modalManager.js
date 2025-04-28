@@ -58,21 +58,67 @@ export default class ModalManager {
     return die;
   }
 
+  #removeDice() {
+    const diceCenter = document.getElementById("dice-center");
+    const diceRight = document.getElementById("dice-right");
+    document.body.removeChild(diceCenter);
+    document.body.removeChild(diceRight);
+  }
+
   #displayDice(numbers, containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = "";
 
     numbers.forEach((num) => {
       if (num >= 1 && num <= 6) {
-        const die = this.createDice(num);
-        container.appendChild(die);
+        const dice = this.createDice(num);
+        container.appendChild(dice);
       }
     });
+  }
+
+  #createToastHTML() {
+    const html = `<div id='result-popup'>
+     <div id='win-message'></div>
+     <div id='attacker-troops-lost'></div>
+     <div id='defender-troops-lost'></div>
+    </div>`;
+
+    return html;
+  }
+
+  renderCombatResult(attackerTroops, defenderTroops, winner) {
+    const body = this.#createToastHTML();
+    Toastify({
+      text: body,
+      duration: 3000,
+      escapeMarkup: false,
+      gravity: "top",
+      position: "center",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #3e2514, #c99147)",
+      },
+    }).showToast();
+
+    const winnerMessage = `${winner} won`;
+    const attackerTroopsMessage = `attacker lost ${attackerTroops}`;
+    const defenderTroopsMessage = `defender lost ${defenderTroops}`;
+
+    document.getElementById("win-message").textContent = winnerMessage;
+    document.getElementById("attacker-troops-lost").textContent =
+      attackerTroopsMessage;
+    document.getElementById("defender-troops-lost").textContent =
+      defenderTroopsMessage;
   }
 
   startDice(attackerDice, defenderDice) {
     this.#displayDice(attackerDice, "dice-center");
     this.#displayDice(defenderDice, "dice-right");
+  }
+
+  removeDice() {
+    this.#removeDice();
   }
 
   troopsToDefendWith() {

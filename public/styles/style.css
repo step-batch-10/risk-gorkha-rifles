@@ -749,3 +749,15 @@ th {
   text-align: center;
   border-radius: 7px;
 }
+
+#result-popup {
+  width: 30vw;
+  height: 10vh;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#result-popup > p {
+  font-size: 40px;
+}
