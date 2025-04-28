@@ -1,5 +1,6 @@
 import { GameStatus, Territory } from "../types/gameTypes.ts";
 import _ from "lodash";
+import GoldenCavalry from "./goldenCavalry.ts";
 
 type Data = {
   [key: string]:
@@ -27,6 +28,8 @@ export interface Action {
   name: string;
   playerId: string | null;
   to: string | null;
+  currentCavalryPos: number;
+  bonusTroops: number[];
   data: {
     territory?: string;
     troopCount?: number;
@@ -75,8 +78,8 @@ export default class Game {
   private playerDetails: Player[] = [];
   private colours: string[];
   private adjacentTerritories: MadhaviContinent;
-  // private diceDetails: (string | number)[] = [];
   private activeBattle: Record<string, BattleDetails> = {};
+  private goldenCavalry: GoldenCavalry = new GoldenCavalry();
 
   constructor(
     players: Set<string>,
@@ -86,6 +89,7 @@ export default class Game {
     timeStamp: () => number,
     adjacentTerritories: MadhaviContinent,
     diceRoller: () => number,
+    goldenCavalry: GoldenCavalry,
     colours: string[] = [
       "#50C878",
       "#DAA520",
@@ -104,6 +108,7 @@ export default class Game {
     this.colours = colours;
     this.adjacentTerritories = adjacentTerritories;
     this.diceRoller = diceRoller;
+    this.goldenCavalry = goldenCavalry;
   }
 
   get gameActions() {
@@ -175,6 +180,8 @@ export default class Game {
       name: action,
       playerId,
       to,
+      currentCavalryPos: this.goldenCavalry.getBonusTroops(),
+      bonusTroops: this.goldenCavalry.getBonus(),
       currentPlayer: userId,
       data: data,
       timeStamp: this.timeStamp(),
@@ -295,7 +302,9 @@ export default class Game {
       0
     );
 
-    return totalTerritoryTroops + continentTroops;
+    const bonusTroops = this.goldenCavalry.getBonusTroops();
+
+    return totalTerritoryTroops + continentTroops + bonusTroops;
   }
 
   public fetchReinforcementData(actionDetails: ActionDetails) {

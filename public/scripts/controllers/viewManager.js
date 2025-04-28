@@ -5,6 +5,7 @@ export default class ViewManager {
   #cardsView;
   #players;
   #playerStates;
+  #cavalryView;
 
   #keyActions = {
     keydown: {
@@ -19,17 +20,22 @@ export default class ViewManager {
     },
   };
 
-  constructor(territoryRenderer, playerSidebarRenderer, phaseView, cardsView) {
+  constructor(territoryRenderer, playerSidebarRenderer, phaseView, cardsView, cavalryView ) {
     this.#territoryRenderer = territoryRenderer;
     this.#playerSidebarRenderer = playerSidebarRenderer;
     this.#phaseView = phaseView;
     this.#cardsView = cardsView;
     this.#registerKeyboardEvents();
+    this.#cavalryView = cavalryView;
   }
 
   updatePlayerStats(players, playerStates) {
     this.#players = players;
     this.#playerStates = playerStates;
+  }
+
+  renderCalvalryPosition(currentCavalryPos, bonusTroops) {
+    this.#cavalryView.render(currentCavalryPos, bonusTroops);
   }
 
   #showPlayerCard(playerIndex) {

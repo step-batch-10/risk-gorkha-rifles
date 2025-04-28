@@ -126,6 +126,7 @@ export default class GameController {
   }
 
   #updateUI({ action, players }, currentPlayer) {
+    this.#viewManager.renderCalvalryPosition(action.currentCavalryPos, action.bonusTroops);
     this.#viewManager.updatePlayerStats(players, action.playerStates);
     this.#viewManager.renderAllTerritories(action.territoryState, players);
     this.#viewManager.renderPlayerSidebar(players, currentPlayer);

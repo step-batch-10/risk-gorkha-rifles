@@ -64,6 +64,8 @@ describe("allotPlayer method", () => {
 
 describe("getGameActions test", () => {
   it("should return  actions when actions are present", () => {
+    console.log("inside test");
+    
     const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");
@@ -79,6 +81,8 @@ describe("getGameActions test", () => {
           name: "startInitialDeployment",
           playerId: null,
           to: null,
+          currentCavalryPos: 0,
+          bonusTroops:[0,10,20,30,40,50,60],
           data: {
             troopCount: 21,
           },
@@ -118,6 +122,7 @@ describe("getGameActions test", () => {
         { id: "3", colour: "#FF7F50" },
       ],
     };
+
     assertEquals(actual, expected);
   });
 
@@ -139,6 +144,8 @@ describe("getGameActions test", () => {
       actions: [
         {
           currentPlayer: "",
+          currentCavalryPos: 0,
+          bonusTroops:[0,10,20,30,40,50,60],
           data: {
             territory: "India",
             troopCount: 11,
@@ -204,6 +211,8 @@ describe("getGameActions test", () => {
       actions: [
         {
           currentPlayer: "",
+          currentCavalryPos: 0,
+          bonusTroops:[0,10,20,30,40,50,60],
           data: {
             territory: "India",
             troopCount: 11,
@@ -295,6 +304,8 @@ describe("getGameActions test", () => {
       actions: [
         {
           currentPlayer: "1",
+          currentCavalryPos: 0,
+          bonusTroops:[0,10,20,30,40,50,60],
           data: {},
           id: "1",
           name: "reinforcementPhase",

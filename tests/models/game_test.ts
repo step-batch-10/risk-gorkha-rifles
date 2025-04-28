@@ -2,6 +2,7 @@ import { assertEquals, assert, assertFalse } from "assert";
 import { describe, it } from "testing";
 import Game, { ActionDetails } from "../../src/models/game.ts";
 import { neighbouringTerritories } from "../../src/utils/continents.ts";
+import GoldenCavalry from "../../src/models/goldenCavalry.ts";
 
 export const gameInstanceBuilder = (diceFn = () => 1) => {
   const continents = {
@@ -12,6 +13,7 @@ export const gameInstanceBuilder = (diceFn = () => 1) => {
   const uniqueId = (): string => "1";
   const timeStamp = (): number => 1;
   const connectedTerritories = neighbouringTerritories();
+  const goldenCavalry: GoldenCavalry = new GoldenCavalry();
 
   const game = new Game(
     new Set(["1", "2"]),
@@ -21,7 +23,7 @@ export const gameInstanceBuilder = (diceFn = () => 1) => {
     timeStamp,
     connectedTerritories,
     diceFn,
-    ["red", "green", "yellow"]
+    goldenCavalry
   );
   return game;
 };
@@ -44,8 +46,8 @@ describe("testing init", () => {
     const game = gameInstanceBuilder();
     game.init();
     const expected = [
-      { id: "1", colour: "red" },
-      { id: "2", colour: "green" },
+      { id: "1", colour: "#50C878" },
+      { id: "2", colour: "#DAA520" },
     ];
 
     assertEquals(game.playersData, expected);
@@ -104,6 +106,8 @@ describe("getLastAction", () => {
       playerId: null,
       to: null,
       currentPlayer: "",
+      currentCavalryPos: 0,
+      bonusTroops: [0, 10, 20, 30, 40, 50, 60],
       data: { troopCount: 21 },
       timeStamp: 1,
       playerStates: playerState,
@@ -553,6 +557,7 @@ describe("Game - getConnectedTerritories", () => {
       peru: ["dummy"],
       lorem: ["alaska"],
     };
+    const goldenCavalry: GoldenCavalry = new GoldenCavalry();
 
     const game = new Game(
       new Set(["1", "2"]),
@@ -562,7 +567,7 @@ describe("Game - getConnectedTerritories", () => {
       timeStamp,
       connectedTerritories,
       () => 1,
-      ["red", "green", "yellow"]
+      goldenCavalry
     );
     game.init();
 

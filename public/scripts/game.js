@@ -11,6 +11,7 @@ import EventBus from "./components/eventBus.js";
 import CardsViewModal from "./views/cardsView.js";
 import ChatBox from "./views/chatBoxManager.js";
 import { AttackDefenceModal } from "./views/attackAndDefendTroopsModal.js";
+import GoldenCavalry from "./views/cavalry.js";
 
 const initModalManager = (eventBus) => {
   const gameStartModal = new GameStartModal("startGame-popup");
@@ -26,8 +27,9 @@ const initViewManager = (eventBus) => {
   const playerSidebarView = new PlayerSidebarView("side-bar-left");
   const cardsView = new CardsViewModal("cards-popup", "cards-option", eventBus);
   cardsView.init();
+  const cavalryView = new GoldenCavalry();
 
-  return new ViewManager(mapView, playerSidebarView, phaseView, cardsView);
+  return new ViewManager(mapView, playerSidebarView, phaseView, cardsView,cavalryView);
 };
 
 const initalizeApp = () => {

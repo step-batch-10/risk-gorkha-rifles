@@ -87,6 +87,8 @@ describe("getGameActions", () => {
           name: "startInitialDeployment",
           playerId: null,
           to: null,
+          currentCavalryPos: 0,
+          bonusTroops:[0,10,20,30,40,50,60],
           playerStates: {
             "1": {
               availableTroops: 21,
