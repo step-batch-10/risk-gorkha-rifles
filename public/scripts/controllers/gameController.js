@@ -306,8 +306,6 @@ export default class GameController {
       toTerritory: defenderTerritory,
       troopCount: troops,
     };
-    console.log(fortificationDetails);
-    alert("before sending the troops");
     this.#apiService.fortification(fortificationDetails);
   }
 
