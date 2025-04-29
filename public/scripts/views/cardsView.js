@@ -17,16 +17,16 @@ export default class CardsViewModal {
     this.#eventBus = eventBus;
   }
 
-  #show() {
+  show() {
     this.#eventBus.emit("renderCards");
     this.#modal.style.display = "flex";
   }
 
-  #hide() {
+  hide() {
     this.#modal.style.display = "none";
   }
 
-  #isVisible() {
+  isVisible() {
     return (
       this.#modal.style.display !== "none" && this.#modal.style.display !== ""
     );
@@ -34,10 +34,10 @@ export default class CardsViewModal {
 
   init() {
     this.#cardsOption.addEventListener("click", () => {
-      if (!this.#isVisible()) {
-        this.#show();
+      if (!this.isVisible()) {
+        this.show();
       } else {
-        this.#hide();
+        this.hide();
       }
     });
   }

@@ -7,6 +7,12 @@
 
 :root {
   --player-color: whitesmoke;
+  --north-america: indianred;
+  --south-america: goldenrod;
+  --asia: #2a9d8f;
+  --africa: #f58549;
+  --europe: #a663cc;
+  --australia: #e5989b;
 }
 
 body {
@@ -24,7 +30,7 @@ svg {
 }
 
 svg tspan {
-  font-family: sans-serif;
+  /* font-family: sans-serif; */
 }
 
 text {
@@ -48,8 +54,6 @@ tspan {
     cursor: pointer;
     pointer-events: all;
     transition-duration: 300ms;
-    stroke: #000;
-    stroke-width: 0.5;
     filter: url("#filter_texture");
 
     &:hover {
@@ -365,6 +369,7 @@ main {
   align-items: center;
   gap: 1rem;
   color: #fff;
+  z-index: 9;
 }
 
 #cards-container {
@@ -423,7 +428,8 @@ main {
   }
 
   50% {
-    filter: grayscale(70%);
+    filter: grayscale(100%);
+    fill: #2a9d8f;
   }
 
   100% {
@@ -464,14 +470,14 @@ main {
 }
 
 .troops-bg {
-  color: black;
+  color: #fff;
   border-radius: 50%;
   width: 30px;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 14px;
   box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -642,6 +648,7 @@ main {
   height: 800px;
   padding: 1rem 1.5rem;
   opacity: 1;
+  z-index: 99;
 }
 
 .help-modal-heading {
@@ -794,6 +801,7 @@ th {
   letter-spacing: 1px;
 }
 
+<<<<<<< HEAD
 #settings {
   height: 50px;
   width: 50px;
@@ -903,4 +911,44 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s ease;
+}
+
+#north-america path {
+  fill: var(--north-america);
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+#south-america path {
+  fill: var(--south-america);
+  stroke: #000;
+  stroke-width: 1;
+}
+
+#asia path {
+  fill: var(--asia);
+  stroke: #000;;
+  stroke-width: 1;
+}
+
+#africa path {
+  fill: var(--africa);
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+#europe path {
+  fill: var(--europe);
+  stroke-width: #fff;
+}
+
+#australia path {
+  fill: var(--australia);
+  stroke-width: #fff;
+}
+
+.continent-name {
+  fill: #333;
+  font-size: 16px;
+  text-shadow: none;
 }
