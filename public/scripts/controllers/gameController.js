@@ -16,6 +16,7 @@ export default class GameController {
     troopsToDefendWith: this.#handleDefenderTroops.bind(this),
     diceRoll: this.#handleDiceRoll.bind(this),
     combatResult: this.#handleCombatResult.bind(this),
+    conqueredTerritory: this.#handleConqueredTerritory.bind(this),
   };
 
   #gameMetaData = {
@@ -124,7 +125,10 @@ export default class GameController {
   }
 
   #updateUI({ action, players }, currentPlayer) {
-    this.#viewManager.renderCalvalryPosition(action.currentCavalryPos, action.bonusTroops);
+    this.#viewManager.renderCalvalryPosition(
+      action.currentCavalryPos,
+      action.bonusTroops
+    );
     this.#viewManager.updatePlayerStats(players, action.playerStates);
     this.#viewManager.renderAllTerritories(action.territoryState, players);
     this.#viewManager.renderPlayerSidebar(players, currentPlayer);
@@ -269,6 +273,12 @@ export default class GameController {
 
       this.#modalManager.removeDice();
     }, 4000);
+  }
+
+  #handleConqueredTerritory({ action }) {
+    // const { attackerTerritory, defenderTerritory, troopsToAttack } =
+    //   action.data;
+    console.log(action);
   }
 
   init() {

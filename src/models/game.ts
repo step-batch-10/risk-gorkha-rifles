@@ -424,6 +424,18 @@ export default class Game {
     return b - a;
   }
 
+  private isDefenderEliminaated(defendingTerritory: string) {
+    return this.territoryState[defendingTerritory].troops <= 0;
+  }
+
+  // private defenderEliminatedAtion(
+  //   attackingTerritory,
+  //   defendingTerritory,
+  //   attackerTroops,userId
+  // ) {
+  //   this.generateAction();
+  // }
+
   private battleOutcome(
     attackingTerritory: string | number,
     defendingTerritory: string | number,
@@ -444,9 +456,35 @@ export default class Game {
 
     this.territoryState[attackingTerritory].troops -= attackerTroops;
     this.territoryState[defendingTerritory].troops -= defenderTroops;
+
     const winner = attackerTroops >= defenderTroops ? "Defender" : "Attacker";
 
     return { attackerTroops, defenderTroops, winner };
+  }
+
+  private changeOwner(
+    attacker: string,
+    defender: string,
+    defenderTerritory: string
+  ) {
+    const terr = Object.entries(this.territoryState).filter(
+      ([territory, { owner }]) => {
+        return owner === defender && territory === defenderTerritory;
+      }
+    );
+    terr[0][1].owner = attacker;
+  }
+
+  private createDefenderEliminatedAcion(dices: number[][], userId: string) {
+    const [attacker, defender] = Object.values(this.activeBattle);
+    const [attackerId, defenderId] = Object.keys(this.activeBattle);
+    const data = {
+      attackerTerritory: attacker.territoryId as string,
+      defenderTerritory: defender.territoryId as string,
+      troopsToAttack: dices[0].length,
+    };
+    this.changeOwner(attackerId, defenderId, data.defenderTerritory as string);
+    this.generateAction(userId, data, "conqueredTerritory", null, null);
   }
 
   private diceAction = (userId: string) => {
@@ -471,6 +509,9 @@ export default class Game {
       this.actions.push(
         this.generateAction(userId, result, "combatResult", null, null)
       );
+      if (this.isDefenderEliminaated(defender.territoryId as string)) {
+        this.createDefenderEliminatedAcion(dices, userId);
+      }
 
       this.activeBattle = {};
     }
