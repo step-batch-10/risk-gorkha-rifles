@@ -372,10 +372,7 @@ export default class Game {
     return neighbouringTerritories;
   }
 
-  private getDefenderId(
-    defender: [string, Territory] | undefined,
-    playerId: string
-  ) {
+  private getDefenderId(defender: [string, Territory] | undefined) {
     if (defender === undefined) {
       return "player not found";
     }
@@ -383,7 +380,13 @@ export default class Game {
     const [territory, { owner }] = defender;
     const defenderId = owner;
     this.actions.push(
-      this.generateAction(playerId, {}, "troopsToDefendWith", null, defenderId)
+      this.generateAction(
+        this.currentPlayer,
+        {},
+        "troopsToDefendWith",
+        null,
+        defenderId
+      )
     );
 
     this.activeBattle[defenderId] = { territoryId: territory };
@@ -391,7 +394,7 @@ export default class Game {
   }
 
   public extractDefenderId(actionDetails: ActionDetails) {
-    const { playerId, data } = actionDetails;
+    const { data } = actionDetails;
     const defendingTerritory = data.territoryId;
 
     const defender = Object.entries(this.territoryState).find(
@@ -400,7 +403,7 @@ export default class Game {
       }
     );
 
-    return this.getDefenderId(defender, playerId);
+    return this.getDefenderId(defender);
   }
 
   get playersData() {
@@ -477,7 +480,7 @@ export default class Game {
     terr[0][1].troops = troopsToAttack;
   }
 
-  private createDefenderEliminatedAcion(dices: number[][], userId: string) {
+  private createDefenderEliminatedAcion(dices: number[][]) {
     const [attacker, defender] = Object.values(this.activeBattle);
     const [attackerId, defenderId] = Object.keys(this.activeBattle);
     const data = {
@@ -493,11 +496,17 @@ export default class Game {
       data.troopsToAttack
     );
     this.actions.push(
-      this.generateAction(userId, data, "conqueredTerritory", null, attackerId)
+      this.generateAction(
+        this.currentPlayer,
+        data,
+        "conqueredTerritory",
+        null,
+        attackerId
+      )
     );
   }
 
-  private diceAction = (userId: string) => {
+  private diceAction = () => {
     const dices: number[][] = [];
 
     for (const { diceOutcome } of Object.values(this.activeBattle)) {
@@ -515,13 +524,25 @@ export default class Game {
       );
 
       this.actions.push(
-        this.generateAction(userId, { dices }, "diceRoll", null, null)
+        this.generateAction(
+          this.currentPlayer,
+          { dices },
+          "diceRoll",
+          null,
+          null
+        )
       );
       this.actions.push(
-        this.generateAction(userId, result, "combatResult", null, null)
+        this.generateAction(
+          this.currentPlayer,
+          result,
+          "combatResult",
+          null,
+          null
+        )
       );
       if (this.isDefenderEliminaated(defender.territoryId as string)) {
-        this.createDefenderEliminatedAcion(dices, userId);
+        this.createDefenderEliminatedAcion(dices);
         const card = this.cardsManager.drawCard();
         console.log("*".repeat(90));
         console.log("card", card);
@@ -543,7 +564,7 @@ export default class Game {
       length: Number(troops),
     }).map(() => this.diceRoller()) as number[];
 
-    this.diceAction(actionDetails.playerId);
+    this.diceAction();
 
     return { status: "success" };
   };
@@ -560,7 +581,7 @@ export default class Game {
 
     this.actions.push(
       this.generateAction(
-        "",
+        this.currentPlayer,
         {
           territory: toTerritory,
           troopCount: this.territoryState[toTerritory].troops,
@@ -575,7 +596,17 @@ export default class Game {
     this.currentPlayer = this.playerCycle();
 
     this.actions.push(
-      this.generateAction("", {}, "reinforcementPhase", "", this.currentPlayer)
+      this.generateAction(this.currentPlayer, {}, "turnChange", null, null)
+    );
+
+    this.actions.push(
+      this.generateAction(
+        this.currentPlayer,
+        {},
+        "reinforcementPhase",
+        null,
+        this.currentPlayer
+      )
     );
 
     return true;

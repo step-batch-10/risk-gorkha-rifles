@@ -568,12 +568,15 @@ describe("Game - fortification", () => {
         troops: 6,
       },
     });
-    assertEquals(game.gameActions.at(-2)?.name, "updateTroops");
-    assertEquals(game.gameActions.at(-2)?.data, {
+    assertEquals(game.gameActions.at(-3)?.name, "updateTroops");
+    assertEquals(game.gameActions.at(-3)?.data, {
       territory: "peru",
       troopCount: 6,
       troopDeployed: 5,
     });
+
+    assertEquals(game.gameActions.at(-2)?.name, "turnChange");
+    assertEquals(game.gameActions.at(-2)?.data, {});
 
     assertEquals(game.gameActions.at(-1)?.name, "reinforcementPhase");
     assertEquals(game.gameActions.at(-1)?.data, {});

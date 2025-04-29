@@ -17,6 +17,7 @@ export default class GameController {
     diceRoll: this.#handleDiceRoll.bind(this),
     combatResult: this.#handleCombatResult.bind(this),
     conqueredTerritory: this.#handleConqueredTerritory.bind(this),
+    turnChange: () => {},
   };
 
   #gameMetaData = {
@@ -119,6 +120,7 @@ export default class GameController {
 
       const gameDetails = { action, status, userId, players };
       if (!this.#isValidAction(action.name)) continue;
+
       this.#updateUI(gameDetails, currentPlayer);
       this.#actionMap[action.name](gameDetails);
     }
