@@ -230,4 +230,8 @@ export default class ViewManager {
   stopAttackPhase() {
     this.#territoryRenderer.stopAttackPhase();
   }
+
+  closeAllPhases() {
+    this.#phaseView.closeAllPhases();
+  }
 }

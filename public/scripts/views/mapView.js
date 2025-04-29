@@ -210,6 +210,7 @@ export default class MapView {
     this.unHighlightTerritory(this.#fortificationDetails.fromTerritory);
     this.#fortificationDetails = {};
     this.#removeFortificationTroopsTemplate();
+    this.#eventBus.emit("switchTurn");
   }
 
   async #sendFortificationData(troopsCount) {

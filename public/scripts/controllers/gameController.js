@@ -17,7 +17,7 @@ export default class GameController {
     diceRoll: this.#handleDiceRoll.bind(this),
     combatResult: this.#handleCombatResult.bind(this),
     conqueredTerritory: this.#handleConqueredTerritory.bind(this),
-    turnChange: () => {},
+    turnChange: this.#switchTurn.bind(this),
   };
 
   #gameMetaData = {
@@ -38,6 +38,10 @@ export default class GameController {
 
   #startGame() {
     this.#modalManager.showGameStartNotificationModal();
+  }
+
+  #switchTurn() {
+    this.#viewManager.closeAllPhases();
   }
 
   #updateLocalState(gameDetails) {
@@ -114,8 +118,9 @@ export default class GameController {
 
   #handleGameData(gameData) {
     const { status, actions, userId, players } = gameData;
+    const newActions = actions.slice(-4);
 
-    for (const action of actions) {
+    for (const action of newActions) {
       const { currentPlayer } = action;
 
       const gameDetails = { action, status, userId, players };
@@ -371,5 +376,6 @@ export default class GameController {
     );
 
     this.#eventBus.on("stopAttackPhase", this.#stopAttackPhase.bind(this));
+    this.#eventBus.on("switchTurn", this.#switchTurn.bind(this));
   }
 }

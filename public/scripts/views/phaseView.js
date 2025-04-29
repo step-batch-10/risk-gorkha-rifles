@@ -30,13 +30,16 @@ export default class PhaseView {
   }
 
   #showAttackPhase() {
-    this.#clearPhaseButtons("draft-phase");
-    this.#clearPhaseButtons("fortify-phase");
+    this.closeAllPhases();
+    this.#showPhaseDetailBox();
+
     const attack = document.getElementById("attack-phase");
     attack.style.display = "block";
 
     const requestAction = document.getElementById("attack-action");
-    requestAction.addEventListener("click", this.#startAttack.bind(this));
+    requestAction.addEventListener("click", this.#startAttack.bind(this), {
+      once: true,
+    });
 
     const skip = document.getElementById("skip");
     skip.style.display = "flex";
@@ -51,14 +54,15 @@ export default class PhaseView {
   }
 
   #displayNextPhaseButton() {
-    this.#clearPhaseButtons("draft-action");
     const nextPhaseButton = document.getElementById("nextPhaseBtn");
-    nextPhaseButton.style.display = "flex";
 
     nextPhaseButton.addEventListener("click", this.#showAttackPhase.bind(this));
     nextPhaseButton.addEventListener(
       "click",
-      this.#stopReinforcement.bind(this)
+      this.#stopReinforcement.bind(this),
+      {
+        once: true,
+      }
     );
   }
 
@@ -67,19 +71,28 @@ export default class PhaseView {
     this.#eventBus.emit("requestReinforcement");
   }
 
-  showFortificationPhase() {
-    // this.#showPhaseDetailBox();
+  closeAllPhases() {
+    console.log("inside close all phases");
+
+    this.#closePhaseDetailBox();
     this.#clearPhaseButtons("draft-phase");
     this.#clearPhaseButtons("attack-phase");
+    this.#clearPhaseButtons("fortify-phase");
+  }
+
+  showFortificationPhase() {
+    this.closeAllPhases();
+    this.#showPhaseDetailBox();
 
     const fortify = document.getElementById("fortify-phase");
     fortify.style.display = "block";
   }
 
   showDraftPhaseUI() {
-    this.#clearPhaseButtons("attack-phase");
-    this.#clearPhaseButtons("fortify-phase");
+    this.closeAllPhases();
     const draftPhaseContainer = this.#showPhaseDetailBox();
+    const draftPhase = document.getElementById("draft-phase");
+    draftPhase.style.display = "block";
 
     const reinforcementRequestButton =
       draftPhaseContainer.querySelector("#draft-action");
@@ -91,6 +104,12 @@ export default class PhaseView {
         once: true,
       }
     );
+  }
+
+  #closePhaseDetailBox() {
+    const draftPhaseContainer = document.getElementById("phaseDetails-box");
+    draftPhaseContainer.style.display = "none";
+    return draftPhaseContainer;
   }
 
   #showPhaseDetailBox() {
