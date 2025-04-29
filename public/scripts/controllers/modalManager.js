@@ -61,8 +61,8 @@ export default class ModalManager {
   #removeDice() {
     const diceCenter = document.getElementById("dice-center");
     const diceRight = document.getElementById("dice-right");
-    document.body.removeChild(diceCenter);
-    document.body.removeChild(diceRight);
+    diceCenter.innerHTML = "";
+    diceRight.innerHTML = "";
   }
 
   #displayDice(numbers, containerId) {

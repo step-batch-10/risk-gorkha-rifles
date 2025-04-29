@@ -75,7 +75,6 @@ export default class ApiService {
   }
 
   static async troopsToDefend(troops) {
-    console.log("troops", troops);
 
     const response = await fetch("/game/troops-to-defend", {
       method: "POST",

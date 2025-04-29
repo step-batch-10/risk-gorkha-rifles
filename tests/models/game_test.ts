@@ -419,7 +419,6 @@ describe("test for storeTroopsToDefend", () => {
       status: "success",
     });
   });
-
   it("should return the success message when two players have given troop count", () => {
     const game = gameInstanceBuilder();
     game.init();
@@ -454,6 +453,49 @@ describe("test for storeTroopsToDefend", () => {
       name: "storeTroops",
       data: {
         troops: 1,
+      },
+    };
+
+    game.storeTroops(actionDetails);
+    assertEquals(game.storeTroops(actionDetails2), {
+      status: "success",
+    });
+  });
+
+  it("should return the success message when two players have given troop count and defender eliminated", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    game?.getNeighbouringTerritories("1", "alaska");
+    game?.extractDefenderId({
+      playerId: "1",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "alberta",
+      },
+    });
+
+    const actionDetails = {
+      playerId: "1",
+      name: "storeTroops",
+      data: {
+        troops: 1,
+      },
+    };
+
+    game?.getNeighbouringTerritories("2", "peru");
+    game?.extractDefenderId({
+      playerId: "2",
+      name: "requestDefendingPlayer",
+      data: {
+        territoryId: "brazil",
+      },
+    });
+
+    const actionDetails2 = {
+      playerId: "2",
+      name: "storeTroops",
+      data: {
+        troops: -2,
       },
     };
 
@@ -582,5 +624,38 @@ describe("Game - getConnectedTerritories", () => {
       "dummy",
       "peru",
     ]);
+  });
+});
+
+describe("test for validPlayerTerritories", () => {
+  it("should return empty array when there is troop count isone", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    const actionDetails = {
+      playerId: "1",
+      name: "requestAttack",
+      data: {},
+    };
+    assertEquals(game.validPlayerTerritories(actionDetails), []);
+  });
+
+  it("should return empty array with territories when the troop is > 1", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    game.updateTroops({
+      playerId: "1",
+      name: "updateTroops",
+      data: {
+        territory: "alaska",
+        troopCount: 2,
+      },
+    });
+
+    const actionDetails = {
+      playerId: "1",
+      name: "requestAttack",
+      data: {},
+    };
+    assertEquals(game.validPlayerTerritories(actionDetails), ["alaska"]);
   });
 });

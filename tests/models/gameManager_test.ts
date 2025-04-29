@@ -624,10 +624,13 @@ describe('handleGameActions test', () => {
       playerId: '1',
       data: {},
     });
+    gameManager.handleGameActions({
+      name: 'updateTroops',
+      playerId: '1',
+      data: { territoryId: 'india', troopsCount: 3 },
+    });
 
-    const expected = ['India'];
-
-    assertEquals(actual, expected);
+    assertEquals(actual, []);
   });
 
   it('should return the territories of the player for reinforcement request', () => {

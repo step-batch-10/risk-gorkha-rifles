@@ -123,6 +123,13 @@ export default class MapView {
     troopsCountDOM.textContent = troopCount;
   }
 
+  #changeTerritoryColor(territoryId, color) {
+    const territory = document.getElementById(territoryId);
+    const path = territory.querySelector("path");
+
+    path.style.fill = color;
+  }
+
   #renderTerritories(territories, players) {
     Object.entries(territories).forEach(
       ([territoryName, { troops, owner }]) => {
@@ -130,8 +137,9 @@ export default class MapView {
         const domTerritory = document.getElementById(territoryName);
         const troopsCountDOM = domTerritory.querySelector("tspan");
         troopsCountDOM.textContent = troops;
-        troopsCountDOM.style.fill = playerColor;
         troopsCountDOM.classList.add("troops-bg");
+
+        this.#changeTerritoryColor(territoryName, playerColor)
       }
     );
   }

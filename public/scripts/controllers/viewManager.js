@@ -9,18 +9,20 @@ export default class ViewManager {
 
   #keyActions = {
     keydown: {
-      help: ["m", "M", "h", "H"],
-      playerCards: ["1", "2", "3"],
-      shortcuts: ["i", "I", "?"],
+      help: ['m', 'M', 'h', 'H'],
+      playerCards: ['1', '2', '3'],
+      shortcuts: ['i', 'I', '?'],
+      cards: ['c', 'C']
     },
     keyup: {
-      help: ["m", "M", "h", "H"],
-      playerCards: ["1", "2", "3"],
-      shortcuts: ["i", "I", "?"],
+      help: ['m', 'M', 'h', 'H'],
+      playerCards: ['1', '2', '3'],
+      shortcuts: ['i', 'I', '?'],
+      cards: ['c', 'C']
     },
   };
 
-  constructor(territoryRenderer, playerSidebarRenderer, phaseView, cardsView, cavalryView ) {
+  constructor(territoryRenderer, playerSidebarRenderer, phaseView, cardsView, cavalryView) {
     this.#territoryRenderer = territoryRenderer;
     this.#playerSidebarRenderer = playerSidebarRenderer;
     this.#phaseView = phaseView;
@@ -30,7 +32,7 @@ export default class ViewManager {
     this.#registerSettings();
   }
 
-  #changeTrack(audio, audios, index)  {
+  #changeTrack(audio, audios, index) {
     const songIndex = Math.abs(index) % audios.length;
     const path = audios.at(songIndex);
 
@@ -126,8 +128,9 @@ export default class ViewManager {
     playerStatsElem.classList.remove("player-stats-opened");
   }
 
-  #togglePlayerCard = (playerIndex, isOpen) => {
-    if (isOpen) {
+  #togglePlayerCard = (playerIndex) => {
+    const playerStatsElem = document.getElementById('player-stats');
+    if (!playerStatsElem.classList.contains('player-stats-opened')) {
       this.#showPlayerCard(playerIndex);
     } else {
       this.#removePlayerCard();
@@ -146,19 +149,35 @@ export default class ViewManager {
     shortcutsModal.classList.toggle("help-modal-opened", isOpen);
   };
 
+  #toggleCardsView() {
+    if (this.#cardsView.isVisible()) {
+      return this.#cardsView.hide();
+    }
+
+    this.#cardsView.show();
+  }
+
   #registerKeyboardEvents() {
     const handleKeyEvent = (eventType, e) => {
+      if (this.#keyActions[eventType].cards.includes(e.key)) {
+        return this.#toggleCardsView();
+      }
+
       if (this.#keyActions[eventType].help.includes(e.key)) {
         return this.#toggleHelpModal(eventType === "keydown");
       }
 
       if (this.#keyActions[eventType].shortcuts.includes(e.key)) {
-        return this.#toggleShortcutsModal(eventType === "keydown");
+        return this.#toggleHelpModal();
+      }
+
+      if (this.#keyActions[eventType].shortcuts.includes(e.key)) {
+        return this.#toggleShortcutsModal();
       }
 
       if (this.#keyActions[eventType].playerCards.includes(e.key)) {
         const playerIndex = parseInt(e.key) - 1;
-        return this.#togglePlayerCard(playerIndex, eventType === "keydown");
+        return this.#togglePlayerCard(playerIndex);
       }
     };
 

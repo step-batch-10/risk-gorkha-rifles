@@ -341,7 +341,7 @@ describe("requestAttack", () => {
       },
     });
 
-    assertEquals(await response.json(), { attackingTerritories: ["india"] });
+    assertEquals(await response.json(), { attackingTerritories: [] });
     assertEquals(response.status, 200);
   });
 });
