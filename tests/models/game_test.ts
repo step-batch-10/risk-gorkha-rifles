@@ -568,12 +568,15 @@ describe("Game - fortification", () => {
         troops: 6,
       },
     });
-    assertEquals(game.gameActions.at(-1)?.name, "updateTroops");
-    assertEquals(game.gameActions.at(-1)?.data, {
+    assertEquals(game.gameActions.at(-2)?.name, "updateTroops");
+    assertEquals(game.gameActions.at(-2)?.data, {
       territory: "peru",
       troopCount: 6,
       troopDeployed: 5,
     });
+
+    assertEquals(game.gameActions.at(-1)?.name, "reinforcementPhase");
+    assertEquals(game.gameActions.at(-1)?.data, {});
   });
 
   it("should not transfer troops if insufficient troops in the source territory", () => {

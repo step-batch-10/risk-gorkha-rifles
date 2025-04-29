@@ -64,10 +64,10 @@ type BattleDetails = {
   troopCount?: string | number;
   diceOutcome?: number[];
 };
-
 export default class Game {
-  private diceRoller: () => number;
   private currentPlayer: string = "";
+  private diceRoller: () => number;
+  private playerCycle: () => string = this.selectPlayerTurn(3);
   private players: Set<string>;
   private gameStatus: GameStatus;
   private actions: Action[] = [];
@@ -123,7 +123,7 @@ export default class Game {
   private selectPlayerTurn(noOfPlayers: number) {
     let i = 0;
     return () => {
-      return this.playerDetails[i++ % noOfPlayers];
+      return this.playerDetails[i++ % noOfPlayers].id;
     };
   }
 
@@ -247,8 +247,7 @@ export default class Game {
     this.actions.push(
       this.generateAction("", {}, "stopInitialDeployment", null, null)
     );
-    const playerCycle = this.selectPlayerTurn(3);
-    this.currentPlayer = playerCycle().id;
+    this.currentPlayer = this.playerCycle();
     this.actions.push(
       this.generateAction(this.currentPlayer, {}, "startGame", null, null)
     );
@@ -571,6 +570,12 @@ export default class Game {
         playerId,
         null
       )
+    );
+
+    this.currentPlayer = this.playerCycle();
+
+    this.actions.push(
+      this.generateAction("", {}, "reinforcementPhase", "", this.currentPlayer)
     );
 
     return true;
