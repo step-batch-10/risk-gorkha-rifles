@@ -24,7 +24,6 @@ export default class GoldenCavalry {
       if (i === currentCavalryPos) {
         const cavalry = document.createElement("img");
         cavalry.src = "../images/goldenCavalry.png";
-        cavalry.classList.add("jump");
         bonus.appendChild(cavalry);
       }
       row1.appendChild(bonus);

@@ -816,19 +816,6 @@ th {
   text-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.5);
 }
 
-.jump {
-  animation: jump 0.5s ease-in-out infinite;
-}
-
-@keyframes jump {
-  0% {
-    transform: translateY(0);
-  }
-  90% {
-    transform: translateY(-10px);
-  }
-}
-
 #settings {
   height: 50px;
   width: 50px;
