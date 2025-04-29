@@ -639,7 +639,7 @@ describe("handleGameActions test", () => {
     const actual = gameManager.handleGameActions({
       name: "reinforceRequest",
       playerId: "1",
-      data: {},
+      data: { cards: [] },
     });
 
     const expected = {
@@ -662,7 +662,7 @@ describe("handleGameActions test", () => {
     const actual = gameManager.handleGameActions({
       name: "reinforceRequest",
       playerId: "1",
-      data: {},
+      data: { cards: [] },
     });
 
     const expected = {
@@ -689,7 +689,7 @@ describe("handleGameActions test", () => {
     const actual = gameManager.handleGameActions({
       name: "reinforceRequest",
       playerId: "1",
-      data: {},
+      data: { cards: [] },
     });
 
     const expected = {

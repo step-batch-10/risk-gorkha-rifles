@@ -5,7 +5,7 @@ import {
   GameStatus,
   LobbyStatus,
 } from "../types/gameTypes.ts";
-import lodash from "npm:lodash";
+import lodash from "lodash";
 import { Action } from "./game.ts";
 import { ActionTypes } from "../types/gameTypes.ts";
 import Messages from "./messages.ts";

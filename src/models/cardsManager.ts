@@ -40,8 +40,10 @@ export class CardsManager {
     const isThreeOfSame = (type: CardType, reward: number): number =>
       counts[type] === 3 ? reward : 0;
 
-    const isTwoPluswild = (type: Exclude<CardType, "wild">, reward: number): number =>
-      counts[type] === 2 && wild === 1 ? reward : 0;
+    const isTwoPluswild = (
+      type: Exclude<CardType, "wild">,
+      reward: number
+    ): number => (counts[type] === 2 && wild === 1 ? reward : 0);
 
     const isOneOfEach = infantry === 1 && cavalry === 1 && artillery === 1;
 
@@ -56,7 +58,7 @@ export class CardsManager {
     return 0;
   }
 
-  public turnInCards(cards: CardType[]): { valid: boolean; troops: number; } {
+  public turnInCards(cards: CardType[]): { valid: boolean; troops: number } {
     if (!this.isValidSet(cards)) return { valid: false, troops: 0 };
 
     const typeCounts = this.getTypeCounts(cards);

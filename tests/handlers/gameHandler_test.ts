@@ -314,14 +314,39 @@ describe("requestReinforcementHandler", () => {
     gameManager.allotPlayer("3", "3");
 
     const response = await app.request("/game/request-reinforcement", {
-      method: "GET",
+      method: "POST",
       headers: {
         Cookie: `sessionId=1`,
       },
+      body: JSON.stringify({
+        cards: [],
+      }),
     });
 
     assertEquals(await response.json(), {
       newTroops: 3,
+      territories: ["india"],
+    });
+  });
+
+  it("should return the available troops of that player with territory cards", async () => {
+    const { app, gameManager } = createServerWithLoggedInUser("Jack");
+    gameManager.allotPlayer("1", "3");
+    gameManager.allotPlayer("2", "3");
+    gameManager.allotPlayer("3", "3");
+
+    const response = await app.request("/game/request-reinforcement", {
+      method: "POST",
+      headers: {
+        Cookie: `sessionId=1`,
+      },
+      body: JSON.stringify({
+        cards: ["infantry", "infantry", "infantry"],
+      }),
+    });
+
+    assertEquals(await response.json(), {
+      newTroops: 7,
       territories: ["india"],
     });
   });

@@ -1,4 +1,4 @@
-import { GameStatus, Territory } from "../types/gameTypes.ts";
+import { CardType, GameStatus, Territory } from "../types/gameTypes.ts";
 import _ from "lodash";
 import GoldenCavalry from "./goldenCavalry.ts";
 import { CardsManager } from "./cardsManager.ts";
@@ -51,7 +51,7 @@ export interface Action {
 export interface ActionDetails {
   playerId: string;
   name: string;
-  data: Record<string, number | string>;
+  data: Record<string, any>;
 }
 
 export interface Player {
@@ -299,7 +299,9 @@ export default class Game {
 
   private updateTroopsToBeCollected(
     territories: string[],
-    continents: Continent[]
+    continents: Continent[],
+    cards: CardType[],
+    playerId: string
   ) {
     const territoryTroops = Math.floor(territories.length / 3);
     const totalTerritoryTroops = territoryTroops < 3 ? 3 : territoryTroops;
@@ -308,16 +310,32 @@ export default class Game {
       0
     );
 
+    const cardTroops = this.cardsManager.turnInCards(cards).troops;
+    const playerCards = this.playerStates[playerId].cards;
+
+    const remainingCards = playerCards.filter((existingCard) =>
+      cards.includes(existingCard as CardType)
+    );
+
+    this.playerStates[playerId].cards = remainingCards;
     const bonusTroops = this.goldenCavalry.getBonusTroops();
 
-    return totalTerritoryTroops + continentTroops + bonusTroops;
+    return totalTerritoryTroops + continentTroops + bonusTroops + cardTroops;
   }
 
   public fetchReinforcementData(actionDetails: ActionDetails) {
-    const { playerId } = actionDetails;
+    const {
+      playerId,
+      data: { cards },
+    } = actionDetails;
     const territories = this.playerTerritories(playerId);
     const continents = this.playerStates[playerId].continents;
-    const newTroops = this.updateTroopsToBeCollected(territories, continents);
+    const newTroops = this.updateTroopsToBeCollected(
+      territories,
+      continents,
+      cards,
+      playerId
+    );
 
     return {
       territories,
@@ -427,7 +445,7 @@ export default class Game {
     return troopsLost;
   };
 
-  private isDefenderEliminaated(defendingTerritory: string) {
+  private isDefenderEliminated(defendingTerritory: string) {
     return this.territoryState[defendingTerritory].troops <= 0;
   }
 
@@ -463,14 +481,14 @@ export default class Game {
     defenderTerritory: string,
     troopsToAttack: number
   ) {
-    const terr = Object.entries(this.territoryState).filter(
+    const [[_, territory]] = Object.entries(this.territoryState).filter(
       ([territory, { owner }]) => {
         return owner === defender && territory === defenderTerritory;
       }
     );
 
-    terr[0][1].owner = attacker;
-    terr[0][1].troops = troopsToAttack;
+    territory.owner = attacker;
+    territory.troops = troopsToAttack;
 
     const defendingTerritory = this.playerStates[defender].territories;
     const index = defendingTerritory.indexOf(defenderTerritory);
@@ -511,6 +529,7 @@ export default class Game {
         this.generateAction(attackerId, {}, "gameOver", null, null)
       );
 
+      this.gameStatus = GameStatus.over;
       return "winner found";
     }
     return "winner not found";
@@ -551,12 +570,10 @@ export default class Game {
           null
         )
       );
-      if (this.isDefenderEliminaated(defender.territoryId as string)) {
+      if (this.isDefenderEliminated(defender.territoryId as string)) {
         this.createDefenderEliminatedAcion(dices);
+
         this.isConquered = true;
-        console.log(this.isConquered);
-        // const card = this.cardsManager.drawCard();
-        // this.playerStates[attackerId].cards.push(card as string);
         this.checkWinner(attackerId);
       }
 
@@ -603,7 +620,13 @@ export default class Game {
       )
     );
 
-    if (turnEndMsg == "turn not end") return "turn not end";
+    if (turnEndMsg === "turn not end") return "turn not end";
+
+    if (this.isConquered) {
+      const card = this.cardsManager.drawCard();
+      this.playerStates[playerId].cards.push(card as string);
+      this.isConquered = false;
+    }
 
     this.currentPlayer = this.playerCycle();
 

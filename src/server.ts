@@ -81,7 +81,7 @@ export default class Server {
     app.get("/profile-details", profileDetailsHandler);
     app.get("/player-full-profile", fullProfileDetailsHandler);
     app.post("/update-troops", updateTroopsHandler);
-    app.get("/request-reinforcement", requestReinforcementHandler);
+    app.post("/request-reinforcement", requestReinforcementHandler);
     app.get("/request-attack", requestAttackHandler);
     app.get("/start-game", startGameHandler);
     app.get("/cards", cardsHandler);

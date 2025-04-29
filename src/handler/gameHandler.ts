@@ -46,17 +46,19 @@ const requestAttackHandler = (context: Context) => {
   return context.json({ attackingTerritories });
 };
 
-const requestReinforcementHandler = (context: Context) => {
+const requestReinforcementHandler = async (context: Context) => {
   const userId: string = context.get("userId");
   const gameManager: GameManager = context.get("gameManager");
+  const { cards } = await context.req.json();
 
   const action: ActionDetails = {
     name: ActionTypes.reinforceRequest,
     playerId: userId,
-    data: {},
+    data: { cards },
   };
 
   const reinforcementData = gameManager.handleGameActions(action);
+  console.log("reinfocement data", reinforcementData);
   return context.json(reinforcementData);
 };
 

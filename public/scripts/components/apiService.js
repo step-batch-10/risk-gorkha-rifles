@@ -16,8 +16,11 @@ export default class ApiService {
     await fetch("/game/start-game");
   }
 
-  static async requestReinforcement() {
-    const reinforcementResponse = await fetch("/game/request-reinforcement");
+  static async requestReinforcement(cards) {
+    const reinforcementResponse = await fetch("/game/request-reinforcement", {
+      method: "POST",
+      body: JSON.stringify({ cards }),
+    });
     const responseData = await reinforcementResponse.json();
 
     return responseData;
@@ -25,6 +28,17 @@ export default class ApiService {
 
   static async getCards() {
     const response = await fetch("/game/cards");
+
+    return await response.json();
+  }
+
+  static async tradeCards(cards) {
+    console.log("cards", cards);
+
+    const response = await fetch("/game/trade-cards", {
+      method: "POST",
+      body: JSON.stringify(cards),
+    });
 
     return await response.json();
   }

@@ -9,19 +9,18 @@ export default class ViewManager {
 
   #keyActions = {
     keydown: {
-      help: ["m", "M", "h", "H"],
-      playerCards: ["1", "2", "3"],
-      shortcuts: ["i", "I", "?"],
-      cards: ["c", "C"],
+      help: ["?", "/"], // Option+m, Option+h
+      playerCards: ["*", "(", ")"], // Option+1, Option+2, Option+3
+      shortcuts: ["!", "#"], // Option+i, Option+/
+      cards: ["~"], // Option+c
     },
     keyup: {
-      help: ["m", "M", "h", "H"],
-      playerCards: ["1", "2", "3"],
-      shortcuts: ["i", "I", "?"],
-      cards: ["c", "C"],
+      help: ["?", "/"], // Option+m, Option+h
+      playerCards: ["*", "(", ")"], // Option+1, Option+2, Option+3
+      shortcuts: ["!", "#"], // Option+i, Option+/
+      cards: ["~"], // Option+c
     },
   };
-
   constructor(
     territoryRenderer,
     playerSidebarRenderer,
@@ -36,6 +35,31 @@ export default class ViewManager {
     this.#registerKeyboardEvents();
     this.#cavalryView = cavalryView;
     this.#registerSettings();
+  }
+
+  #registerKeyboardEvents() {
+    const handleKeyEvent = (eventType, e) => {
+      if (this.#keyActions[eventType].cards.includes(e.key)) {
+        return this.#toggleCardsView();
+      }
+
+      if (this.#keyActions[eventType].help.includes(e.key)) {
+        return this.#toggleHelpModal();
+      }
+
+      if (this.#keyActions[eventType].shortcuts.includes(e.key)) {
+        return this.#toggleShortcutsModal();
+      }
+
+      if (this.#keyActions[eventType].playerCards.includes(e.key)) {
+        const playerIndex = this.#keyActions.keydown.playerCards.indexOf(e.key);
+        return this.#togglePlayerCard(playerIndex);
+      }
+    };
+
+    globalThis.document.addEventListener("keydown", (e) =>
+      handleKeyEvent("keydown", e)
+    );
   }
 
   #changeTrack(audio, audios, index) {
@@ -163,31 +187,6 @@ export default class ViewManager {
     this.#cardsView.show();
   }
 
-  #registerKeyboardEvents() {
-    const handleKeyEvent = (eventType, e) => {
-      if (this.#keyActions[eventType].cards.includes(e.key)) {
-        return this.#toggleCardsView();
-      }
-
-      if (this.#keyActions[eventType].help.includes(e.key)) {
-        return this.#toggleHelpModal();
-      }
-
-      if (this.#keyActions[eventType].shortcuts.includes(e.key)) {
-        return this.#toggleShortcutsModal();
-      }
-
-      if (this.#keyActions[eventType].playerCards.includes(e.key)) {
-        const playerIndex = parseInt(e.key) - 1;
-        return this.#togglePlayerCard(playerIndex);
-      }
-    };
-
-    globalThis.document.addEventListener("keydown", (e) =>
-      handleKeyEvent("keydown", e)
-    );
-  }
-
   highlightTerritory(territoryId) {
     this.#territoryRenderer.highlightTerritory(territoryId);
   }
@@ -237,5 +236,13 @@ export default class ViewManager {
 
   resetMapEffects() {
     this.#territoryRenderer.resetMapEffects();
+  }
+
+  hideTradeButton() {
+    this.#cardsView.hideTradeButton();
+  }
+
+  showTradeButton() {
+    this.#cardsView.showTradeButton();
   }
 }
