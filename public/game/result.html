@@ -7,18 +7,27 @@
   <title>RISK | Result</title>
   <link href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles/winner.css" type="text/css" />
+
 </head>
 
 <body>
   <div id="winner-screen" class="winner-popup">
     <div class="winner-content">
-      <h1 id="winner-name">🏆 <span id="winner-name"> </span>conquered the world!</h1>
+      <h1>Game Over!</h1>
       <div class="winner-buttons">
         <button>Main Menu</button>
       </div>
     </div>
   </div>
 
+  <script>
+    globalThis.onload = () => {
+      const mainMenuButton = document.querySelector(".winner-buttons button");
+      mainMenuButton.addEventListener("click", () => {
+        window.location.href = "/";
+      });
+    }
+  </script>
 </body>
 
 </html>
