@@ -5,13 +5,13 @@ import { CardsManager } from "./cardsManager.ts";
 
 type Data = {
   [key: string]:
-    | number
-    | Record<string, string>
-    | string
-    | Record<string, PlayerState>
-    | number[]
-    | string[]
-    | number[][];
+  | number
+  | Record<string, string>
+  | string
+  | Record<string, PlayerState>
+  | number[]
+  | string[]
+  | number[][];
 };
 
 type Continent = { name: string; extraTroops: number };
@@ -185,7 +185,7 @@ export default class Game {
       name: action,
       playerId,
       to,
-      currentCavalryPos: this.goldenCavalry.getBonusTroops(),
+      currentCavalryPos: this.goldenCavalry.currentPosition(),
       bonusTroops: this.goldenCavalry.getBonus(),
       currentPlayer: userId,
       data: data,

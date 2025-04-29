@@ -29,7 +29,7 @@ const initViewManager = (eventBus) => {
   cardsView.init();
   const cavalryView = new GoldenCavalry();
 
-  return new ViewManager(mapView, playerSidebarView, phaseView, cardsView,cavalryView);
+  return new ViewManager(mapView, playerSidebarView, phaseView, cardsView, cavalryView);
 };
 
 const initalizeApp = () => {

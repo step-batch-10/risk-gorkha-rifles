@@ -8,7 +8,10 @@ export default class GoldenCavalry {
 
   nextPosition() {
     this.position = this.position + 1;
-    console.log(`Golden Cavalry has moved to ${this.position}.`);
+    return this.position;
+  }
+
+  currentPosition() {
     return this.position;
   }
 

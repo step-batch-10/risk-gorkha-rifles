@@ -99,6 +99,8 @@ export default class ViewManager {
     this.#cavalryView.render(currentCavalryPos, bonusTroops);
   }
 
+
+
   #showPlayerCard(playerIndex) {
     const playerStatsElem = document.getElementById("player-stats");
     const playerDetailsElem = document.getElementById("player-stats-details");
