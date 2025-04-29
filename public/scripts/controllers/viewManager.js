@@ -164,6 +164,7 @@ export default class ViewManager {
       }
 
       if (this.#keyActions[eventType].help.includes(e.key)) {
+        return this.#toggleHelpModal(eventType === "keydown");
       }
 
       if (this.#keyActions[eventType].shortcuts.includes(e.key)) {
