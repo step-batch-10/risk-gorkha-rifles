@@ -81,7 +81,7 @@ describe("getGameActions", () => {
         {
           currentPlayer: "",
           data: {
-            troopCount: 21,
+            newTroops: 21,
           },
           id: "1",
           name: "startInitialDeployment",
