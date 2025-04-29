@@ -443,17 +443,56 @@ main {
   font-size: larger;
 }
 
-.avatar {
-  margin-right: 10px;
+.current-player {
+  position: relative;
+  border-radius: 10px;
+  z-index: 0;
+  overflow: hidden;
 }
 
-.current-player {
-  border: 3px solid #9e8117;
-  box-shadow: 0 0 13px 5px #f9ffbb;
+.current-player::before,
+.current-player::after {
+  content: "";
+  position: absolute;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: -1;
+}
 
-  & > * {
-    transform: scale(1.1);
+.current-player::before {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  width: 9999px;
+  height: 9999px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-image: conic-gradient(
+    rgba(0, 0, 0, 0),
+    #ffda48,
+    rgba(0, 0, 0, 0) 100%
+  );
+  animation: rotate 3s linear infinite;
+}
+
+.current-player::after {
+  top: 5px;
+  left: 5px;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border-radius: 7px;
+  background-size: 100% 100%;
+  background-image: url("/images/player-name-background.png");
+}
+
+@keyframes rotate {
+  100% {
+    transform: translate(-50%, -50%) rotate(1turn);
   }
+}
+
+.avatar {
+  margin-right: 10px;
 }
 
 .chat-icon-container {
@@ -819,7 +858,7 @@ th {
   height: 50px;
   width: 50px;
   position: fixed;
-  background-image: url("../images/game-settings.png");
+  background-image: url("../images/settings.png");
   background-size: contain;
   top: 80px;
   right: 15px;
@@ -1002,9 +1041,9 @@ button {
   background-color: #7f4f24;
 }
 
-.fly{
+.fly {
   transform: translateZ(6px) translateX(-3px);
   transition-duration: 2s;
   filter: drop-shadow(5px 2px);
-   fill: yellow;
+  fill: yellow;
 }

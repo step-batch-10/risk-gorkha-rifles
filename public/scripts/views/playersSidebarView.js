@@ -28,15 +28,15 @@ export default class PlayerSidebarView {
   }
 
   render(players, currentPlayer) {
+    if (!currentPlayer || this.#currentPlayer === currentPlayer) {
+      return;
+    }
+
     this.#clear();
 
     Object.values(players).forEach((player) => {
       const playerObj = this.#generatePlayerDetails(player, currentPlayer);
       this.#sidebar.appendChild(playerObj);
     });
-
-    // if (currentPlayer) {
-    //   this.#highlightCurrentPlayer(currentPlayer);
-    // }
   }
 }
