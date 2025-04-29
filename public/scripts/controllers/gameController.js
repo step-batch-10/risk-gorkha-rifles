@@ -252,6 +252,7 @@ export default class GameController {
     });
     chatBox.init();
   }
+
   #sendDefenderTroops(troops) {
     this.#apiService.troopsToDefend(troops);
   }
@@ -299,7 +300,7 @@ export default class GameController {
         }
       );
       const maxTroops = territoryState[0][1].troops;
-      console.log(maxTroops, "max troops");
+
       this.#modalManager.troopsForFortification(
         attackerTerritory,
         defenderTerritory,
@@ -320,6 +321,10 @@ export default class GameController {
     };
 
     this.#apiService.fortification(fortificationDetails);
+  }
+
+  #stopAttackPhase() {
+    this.#viewManager.stopAttackPhase();
   }
 
   init() {
@@ -364,5 +369,7 @@ export default class GameController {
       "TroopsForFortificationInAttack",
       this.#troopsForFortificationInAttack.bind(this)
     );
+
+    this.#eventBus.on("stopAttackPhase", this.#stopAttackPhase.bind(this));
   }
 }

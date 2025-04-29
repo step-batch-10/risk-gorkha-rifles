@@ -1015,3 +1015,10 @@ button {
   color: #fff;
   background-color: #7f4f24;
 }
+
+.fly{
+  transform: translateZ(6px) translateX(-3px);
+  transition-duration: 2s;
+  filter: drop-shadow(5px 2px);
+   fill: yellow;
+}

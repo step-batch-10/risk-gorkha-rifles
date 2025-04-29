@@ -431,14 +431,6 @@ export default class Game {
     return this.territoryState[defendingTerritory].troops <= 0;
   }
 
-  // private defenderEliminatedAtion(
-  //   attackingTerritory,
-  //   defendingTerritory,
-  //   attackerTroops,userId
-  // ) {
-  //   this.generateAction();
-  // }
-
   private battleOutcome(
     attackingTerritory: string | number,
     defendingTerritory: string | number,
@@ -544,10 +536,8 @@ export default class Game {
       if (this.isDefenderEliminaated(defender.territoryId as string)) {
         this.createDefenderEliminatedAcion(dices);
         const card = this.cardsManager.drawCard();
-        console.log("*".repeat(90));
-        console.log("card", card);
-        console.log("*".repeat(90));
         this.playerStates[attackerId].cards.push(card as string);
+        // this.checkWinner()
       }
 
       this.activeBattle = {};

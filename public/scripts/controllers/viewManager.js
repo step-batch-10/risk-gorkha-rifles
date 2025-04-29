@@ -228,4 +228,8 @@ export default class ViewManager {
       actionData.activeTerritories
     );
   }
+
+  stopAttackPhase() {
+    this.#territoryRenderer.stopAttackPhase();
+  }
 }

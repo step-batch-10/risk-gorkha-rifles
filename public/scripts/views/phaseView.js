@@ -26,6 +26,7 @@ export default class PhaseView {
 
   #startFortificationPhase() {
     this.#eventBus.emit("startFortification");
+    this.#eventBus.emit("stopAttackPhase")
   }
 
   #showAttackPhase() {

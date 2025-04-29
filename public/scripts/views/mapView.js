@@ -13,6 +13,7 @@ export default class MapView {
 
   #eventBus;
   #listeners = {};
+  #attackingTerritories = [];
 
   constructor(eventBus) {
     this.#eventBus = eventBus;
@@ -69,6 +70,15 @@ export default class MapView {
 
   #handleDefendTerritoryClick(territoryId) {
     this.#attackPhaseDetails.attackingTerritory = territoryId;
+
+    const territory = document.getElementById(territoryId);
+    territory.classList.add("fly");
+    const fight = document.getElementById("fight");
+    const main = document.getElementById("main-svg")
+    fight.appendChild(territory);
+    main.setAttribute("filter", "url(#blurMe)");
+
+
     this.#eventBus.emit("defendingPlayer", territoryId);
     this.#showToast("Select the number of troops to attack with");
 
@@ -95,13 +105,18 @@ export default class MapView {
       territory.addEventListener("click", listener);
     });
   }
-
+  //-----------------------------attack territory click
   #handleAttackTerritoryClick(territoryId) {
+    const territory = document.getElementById(territoryId);
+    territory.classList.add("fly");
+    const fight = document.getElementById("fight");
+    fight.appendChild(territory);
     this.#attackPhaseDetails.attackingTerritory = territoryId;
     this.#selectDefendingTerritory(territoryId);
   }
 
   handleAttackPhase(attackingTerritories) {
+    this.#attackingTerritories = attackingTerritories;
     attackingTerritories.forEach((territoryId) => {
       const territory = document.getElementById(territoryId);
       this.#toggleTerritoryHighlight(territoryId, true);
@@ -114,6 +129,10 @@ export default class MapView {
       this.#listeners[territoryId] = listener;
       territory.addEventListener("click", listener);
     });
+  }
+
+  stopAttackPhase() {
+    this.#removeClickListeners(this.#attackingTerritories);
   }
 
   updateTerritory({ territory, troopCount }) {
