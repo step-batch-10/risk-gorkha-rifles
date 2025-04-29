@@ -684,6 +684,23 @@ describe("Game - fortification", () => {
       peru: { owner: "2", troops: 1 },
     });
   });
+  it("should return one message that turn not end", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+    const actionDetails: ActionDetails = {
+      playerId: "1",
+      name: "fortification",
+      data: {
+        fromTerritory: "alaska",
+        toTerritory: "brazil",
+        troopCount: 0,
+        turnEndMsg: "turn not end",
+      },
+    };
+
+    const actual = game.fortification(actionDetails);
+    assertEquals(actual, "turn not end");
+  });
 });
 
 describe("Game - getConnectedTerritories", () => {
@@ -786,7 +803,6 @@ describe("tests for check winner", () => {
   it("should return winner found when he conquered 16 or more territories", () => {
     const game = gameInstanceForWinnerCheck();
     game.init();
-   
 
     const actual = game.checkWinner("1");
     const expected = "winner found";

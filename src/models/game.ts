@@ -580,8 +580,8 @@ export default class Game {
   };
 
   public fortification({ data, playerId }: ActionDetails) {
-    const { fromTerritory, toTerritory, troopCount } = data;
-
+    const { fromTerritory, toTerritory, troopCount, turnEndMsg } = data;
+    console.log(this.territoryState[fromTerritory].troops, "troops");
     if (this.territoryState[fromTerritory].troops <= Number(troopCount)) {
       return false;
     }
@@ -602,6 +602,8 @@ export default class Game {
         null
       )
     );
+
+    if (turnEndMsg == "turn not end") return "turn not end";
 
     this.currentPlayer = this.playerCycle();
 

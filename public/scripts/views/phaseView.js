@@ -37,9 +37,7 @@ export default class PhaseView {
     attack.style.display = "block";
 
     const requestAction = document.getElementById("attack-action");
-    requestAction.addEventListener("click", this.#startAttack.bind(this), {
-      once: true,
-    });
+    requestAction.addEventListener("click", this.#startAttack.bind(this));
 
     const skip = document.getElementById("skip");
     skip.style.display = "flex";

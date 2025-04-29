@@ -322,6 +322,7 @@ export default class GameController {
       fromTerritory: attackerTerritory,
       toTerritory: defenderTerritory,
       troopCount: troops,
+      turnEndMsg: "turn not end",
     };
 
     this.#apiService.fortification(fortificationDetails);
@@ -336,7 +337,7 @@ export default class GameController {
   }
 
   #gameOver() {
-    globalThis.location.href = "/login";
+    globalThis.location.href = "/game/result.html";
   }
 
   init() {
