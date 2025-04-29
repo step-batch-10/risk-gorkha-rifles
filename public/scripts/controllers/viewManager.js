@@ -9,20 +9,26 @@ export default class ViewManager {
 
   #keyActions = {
     keydown: {
-      help: ['m', 'M', 'h', 'H'],
-      playerCards: ['1', '2', '3'],
-      shortcuts: ['i', 'I', '?'],
-      cards: ['c', 'C']
+      help: ["m", "M", "h", "H"],
+      playerCards: ["1", "2", "3"],
+      shortcuts: ["i", "I", "?"],
+      cards: ["c", "C"],
     },
     keyup: {
-      help: ['m', 'M', 'h', 'H'],
-      playerCards: ['1', '2', '3'],
-      shortcuts: ['i', 'I', '?'],
-      cards: ['c', 'C']
+      help: ["m", "M", "h", "H"],
+      playerCards: ["1", "2", "3"],
+      shortcuts: ["i", "I", "?"],
+      cards: ["c", "C"],
     },
   };
 
-  constructor(territoryRenderer, playerSidebarRenderer, phaseView, cardsView, cavalryView) {
+  constructor(
+    territoryRenderer,
+    playerSidebarRenderer,
+    phaseView,
+    cardsView,
+    cavalryView
+  ) {
     this.#territoryRenderer = territoryRenderer;
     this.#playerSidebarRenderer = playerSidebarRenderer;
     this.#phaseView = phaseView;
@@ -129,8 +135,8 @@ export default class ViewManager {
   }
 
   #togglePlayerCard = (playerIndex) => {
-    const playerStatsElem = document.getElementById('player-stats');
-    if (!playerStatsElem.classList.contains('player-stats-opened')) {
+    const playerStatsElem = document.getElementById("player-stats");
+    if (!playerStatsElem.classList.contains("player-stats-opened")) {
       this.#showPlayerCard(playerIndex);
     } else {
       this.#removePlayerCard();
@@ -164,10 +170,6 @@ export default class ViewManager {
       }
 
       if (this.#keyActions[eventType].help.includes(e.key)) {
-        return this.#toggleHelpModal(eventType === "keydown");
-      }
-
-      if (this.#keyActions[eventType].shortcuts.includes(e.key)) {
         return this.#toggleHelpModal();
       }
 
@@ -183,10 +185,6 @@ export default class ViewManager {
 
     globalThis.document.addEventListener("keydown", (e) =>
       handleKeyEvent("keydown", e)
-    );
-
-    globalThis.document.addEventListener("keyup", (e) =>
-      handleKeyEvent("keyup", e)
     );
   }
 

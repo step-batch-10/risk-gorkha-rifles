@@ -139,7 +139,7 @@ export default class MapView {
         troopsCountDOM.textContent = troops;
         troopsCountDOM.classList.add("troops-bg");
 
-        this.#changeTerritoryColor(territoryName, playerColor)
+        this.#changeTerritoryColor(territoryName, playerColor);
       }
     );
   }
@@ -154,17 +154,70 @@ export default class MapView {
     });
   }
 
+  #toastTemplate() {
+    //html template
+    const div = document.createElement("div");
+    div.setAttribute("id", "troops-to-fortify");
+    const template = `
+    <div>
+      <input id="fortify-troops-count-value" type="number" />
+      <div id="fortify-place-btn">Fortify</div>
+    </div>
+    `;
+    div.innerHTML = template;
+    globalThis.document.body.appendChild(div);
+  }
+
+  #removeFortificationTroopsTemplate() {
+    globalThis.document.body.removeChild(
+      document.getElementById("troops-to-fortify")
+    );
+  }
+
+  #askTroopsToFortify(callback) {
+    this.#toastTemplate();
+
+    const fortifyPlaceButton = document.getElementById("fortify-place-btn");
+    fortifyPlaceButton.addEventListener("click", () => {
+      const troopsCount = document.getElementById(
+        "fortify-troops-count-value"
+      ).value;
+      callback(troopsCount);
+    });
+  }
+
+  #resetFortificationPhase() {
+    this.unHighlightTerritory(this.#fortificationDetails.toTerritory);
+    this.unHighlightTerritory(this.#fortificationDetails.fromTerritory);
+    this.#fortificationDetails = {};
+    this.#removeFortificationTroopsTemplate();
+  }
+
+  async #sendFortificationData(troopsCount) {
+    this.#fortificationDetails.troopCount = troopsCount;
+    const [emitResponse] = await this.#eventBus.emit(
+      "fortification",
+      this.#fortificationDetails
+    );
+    const fortificationResponse = await emitResponse;
+
+    if (fortificationResponse) {
+      return this.#resetFortificationPhase();
+    }
+
+    this.#showToast("Invalid Fortification");
+  }
+
   #selectToTerritoryClick(territoryId, territories) {
     return () => {
       this.#fortificationDetails.toTerritory = territoryId;
       this.#removeClickListeners(territories);
       this.#toggleBlinkTerritories(territories, false);
       this.highlightTerritory(territoryId);
+      this.highlightTerritory(this.#fortificationDetails.fromTerritory);
 
       setTimeout(() => {
-        const troopsCount = prompt("Enter number of toops to select");
-        this.#fortificationDetails.troopCount = troopsCount;
-        this.#eventBus.emit("fortification", this.#fortificationDetails);
+        this.#askTroopsToFortify(this.#sendFortificationData.bind(this));
       }, 2000);
     };
   }
@@ -185,15 +238,14 @@ export default class MapView {
       const territory = document.getElementById(territoryId);
 
       const listner = this.#selectToTerritoryClick(territoryId, territories);
-      this.#handleConnectedTerritories(territoryId);
       this.#listeners[territoryId] = listner;
 
-      territory.addEventListener("click", listner);
+      territory.addEventListener("click", listner, { once: true });
     });
   }
 
   async #handleConnectedTerritories(territoryId) {
-    const [emitResponse] = this.#eventBus.emit(
+    const [emitResponse] = await this.#eventBus.emit(
       "getConnectedTerritories",
       territoryId
     );
@@ -209,6 +261,7 @@ export default class MapView {
       this.#removeClickListeners(territories);
       this.#unHighlightTerritories(territories);
       this.highlightTerritory(territoryId);
+
       this.#handleConnectedTerritories(territoryId);
     };
   }
@@ -223,7 +276,7 @@ export default class MapView {
       const listner = this.#selectFromTerritoryClick(territoryId, territories);
       this.#listeners[territoryId] = listner;
 
-      territory.addEventListener("click", listner);
+      territory.addEventListener("click", listner, { once: true });
     });
   }
 }

@@ -75,7 +75,6 @@ export default class ApiService {
   }
 
   static async troopsToDefend(troops) {
-
     const response = await fetch("/game/troops-to-defend", {
       method: "POST",
       body: JSON.stringify({ troops }),
@@ -84,10 +83,12 @@ export default class ApiService {
   }
 
   static async fortification(fortificationDetails) {
-    await fetch("/game/fortification", {
+    const res = await fetch("/game/fortification", {
       method: "POST",
       body: JSON.stringify(fortificationDetails),
     });
+
+    return await res.json();
   }
 
   static async startFortification() {

@@ -18,7 +18,7 @@
 body {
   width: 100vw;
   height: 100vh;
-  background-image: url('../images/background.png');
+  background-image: url("../images/background.png");
   background-size: cover;
   overflow: hidden;
 }
@@ -92,7 +92,7 @@ tspan {
   position: relative;
   width: 280px;
   height: 75px;
-  background-image: url('/images/player-name-background.png');
+  background-image: url("/images/player-name-background.png");
   background-size: 100% 100%;
   background-repeat: repeat;
   border-radius: 16px;
@@ -424,16 +424,19 @@ main {
 
 @keyframes blinkAnimation {
   0% {
-    filter: grayscale(0%);
+    filter: url("#filter_texture");
   }
 
-  50% {
-    filter: grayscale(100%);
-    fill: #2a9d8f;
+  30% {
+    filter: none;
+  }
+
+  70% {
+    filter: none;
   }
 
   100% {
-    filter: grayscale(0%);
+    filter: url("#filter_texture");
   }
 }
 
@@ -774,7 +777,7 @@ th {
   left: 35%;
   bottom: 1%;
   padding: 8px;
-  background: url('../images/login-background.png') no-repeat center center;
+  background: url("../images/login-background.png") no-repeat center center;
   background-size: cover;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -790,7 +793,7 @@ th {
   padding: 8px 12px;
   text-align: center;
   color: #3b1e00;
-  font-family: 'Georgia', serif;
+  font-family: "Georgia", serif;
   font-weight: bold;
   font-size: 16px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
@@ -914,8 +917,8 @@ button {
 
 #north-america path {
   fill: var(--north-america);
-  stroke: #fff;
-  stroke-width: 2;
+  stroke: #000;
+  stroke-width: 1;
 }
 
 #south-america path {
@@ -926,28 +929,64 @@ button {
 
 #asia path {
   fill: var(--asia);
-  stroke: #000;;
+  stroke: #000;
   stroke-width: 1;
 }
 
 #africa path {
   fill: var(--africa);
-  stroke: #fff;
-  stroke-width: 2;
+  stroke: #000;
+  stroke-width: 1;
 }
 
 #europe path {
   fill: var(--europe);
-  stroke-width: #fff;
 }
 
 #australia path {
   fill: var(--australia);
-  stroke-width: #fff;
+  stroke: #000;
+  stroke-width: 1;
 }
 
 .continent-name {
   fill: #333;
   font-size: 16px;
   text-shadow: none;
+}
+
+#troops-to-fortify {
+  padding: 10px;
+  background-color: rgba(59, 30, 0, 0.5);
+  position: fixed;
+  z-index: 99;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#troops-to-fortify input {
+  width: 300px;
+  height: 40px;
+  padding: 10px;
+}
+
+#troops-to-fortify input:focus {
+  outline: none;
+}
+
+#fortify-place-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  width: 70%;
+  margin: 10px auto;
+  height: 40px;
+  color: #fff;
+  background-color: #7f4f24;
 }

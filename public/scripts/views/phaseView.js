@@ -25,7 +25,7 @@ export default class PhaseView {
   }
 
   #startFortificationPhase() {
-    this.#eventBus.emit('startFortification');
+    this.#eventBus.emit("startFortification");
   }
 
   #showAttackPhase() {
@@ -40,7 +40,9 @@ export default class PhaseView {
     const skip = document.getElementById("skip");
     skip.style.display = "flex";
     requestAction.style.display = "flex";
-    skip.addEventListener('click', this.#startFortificationPhase.bind(this))
+    skip.addEventListener("click", this.#startFortificationPhase.bind(this), {
+      once: true,
+    });
   }
 
   #stopReinforcement() {

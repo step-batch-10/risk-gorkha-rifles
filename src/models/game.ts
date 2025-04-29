@@ -542,7 +542,7 @@ export default class Game {
   public fortification({ data, playerId }: ActionDetails) {
     const { fromTerritory, toTerritory, troopCount } = data;
 
-    if (this.territoryState[fromTerritory].troops < Number(troopCount)) {
+    if (this.territoryState[fromTerritory].troops <= Number(troopCount)) {
       return false;
     }
 
