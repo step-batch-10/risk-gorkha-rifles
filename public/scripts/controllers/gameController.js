@@ -332,6 +332,10 @@ export default class GameController {
     this.#viewManager.stopAttackPhase();
   }
 
+  #resetMapEffects() {
+    this.#viewManager.resetMapEffects();
+  }
+
   init() {
     this.#pollGameData();
     this.#initChatBox();
@@ -377,5 +381,6 @@ export default class GameController {
 
     this.#eventBus.on("stopAttackPhase", this.#stopAttackPhase.bind(this));
     this.#eventBus.on("switchTurn", this.#switchTurn.bind(this));
+    this.#eventBus.on("resetMap", this.#resetMapEffects.bind(this));
   }
 }

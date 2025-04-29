@@ -234,4 +234,8 @@ export default class ViewManager {
   closeAllPhases() {
     this.#phaseView.closeAllPhases();
   }
+
+  resetMapEffects() {
+    this.#territoryRenderer.resetMapEffects();
+  }
 }

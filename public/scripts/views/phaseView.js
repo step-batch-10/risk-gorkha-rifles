@@ -26,7 +26,7 @@ export default class PhaseView {
 
   #startFortificationPhase() {
     this.#eventBus.emit("startFortification");
-    this.#eventBus.emit("stopAttackPhase")
+    this.#eventBus.emit("stopAttackPhase");
   }
 
   #showAttackPhase() {
@@ -74,6 +74,7 @@ export default class PhaseView {
   closeAllPhases() {
     console.log("inside close all phases");
 
+    this.#eventBus.emit("resetMap");
     this.#closePhaseDetailBox();
     this.#clearPhaseButtons("draft-phase");
     this.#clearPhaseButtons("attack-phase");

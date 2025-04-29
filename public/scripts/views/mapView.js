@@ -74,10 +74,9 @@ export default class MapView {
     const territory = document.getElementById(territoryId);
     territory.classList.add("fly");
     const fight = document.getElementById("fight");
-    const main = document.getElementById("main-svg")
+    const main = document.getElementById("main-svg");
     fight.appendChild(territory);
     main.setAttribute("filter", "url(#blurMe)");
-
 
     this.#eventBus.emit("defendingPlayer", territoryId);
     this.#showToast("Select the number of troops to attack with");
@@ -297,6 +296,16 @@ export default class MapView {
       this.#listeners[territoryId] = listner;
 
       territory.addEventListener("click", listner, { once: true });
+    });
+  }
+
+  resetMapEffects() {
+    console.log('"resetting');
+
+    const territoryPaths = globalThis.document.querySelectorAll("path");
+
+    territoryPaths.forEach((path) => {
+      path.classList.remove("highlight-territory");
     });
   }
 }
