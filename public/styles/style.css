@@ -469,7 +469,7 @@ main {
   background-position: 0 0;
   background-image: conic-gradient(
     rgba(0, 0, 0, 0),
-    #ffda48,
+    #ffef5c,
     rgba(0, 0, 0, 0) 100%
   );
   animation: rotate 3s linear infinite;

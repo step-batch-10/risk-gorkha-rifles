@@ -28,7 +28,7 @@ export default class PlayerSidebarView {
   }
 
   render(players, currentPlayer) {
-    if (!currentPlayer || this.#currentPlayer === currentPlayer) {
+    if (this.#currentPlayer || this.#currentPlayer === currentPlayer) {
       return;
     }
 
