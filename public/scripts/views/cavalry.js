@@ -6,36 +6,32 @@ export default class GoldenCavalry {
   }
 
   render(currentCavalryPos, bonusTroops) {
-    console.log(currentCavalryPos,bonusTroops);
-    
     this.#container.innerHTML = "";
 
     const cavalryTable = document.createElement("table");
 
-    const thead = document.createElement("thead");
-    thead.innerHTML = `
-      <tr>
-        <th>Position</th>
-        <th>Troops</th>
-      </tr>
-    `;
-
     const tbody = document.createElement("tbody");
+
+    const row1 = document.createElement("tr");
     for (let i = 0; i < bonusTroops.length; i++) {
-      const row = document.createElement("tr");
-
-      const positionCell = document.createElement("td");
-      positionCell.textContent = i + 1;
-
-      const troopsCell = document.createElement("td");
-      troopsCell.textContent = bonusTroops[i];
-
-      row.appendChild(positionCell);
-      row.appendChild(troopsCell);
-      tbody.appendChild(row);
+      const bonus = document.createElement("td");
+      if (i === currentCavalryPos) {
+        const gc = document.createElement("img");
+        gc.src = "../images/goldenCavalry.png"
+        bonus.appendChild(gc);
+      }
+      row1.appendChild(bonus);
     }
 
-    cavalryTable.appendChild(thead);
+    const row2 = document.createElement("tr");
+    for (let i = 0; i < bonusTroops.length; i++) {
+      const bonus = document.createElement("td");
+      bonus.textContent = bonusTroops[i];
+      row2.appendChild(bonus);
+    }
+
+    tbody.appendChild(row1);
+    tbody.appendChild(row2);
     cavalryTable.appendChild(tbody);
 
     this.#container.appendChild(cavalryTable);
