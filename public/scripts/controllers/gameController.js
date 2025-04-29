@@ -4,8 +4,12 @@ export default class GameController {
   #viewManager;
   #eventBus;
   #ChatBox;
+  #attackingTerritory;
+  #defendingTerritory;
 
   #actionMap = {
+    selectedDefendingTerritory: this.#handleDefendingTeritorySelect.bind(this),
+    selectedAttackingTerritory: this.#handleAttackingTerritorySelect.bind(this),
     startInitialDeployment: this.#handleIntialDeploymentStart.bind(this),
     updateTroops: this.#handleTroopDeployment.bind(this),
     stopInitialDeployment: this.#intialDeploymentStop.bind(this),
@@ -103,6 +107,22 @@ export default class GameController {
     this.#modalManager.endReinforcementPhase();
   }
 
+  #handleDefendingTeritorySelect(gameDetails) {
+    const { territoryId } = gameDetails.action.data;
+    this.#viewManager.popUpTerritory(territoryId);
+    this.#defendingTerritory = territoryId;
+    this.#viewManager.focusAttack(
+      this.#attackingTerritory,
+      this.#defendingTerritory
+    );
+  }
+
+  #handleAttackingTerritorySelect(gameDetails) {
+    const { territoryId } = gameDetails.action.data;
+    this.#viewManager.popUpTerritory(territoryId);
+    this.#attackingTerritory = territoryId;
+  }
+
   #handleIntialDeploymentStart(gameDetails) {
     const { action, userId } = gameDetails;
 
@@ -143,16 +163,14 @@ export default class GameController {
   }
 
   #handleReinforcementPhase() {
-    this.#viewManager.showTradeButton();
     setTimeout(() => {
       this.#viewManager.startPlayerTurn();
     }, 5000);
   }
 
-  async #requestReinforcement(cards = []) {
-    const tradedCards = this.#tradeCards(cards);
+  async #requestReinforcement() {
     const { territories, newTroops } =
-      await this.#apiService.requestReinforcement(tradedCards);
+      await this.#apiService.requestReinforcement();
     Toastify({
       text: `You received ${newTroops} troops.`,
       duration: 3000,
@@ -179,8 +197,6 @@ export default class GameController {
   }
 
   async #handleAttackPhase() {
-    this.#viewManager.hideTradeButton();
-
     const territories = await this.#apiService.requestAttack();
 
     this.#viewManager.handleAttackView(territories);
@@ -201,13 +217,6 @@ export default class GameController {
   async #renderCards() {
     const cards = await this.#apiService.getCards();
     this.#viewManager.renderCards(cards);
-  }
-
-  #tradeCards(cards) {
-    const [tradedCard] = [...cards];
-    const tradedCards = Array(3).fill(tradedCard);
-
-    return tradedCards;
   }
 
   async #getDefendingPlayer(defendingTerritory) {
@@ -238,7 +247,7 @@ export default class GameController {
     this.#modalManager.troopsToDefendWith();
   }
 
-  #handleDiceRoll({ action }) {
+  async #handleDiceRoll({ action }) {
     const { dices } = action.data;
     Toastify({
       text: `Dice are rolling`,
@@ -253,9 +262,12 @@ export default class GameController {
 
     this.#modalManager.startDice([1, 1, 1], [1, 1]);
     const [attackerDice, defenderDice] = dices;
-    setTimeout(() => {
-      this.#modalManager.startDice(attackerDice, defenderDice);
-    }, 3000);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    this.#modalManager.startDice(attackerDice, defenderDice);
+    this.#viewManager.blurOut(
+      this.#attackingTerritory,
+      this.#defendingTerritory
+    );
   }
 
   async #initChatBox() {
@@ -369,7 +381,6 @@ export default class GameController {
       this.#getDefendingTerritories.bind(this)
     );
     this.#eventBus.on("renderCards", this.#renderCards.bind(this));
-
     this.#eventBus.on("defendingPlayer", this.#getDefendingPlayer.bind(this));
     this.#eventBus.on(
       "getConnectedTerritories",

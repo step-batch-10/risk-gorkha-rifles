@@ -32,6 +32,8 @@ export interface Action {
   currentCavalryPos: number;
   bonusTroops: number[];
   data: {
+    atkId?: string;
+    dfdId?: string;
     territory?: string;
     newTroops?: number;
     troopCount?: number;
@@ -371,6 +373,15 @@ export default class Game {
     playerId: string,
     attackingTerritory: string | number
   ) {
+    this.actions.push(
+      this.generateAction(
+        this.currentPlayer,
+        { territoryId: attackingTerritory },
+        "selectedAttackingTerritory",
+        null,
+        null
+      )
+    );
     this.activeBattle[playerId] = { territoryId: attackingTerritory };
     const neighbouring = this.adjacentTerritories[attackingTerritory];
     const neighbouringTerritories = neighbouring.filter(
@@ -419,6 +430,16 @@ export default class Game {
       ([territoryName]) => {
         return territoryName === defendingTerritory;
       }
+    );
+
+    this.actions.push(
+      this.generateAction(
+        this.currentPlayer,
+        { territoryId: defendingTerritory },
+        "selectedDefendingTerritory",
+        null,
+        null
+      )
     );
 
     return this.getDefenderId(defender);

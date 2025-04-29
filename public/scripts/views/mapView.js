@@ -38,6 +38,8 @@ export default class MapView {
   }
 
   #toggleTerritoryHighlight(territoryId, highlight = true) {
+    console.log(territoryId, highlight);
+
     const territory = document.getElementById(territoryId);
     const path = territory.querySelector("path");
     path.classList.toggle("highlight-territory", highlight);

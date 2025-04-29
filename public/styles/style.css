@@ -52,12 +52,12 @@ tspan {
 .territory {
   & path {
     cursor: pointer;
-    pointer-events: all;
+    pointer-events: auto;
     transition-duration: 300ms;
     filter: url("#filter_texture");
 
     &:hover {
-      filter: brightness(100%);
+      filter: brightness(100%) !important;
     }
   }
 }
@@ -1043,10 +1043,9 @@ button {
 }
 
 .fly {
-  transform: translateZ(6px) translateX(-3px);
-  transition-duration: 2s;
-  filter: drop-shadow(5px 2px);
-  fill: yellow;
+  transform: translateZ(6px) translateX(-5px);
+  transition-duration: 1s;
+  filter: brightness(170%) drop-shadow(4px 4px 2px rgba(0, 0, 0, 1));
 }
 
 #trade-button {

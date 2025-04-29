@@ -245,4 +245,32 @@ export default class ViewManager {
   showTradeButton() {
     this.#cardsView.showTradeButton();
   }
+
+  popUpTerritory(territoryId) {
+    const territory = document.getElementById(territoryId);
+    territory.classList.add("fly");
+  }
+
+  focusAttack(attckingTerritory, defendingTerritory) {
+    const atkId = document.getElementById(attckingTerritory);
+    const dfdId = document.getElementById(defendingTerritory);
+    const fight = document.getElementById("fight");
+    fight.appendChild(atkId);
+    fight.appendChild(dfdId);
+    const main = document.getElementById("main-svg");
+    main.setAttribute("filter", "url(#blurMe)");
+  }
+
+  blurOut(attckingTerritory, defendingTerritory) {
+    console.log(attckingTerritory, defendingTerritory);
+    const atkId = document.getElementById(attckingTerritory);
+    const dfdId = document.getElementById(defendingTerritory);
+    console.log("*".repeat(50));
+    const main = document.getElementById("main-svg");
+    main.appendChild(atkId);
+    main.appendChild(dfdId);
+    main.removeAttribute("filter");
+    atkId.classList.remove("fly");
+    dfdId.classList.remove("fly");
+  }
 }

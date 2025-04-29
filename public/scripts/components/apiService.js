@@ -16,7 +16,7 @@ export default class ApiService {
     await fetch("/game/start-game");
   }
 
-  static async requestReinforcement(cards) {
+  static async requestReinforcement(cards = []) {
     const reinforcementResponse = await fetch("/game/request-reinforcement", {
       method: "POST",
       body: JSON.stringify({ cards }),
