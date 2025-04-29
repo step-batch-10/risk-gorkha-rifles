@@ -207,7 +207,7 @@ export const getTypeCounts = (cards: CardType[]): Record<CardType, number> => {
       acc[type]++;
       return acc;
     },
-    { infantry: 0, cavalry: 0, artillery: 0, hybrid: 0 }
+    { infantry: 0, cavalry: 0, artillery: 0, wild: 0 }
   );
 };
 

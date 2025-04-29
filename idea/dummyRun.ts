@@ -24,7 +24,7 @@ export const main = () => {
 
   users.createUser(
     "dummyPlayer2",
-    "https://img.freepik.com/premium-vector/man-professional-business-casual-young-avatar-icon-illustration_1277826-622.jpg?semt=ais_hybrid&w=740"
+    "https://img.freepik.com/premium-vector/man-professional-business-casual-young-avatar-icon-illustration_1277826-622.jpg?semt=ais_wild&w=740"
   );
 
   const user1Id = users.findIdByUsername("dummyPlayer1") || "";

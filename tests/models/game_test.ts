@@ -3,6 +3,8 @@ import { describe, it } from "testing";
 import Game, { ActionDetails } from "../../src/models/game.ts";
 import { neighbouringTerritories } from "../../src/utils/continents.ts";
 import GoldenCavalry from "../../src/models/goldenCavalry.ts";
+import { CardsManager } from "../../src/models/cardsManager.ts";
+import { CardType } from "../../src/types/gameTypes.ts";
 
 export const gameInstanceBuilder = (diceFn = () => 1) => {
   const continents = {
@@ -14,6 +16,23 @@ export const gameInstanceBuilder = (diceFn = () => 1) => {
   const timeStamp = (): number => 1;
   const connectedTerritories = neighbouringTerritories();
   const goldenCavalry: GoldenCavalry = new GoldenCavalry();
+  const mockedDeck: CardType[] = [
+    "infantry",
+    "infantry",
+    "infantry",
+    "cavalry",
+    "cavalry",
+    "cavalry",
+    "artillery",
+    "artillery",
+    "artillery",
+    "wild",
+    "wild",
+  ];
+  const cardsManager = new CardsManager(
+    mockedDeck,
+    (deck: CardType[]): CardType[] => [...deck]
+  );
 
   const game = new Game(
     new Set(["1", "2"]),
@@ -23,7 +42,8 @@ export const gameInstanceBuilder = (diceFn = () => 1) => {
     timeStamp,
     connectedTerritories,
     diceFn,
-    goldenCavalry
+    goldenCavalry,
+    cardsManager
   );
   return game;
 };
@@ -600,6 +620,23 @@ describe("Game - getConnectedTerritories", () => {
       lorem: ["alaska"],
     };
     const goldenCavalry: GoldenCavalry = new GoldenCavalry();
+    const mockedDeck: CardType[] = [
+      "infantry",
+      "infantry",
+      "infantry",
+      "cavalry",
+      "cavalry",
+      "cavalry",
+      "artillery",
+      "artillery",
+      "artillery",
+      "wild",
+      "wild",
+    ];
+    const cardsManager = new CardsManager(
+      mockedDeck,
+      (deck: CardType[]): CardType[] => [...deck]
+    );
 
     const game = new Game(
       new Set(["1", "2"]),
@@ -609,7 +646,8 @@ describe("Game - getConnectedTerritories", () => {
       timeStamp,
       connectedTerritories,
       () => 1,
-      goldenCavalry
+      goldenCavalry,
+      cardsManager
     );
     game.init();
 

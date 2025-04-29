@@ -1,6 +1,7 @@
 import { GameStatus, Territory } from "../types/gameTypes.ts";
 import _ from "lodash";
 import GoldenCavalry from "./goldenCavalry.ts";
+import { CardsManager } from "./cardsManager.ts";
 
 type Data = {
   [key: string]:
@@ -81,6 +82,7 @@ export default class Game {
   private adjacentTerritories: MadhaviContinent;
   private activeBattle: Record<string, BattleDetails> = {};
   private goldenCavalry: GoldenCavalry = new GoldenCavalry();
+  private cardsManager: CardsManager;
 
   constructor(
     players: Set<string>,
@@ -91,6 +93,7 @@ export default class Game {
     adjacentTerritories: MadhaviContinent,
     diceRoller: () => number,
     goldenCavalry: GoldenCavalry,
+    cardsManager: CardsManager,
     colours: string[] = [
       "#50C878",
       "#DAA520",
@@ -110,6 +113,7 @@ export default class Game {
     this.adjacentTerritories = adjacentTerritories;
     this.diceRoller = diceRoller;
     this.goldenCavalry = goldenCavalry;
+    this.cardsManager = cardsManager;
   }
 
   get gameActions() {
@@ -502,6 +506,7 @@ export default class Game {
     }
 
     const [attacker, defender] = Object.values(this.activeBattle);
+    const [attackerId, _defenderId] = Object.keys(this.activeBattle);
     if (dices.every((dice) => dice.length !== 0)) {
       const result = this.battleOutcome(
         attacker.territoryId as string,
@@ -518,6 +523,11 @@ export default class Game {
       );
       if (this.isDefenderEliminaated(defender.territoryId as string)) {
         this.createDefenderEliminatedAcion(dices, userId);
+        const card = this.cardsManager.drawCard();
+        console.log("*".repeat(90));
+        console.log("card", card);
+        console.log("*".repeat(90));
+        this.playerStates[attackerId].cards.push(card as string);
       }
 
       this.activeBattle = {};

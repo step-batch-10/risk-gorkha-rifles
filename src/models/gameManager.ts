@@ -1,10 +1,17 @@
 import Game, { ActionDetails } from "./game.ts";
-import { Continent, GameStatus, LobbyStatus } from "../types/gameTypes.ts";
+import {
+  CardType,
+  Continent,
+  GameStatus,
+  LobbyStatus,
+} from "../types/gameTypes.ts";
 import lodash from "npm:lodash";
 import { Action } from "./game.ts";
 import { ActionTypes } from "../types/gameTypes.ts";
 import Messages from "./messages.ts";
 import GoldenCavalry from "./goldenCavalry.ts";
+import { CardsManager } from "./cardsManager.ts";
+import { getCards } from "../utils/cards.ts";
 
 export default class GameManager {
   private shuffler: (ar: string[]) => string[];
@@ -58,7 +65,11 @@ export default class GameManager {
     const gameId = this.uniqueId();
     const continents = this.getContinents();
     const goldenCavalry: GoldenCavalry = new GoldenCavalry();
-
+    const cards: CardType[] = getCards();
+    const cardsManager = new CardsManager(
+      cards,
+      (deck: CardType[]): CardType[] => [...deck]
+    );
     const game = new Game(
       players,
       continents,
@@ -67,7 +78,8 @@ export default class GameManager {
       this.timeStamp,
       this.connectedTerritories,
       () => Math.ceil(Math.random() * 6),
-      goldenCavalry
+      goldenCavalry,
+      cardsManager
     );
     game.init();
     this.games.push(game);

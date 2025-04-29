@@ -88,7 +88,7 @@ describe("getGameActions", () => {
           playerId: null,
           to: null,
           currentCavalryPos: 0,
-          bonusTroops:[0,10,20,30,40,50,60],
+          bonusTroops: [0, 10, 20, 30, 40, 50, 60],
           playerStates: {
             "1": {
               availableTroops: 21,
@@ -495,7 +495,7 @@ describe("cardsHandler", () => {
       infantry: 0,
       cavalry: 0,
       artillery: 0,
-      hybrid: 0,
+      wild: 0,
     });
   });
 });

@@ -11,7 +11,7 @@ describe("getTypeCounts", () => {
       infantry: 2,
       cavalry: 1,
       artillery: 0,
-      hybrid: 0,
+      wild: 0,
     });
   });
 
@@ -22,7 +22,7 @@ describe("getTypeCounts", () => {
       infantry: 0,
       cavalry: 0,
       artillery: 0,
-      hybrid: 0,
+      wild: 0,
     });
   });
 
@@ -33,18 +33,18 @@ describe("getTypeCounts", () => {
       infantry: 2,
       cavalry: 0,
       artillery: 0,
-      hybrid: 0,
+      wild: 0,
     });
   });
 
   it("should count the cards for all types", () => {
-    const cards: CardType[] = ["infantry", "hybrid", "cavalry", "artillery"];
+    const cards: CardType[] = ["infantry", "wild", "cavalry", "artillery"];
     const playerCards = getTypeCounts(cards);
     assertEquals(playerCards, {
       infantry: 1,
       cavalry: 1,
       artillery: 1,
-      hybrid: 1,
+      wild: 1,
     });
   });
 });

@@ -21,7 +21,7 @@ export class AttackDefenceModal {
 
   #createFortificationTroopsHtml() {
     return `<div id="troops-to-fortify">
-              <input id="troops-input" type="text" placeholder="Troops to fortify" style="width: 200px;" min="1" max="3"/>
+              <input id="troops-input" type="text" placeholder="Troops to move" style="width: 200px;" min="1" max="3"/>
               <button id="submit-button" style="margin-left: 5px;">Submit</button>
             </div>
           `;
@@ -50,11 +50,14 @@ export class AttackDefenceModal {
       this.#createDefenderTroopsHtml.bind(this)
     );
     const input = document.getElementById("troops-input");
-
     const button = document.getElementById("submit-button");
 
     button.addEventListener("click", () => {
       myToast.hideToast();
+      if (parseInt(input.value) > 2) {
+        alert("you can't defend with more than 2");
+        return this.showTroopsToDefend();
+      }
       this.#eventbus.emit("sendDefenderTroops", parseInt(input.value));
     });
   }
@@ -68,6 +71,10 @@ export class AttackDefenceModal {
 
     button.addEventListener("click", () => {
       myToast.hideToast();
+      if (parseInt(input.value) > 3) {
+        alert("you can't attack with moret tahn 3");
+        return this.showTroopsToAttack();
+      }
       this.#eventbus.emit("sendAttckerTroops", parseInt(input.value));
     });
   }

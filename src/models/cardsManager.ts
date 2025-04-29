@@ -30,18 +30,18 @@ export class CardsManager {
         acc[type]++;
         return acc;
       },
-      { infantry: 0, cavalry: 0, artillery: 0, hybrid: 0 }
+      { infantry: 0, cavalry: 0, artillery: 0, wild: 0 }
     );
   }
 
   private getRewardForCombination(counts: Record<CardType, number>): number {
-    const { infantry, cavalry, artillery, hybrid } = counts;
+    const { infantry, cavalry, artillery, wild } = counts;
 
     const isThreeOfSame = (type: CardType, reward: number): number =>
       counts[type] === 3 ? reward : 0;
 
-    const isTwoPlusHybrid = (type: Exclude<CardType, "hybrid">, reward: number): number =>
-      counts[type] === 2 && hybrid === 1 ? reward : 0;
+    const isTwoPluswild = (type: Exclude<CardType, "wild">, reward: number): number =>
+      counts[type] === 2 && wild === 1 ? reward : 0;
 
     const isOneOfEach = infantry === 1 && cavalry === 1 && artillery === 1;
 
@@ -49,9 +49,9 @@ export class CardsManager {
     if (isThreeOfSame("infantry", 4)) return 4;
     if (isThreeOfSame("cavalry", 6)) return 6;
     if (isThreeOfSame("artillery", 8)) return 8;
-    if (isTwoPlusHybrid("infantry", 4)) return 4;
-    if (isTwoPlusHybrid("cavalry", 6)) return 6;
-    if (isTwoPlusHybrid("artillery", 8)) return 8;
+    if (isTwoPluswild("infantry", 4)) return 4;
+    if (isTwoPluswild("cavalry", 6)) return 6;
+    if (isTwoPluswild("artillery", 8)) return 8;
 
     return 0;
   }
