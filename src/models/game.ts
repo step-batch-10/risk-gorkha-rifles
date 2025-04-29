@@ -5,13 +5,13 @@ import { CardsManager } from "./cardsManager.ts";
 
 type Data = {
   [key: string]:
-  | number
-  | Record<string, string>
-  | string
-  | Record<string, PlayerState>
-  | number[]
-  | string[]
-  | number[][];
+    | number
+    | Record<string, string>
+    | string
+    | Record<string, PlayerState>
+    | number[]
+    | string[]
+    | number[][];
 };
 
 type Continent = { name: string; extraTroops: number };
@@ -83,6 +83,7 @@ export default class Game {
   private activeBattle: Record<string, BattleDetails> = {};
   private goldenCavalry: GoldenCavalry = new GoldenCavalry();
   private cardsManager: CardsManager;
+  private isConquered: boolean = false;
 
   constructor(
     players: Set<string>,
@@ -335,7 +336,6 @@ export default class Game {
         return owner === playerId && troops > 1;
       }
     );
-    console.log(validTerritories);
 
     const territories = validTerritories.map((terrritory) => terrritory[0]);
     return territories;
@@ -468,8 +468,14 @@ export default class Game {
         return owner === defender && territory === defenderTerritory;
       }
     );
+
     terr[0][1].owner = attacker;
     terr[0][1].troops = troopsToAttack;
+
+    const defendingTerritory = this.playerStates[defender].territories;
+    const index = defendingTerritory.indexOf(defenderTerritory);
+    defendingTerritory.splice(index, 1);
+    this.playerStates[attacker].territories.push(defenderTerritory);
   }
 
   private createDefenderEliminatedAcion(dices: number[][]) {
@@ -496,6 +502,18 @@ export default class Game {
         attackerId
       )
     );
+  }
+
+  public checkWinner(attackerId: string) {
+    const noOfTerritories = this.playerStates[attackerId].territories.length;
+    if (noOfTerritories >= 16) {
+      this.actions.push(
+        this.generateAction(attackerId, {}, "gameOver", null, null)
+      );
+
+      return "winner found";
+    }
+    return "winner not found";
   }
 
   private diceAction = () => {
@@ -535,9 +553,11 @@ export default class Game {
       );
       if (this.isDefenderEliminaated(defender.territoryId as string)) {
         this.createDefenderEliminatedAcion(dices);
-        const card = this.cardsManager.drawCard();
-        this.playerStates[attackerId].cards.push(card as string);
-        // this.checkWinner()
+        this.isConquered = true;
+        console.log(this.isConquered);
+        // const card = this.cardsManager.drawCard();
+        // this.playerStates[attackerId].cards.push(card as string);
+        this.checkWinner(attackerId);
       }
 
       this.activeBattle = {};

@@ -48,6 +48,84 @@ export const gameInstanceBuilder = (diceFn = () => 1) => {
   return game;
 };
 
+export const gameInstanceForWinnerCheck = (diceFn = () => 1) => {
+  const continents = {
+    NorthAmerica: [
+      "alaska",
+      "alberta",
+      "central-america",
+      "eastern-us",
+      "greenland",
+      "northwest-territory",
+      "middle-east",
+      "mongolia",
+      "siam",
+      "siberia",
+      "ural",
+      "yakutsk",
+    ],
+    SouthAmerica: ["brazil", "peru"],
+    Africa: [
+      "congo",
+      "east-africa",
+      "egypt",
+      "madagascar",
+      "north-africa",
+      "south-africa",
+    ],
+    Australia: [
+      "eastern-australia",
+      "indonesia",
+      "new-guinea",
+      "western-australia",
+    ],
+    Europe: [
+      "great-britain",
+      "iceland",
+      "northern-europe",
+      "scandinavia",
+      "southern-europe",
+      "ukraine",
+      "western-europe",
+    ],
+  };
+  const shuffler = (arr: string[]): string[] => arr;
+  const uniqueId = (): string => "1";
+  const timeStamp = (): number => 1;
+  const connectedTerritories = neighbouringTerritories();
+  const goldenCavalry: GoldenCavalry = new GoldenCavalry();
+  const mockedDeck: CardType[] = [
+    "infantry",
+    "infantry",
+    "infantry",
+    "cavalry",
+    "cavalry",
+    "cavalry",
+    "artillery",
+    "artillery",
+    "artillery",
+    "wild",
+    "wild",
+  ];
+  const cardsManager = new CardsManager(
+    mockedDeck,
+    (deck: CardType[]): CardType[] => [...deck]
+  );
+
+  const game = new Game(
+    new Set(["1", "2"]),
+    continents,
+    uniqueId,
+    shuffler,
+    timeStamp,
+    connectedTerritories,
+    diceFn,
+    goldenCavalry,
+    cardsManager
+  );
+  return game;
+};
+
 describe("testing init", () => {
   it("should return the territory state after distributing troops", () => {
     const game = gameInstanceBuilder();
@@ -701,5 +779,25 @@ describe("test for validPlayerTerritories", () => {
       data: {},
     };
     assertEquals(game.validPlayerTerritories(actionDetails), ["alaska"]);
+  });
+});
+
+describe("tests for check winner", () => {
+  it("should return winner found when he conquered 16 or more territories", () => {
+    const game = gameInstanceForWinnerCheck();
+    game.init();
+   
+
+    const actual = game.checkWinner("1");
+    const expected = "winner found";
+    assertEquals(actual, expected);
+  });
+  it("should return winner not found when he didn't conquer 16 or more territories", () => {
+    const game = gameInstanceBuilder();
+    game.init();
+
+    const actual = game.checkWinner("1");
+    const expected = "winner not found";
+    assertEquals(actual, expected);
   });
 });

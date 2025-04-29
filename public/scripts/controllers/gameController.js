@@ -18,6 +18,7 @@ export default class GameController {
     combatResult: this.#handleCombatResult.bind(this),
     conqueredTerritory: this.#handleConqueredTerritory.bind(this),
     turnChange: this.#switchTurn.bind(this),
+    gameOver: this.#gameOver.bind(this),
   };
 
   #gameMetaData = {
@@ -286,8 +287,6 @@ export default class GameController {
   #handleConqueredTerritory({ action }) {
     const { attackerTerritory, defenderTerritory } = action.data;
 
-    console.log(action);
-    console.log(attackerTerritory, defenderTerritory);
     setTimeout(() => {
       Toastify({
         text: `attacker conquered the defender territory`,
@@ -334,6 +333,10 @@ export default class GameController {
 
   #resetMapEffects() {
     this.#viewManager.resetMapEffects();
+  }
+
+  #gameOver() {
+    globalThis.location.href = "/login";
   }
 
   init() {
