@@ -214,9 +214,7 @@ export const getTypeCounts = (cards: CardType[]): Record<CardType, number> => {
 const storeTroops = async (context: Context) => {
   const userId: string = context.get("userId");
   const { troops } = await context.req.json();
-  console.log("*".repeat(80));
-  console.log(await context.req.json());
-  console.log("*".repeat(80));
+
   const gameManager: GameManager = context.get("gameManager");
   const status = gameManager.handleGameActions({
     playerId: userId,

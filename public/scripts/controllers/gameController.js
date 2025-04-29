@@ -279,6 +279,16 @@ export default class GameController {
     // const { attackerTerritory, defenderTerritory, troopsToAttack } =
     //   action.data;
     console.log(action);
+    Toastify({
+      text: `attacker conquered the defender territory`,
+      duration: 3000,
+      gravity: "top",
+      position: "center",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to right, #3e2514, #c99147)",
+      },
+    }).showToast();
   }
 
   init() {

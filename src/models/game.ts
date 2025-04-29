@@ -325,7 +325,6 @@ export default class Game {
 
   public validPlayerTerritories(actionDetails: ActionDetails) {
     const { playerId } = actionDetails;
-    console.log(this.territoryState, "territories");
     const validTerritories = Object.entries(this.territoryState).filter(
       ([_territory, { owner, troops }]) => {
         return owner === playerId && troops > 1;
@@ -465,7 +464,8 @@ export default class Game {
   private changeOwner(
     attacker: string,
     defender: string,
-    defenderTerritory: string
+    defenderTerritory: string,
+    troopsToAttack: number
   ) {
     const terr = Object.entries(this.territoryState).filter(
       ([territory, { owner }]) => {
@@ -473,6 +473,7 @@ export default class Game {
       }
     );
     terr[0][1].owner = attacker;
+    terr[0][1].troops = troopsToAttack;
   }
 
   private createDefenderEliminatedAcion(dices: number[][], userId: string) {
@@ -483,8 +484,15 @@ export default class Game {
       defenderTerritory: defender.territoryId as string,
       troopsToAttack: dices[0].length,
     };
-    this.changeOwner(attackerId, defenderId, data.defenderTerritory as string);
-    this.generateAction(userId, data, "conqueredTerritory", null, null);
+    this.changeOwner(
+      attackerId,
+      defenderId,
+      data.defenderTerritory as string,
+      data.troopsToAttack
+    );
+    this.actions.push(
+      this.generateAction(userId, data, "conqueredTerritory", null, null)
+    );
   }
 
   private diceAction = (userId: string) => {

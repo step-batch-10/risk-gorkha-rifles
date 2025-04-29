@@ -64,8 +64,6 @@ describe("allotPlayer method", () => {
 
 describe("getGameActions test", () => {
   it("should return  actions when actions are present", () => {
-    console.log("inside test");
-
     const gameManager = gameManagerInstanceBuilder(() => ({ Asia: ["India"] }));
     gameManager.allotPlayer("1", "3");
     gameManager.allotPlayer("2", "3");

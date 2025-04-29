@@ -21,7 +21,6 @@ export class AttackDefenceModal {
 
   #createToast(createToastHTML) {
     const toastHTML = createToastHTML();
-    console.log(toastHTML, createToastHTML);
     const myToast = Toastify({
       text: toastHTML,
       duration: -1,
@@ -42,9 +41,7 @@ export class AttackDefenceModal {
     const myToast = this.#createToast(
       this.#createDefenderTroopsHtml.bind(this)
     );
-    console.log("inside the troops to defend");
     const input = document.getElementById("troops-input");
-    console.log("troops to defend", input);
 
     const button = document.getElementById("submit-button");
 
