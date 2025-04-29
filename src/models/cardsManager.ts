@@ -12,12 +12,14 @@ export class CardsManager {
   }
 
   public drawCard(): CardType | null {
-    if (this.deck.length === 0) {
-      this.deck = this.shuffler([...this.discarded]);
-      this.discarded = [];
-    }
+    // if (this.deck.length === 0) {
+    //   this.deck = this.shuffler([...this.discarded]);
+    //   this.discarded = [];
+    // }
 
-    return this.deck.pop() || null;
+    // return this.deck.pop() || null;
+
+    return "artillery";
   }
 
   private isValidSet(cards: CardType[]): boolean {

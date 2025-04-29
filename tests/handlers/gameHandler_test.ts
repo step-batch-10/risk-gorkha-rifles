@@ -92,19 +92,19 @@ describe("getGameActions", () => {
           playerStates: {
             "1": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["india"],
             },
             "2": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["china"],
             },
             "3": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["nepal"],
             },
@@ -298,7 +298,7 @@ describe("update troop handler", () => {
         territories: ["india"],
         continents: [],
         availableTroops: 11,
-        cards: [],
+        cards: ["infantry", "infantry", "infantry"],
       },
     };
 
@@ -346,7 +346,7 @@ describe("requestReinforcementHandler", () => {
     });
 
     assertEquals(await response.json(), {
-      newTroops: 7,
+      newTroops: 17,
       territories: ["india"],
     });
   });
@@ -517,7 +517,7 @@ describe("cardsHandler", () => {
     });
 
     assertEquals(await response.json(), {
-      infantry: 0,
+      infantry: 3,
       cavalry: 0,
       artillery: 0,
       wild: 0,

@@ -159,13 +159,13 @@ describe("testing init", () => {
         territories: ["alaska", "brazil"],
         continents: [],
         availableTroops: 21,
-        cards: [],
+        cards: ["infantry", "infantry", "infantry"],
       },
       "2": {
         territories: ["alberta", "peru"],
         continents: [],
         availableTroops: 21,
-        cards: [],
+        cards: ["infantry", "infantry", "infantry"],
       },
     };
 
@@ -182,13 +182,13 @@ describe("getLastAction", () => {
         territories: ["alaska", "brazil"],
         continents: [],
         availableTroops: 21,
-        cards: [],
+        cards: ["infantry", "infantry", "infantry"],
       },
       "2": {
         territories: ["alberta", "peru"],
         continents: [],
         availableTroops: 21,
-        cards: [],
+        cards: ["infantry", "infantry", "infantry"],
       },
     };
     const territoryState = {

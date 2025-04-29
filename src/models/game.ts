@@ -146,7 +146,7 @@ export default class Game {
         territories: territoriesByPlayer[playerId] || [],
         continents: [],
         availableTroops: 21,
-        cards: [],
+        cards: ["infantry", "infantry", "infantry"],
       };
     });
 
@@ -311,6 +311,11 @@ export default class Game {
     );
 
     const cardTroops = this.cardsManager.turnInCards(cards).troops;
+
+    if (cardTroops !== 0) {
+      this.goldenCavalry.nextPosition();
+    }
+
     const playerCards = this.playerStates[playerId].cards;
 
     const remainingCards = playerCards.filter((existingCard) =>
@@ -523,7 +528,7 @@ export default class Game {
       defenderTerritory: defender.territoryId as string,
       troopsToAttack: dices[0].length,
     };
-
+    this.territoryState[data.attackerTerritory].troops -= data.troopsToAttack;
     this.changeOwner(
       attackerId,
       defenderId,

@@ -163,14 +163,16 @@ export default class GameController {
   }
 
   #handleReinforcementPhase() {
+    this.#viewManager.showTradeButton();
     setTimeout(() => {
       this.#viewManager.startPlayerTurn();
     }, 5000);
   }
 
-  async #requestReinforcement() {
+  async #requestReinforcement(cards = []) {
+    const tradedCards = this.#tradeCards(cards);
     const { territories, newTroops } =
-      await this.#apiService.requestReinforcement();
+      await this.#apiService.requestReinforcement(tradedCards);
     Toastify({
       text: `You received ${newTroops} troops.`,
       duration: 3000,
@@ -197,6 +199,8 @@ export default class GameController {
   }
 
   async #handleAttackPhase() {
+    this.#viewManager.hideTradeButton();
+
     const territories = await this.#apiService.requestAttack();
 
     this.#viewManager.handleAttackView(territories);
@@ -217,6 +221,13 @@ export default class GameController {
   async #renderCards() {
     const cards = await this.#apiService.getCards();
     this.#viewManager.renderCards(cards);
+  }
+
+  #tradeCards(cards) {
+    const [tradedCard] = [...cards];
+    const tradedCards = Array(3).fill(tradedCard);
+
+    return tradedCards;
   }
 
   async #getDefendingPlayer(defendingTerritory) {
@@ -247,8 +258,7 @@ export default class GameController {
     this.#modalManager.troopsToDefendWith();
   }
 
-  async #handleDiceRoll({ action }) {
-    const { dices } = action.data;
+  async #handleDiceRoll() {
     Toastify({
       text: `Dice are rolling`,
       duration: 3000,
@@ -261,13 +271,18 @@ export default class GameController {
     }).showToast();
 
     this.#modalManager.startDice([1, 1, 1], [1, 1]);
-    const [attackerDice, defenderDice] = dices;
+    // const [attackerDice, defenderDice] = dices;
     await new Promise((resolve) => setTimeout(resolve, 3000));
-    this.#modalManager.startDice(attackerDice, defenderDice);
+    this.#modalManager.startDice([6, 5, 4], [1, 1]);
+    // this.#modalManager.startDice(attackerDice, defenderDice);
     this.#viewManager.blurOut(
       this.#attackingTerritory,
       this.#defendingTerritory
     );
+    // const [attackerDice, defenderDice] = dices;
+    // setTimeout(() => {
+    //   this.#modalManager.startDice([6, 5, 4], [1, 1]);
+    // }, 3000);
   }
 
   async #initChatBox() {
@@ -381,6 +396,7 @@ export default class GameController {
       this.#getDefendingTerritories.bind(this)
     );
     this.#eventBus.on("renderCards", this.#renderCards.bind(this));
+
     this.#eventBus.on("defendingPlayer", this.#getDefendingPlayer.bind(this));
     this.#eventBus.on(
       "getConnectedTerritories",

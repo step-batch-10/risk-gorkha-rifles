@@ -1059,3 +1059,15 @@ button {
   color: #fff;
   background-color: #7f4f24;
 }
+
+#trade-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  width: 40%;
+  margin: 20px auto;
+  height: 40px;
+  color: #fff;
+  background-color: #7f4f24;
+}

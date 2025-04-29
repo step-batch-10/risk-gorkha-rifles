@@ -88,19 +88,19 @@ describe("getGameActions test", () => {
           playerStates: {
             "1": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["India"],
             },
             "2": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
             "3": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
@@ -156,19 +156,19 @@ describe("getGameActions test", () => {
           playerStates: {
             "1": {
               availableTroops: 11,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["India"],
             },
             "2": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
             "3": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
@@ -223,19 +223,19 @@ describe("getGameActions test", () => {
           playerStates: {
             "1": {
               availableTroops: 11,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["India"],
             },
             "2": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
             "3": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
@@ -312,19 +312,19 @@ describe("getGameActions test", () => {
           playerStates: {
             "1": {
               availableTroops: 0,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["India"],
             },
             "2": {
               availableTroops: 0,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["China"],
             },
             "3": {
               availableTroops: 0,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["Nepal"],
             },
@@ -405,19 +405,19 @@ describe("getGameActions test", () => {
           playerStates: {
             "1": {
               availableTroops: 11,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["India"],
             },
             "2": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
             "3": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
@@ -455,19 +455,19 @@ describe("getGameActions test", () => {
           playerStates: {
             "1": {
               availableTroops: 11,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: ["India"],
             },
             "2": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
             "3": {
               availableTroops: 21,
-              cards: [],
+              cards: ["infantry", "infantry", "infantry"],
               continents: [],
               territories: [],
             },
