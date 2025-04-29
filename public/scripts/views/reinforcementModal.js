@@ -1,4 +1,4 @@
-import ApiService from "../components/apiService.js";
+import ApiService from '../components/apiService.js';
 
 export default class ReinforcementModal {
   #currentPlayer;
@@ -14,9 +14,9 @@ export default class ReinforcementModal {
   #removeTerritoryHighlight() {
     Object.keys(this.#territories).forEach((territoryId) => {
       const territoryElement = document.getElementById(territoryId);
-      const path = territoryElement.querySelector("path");
+      const path = territoryElement.querySelector('path');
 
-      path.classList.remove("highlight-territory");
+      path.classList.remove('highlight-territory');
     });
   }
 
@@ -24,8 +24,8 @@ export default class ReinforcementModal {
     return (_event) => {
       if (this.#isOwnedByCurrentPlayer(territoryId)) {
         const territory = document.getElementById(territoryId);
-        const path = territory.querySelector("path");
-        path.classList.add("highlight-territory");
+        const path = territory.querySelector('path');
+        path.classList.add('highlight-territory');
 
         this.#showTroopDeploymentToast(territoryId);
       }
@@ -36,14 +36,14 @@ export default class ReinforcementModal {
     Object.keys(this.#territories).forEach((territoryId) => {
       const territoryElement = document.getElementById(territoryId);
       const listener = this.#clickListeners[territoryId];
-      territoryElement.removeEventListener("click", listener);
+      territoryElement.removeEventListener('click', listener);
     });
   }
 
   addTerritoryListeners(currentPlayer, territories, actionData) {
-    const { troopCount } = actionData;
-    this.#totalTroops = troopCount;
-    this.#remainingTroops = troopCount;
+    const { newTroops } = actionData;
+    this.#totalTroops = newTroops;
+    this.#remainingTroops = newTroops;
 
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
@@ -52,7 +52,7 @@ export default class ReinforcementModal {
       const territoryElement = document.getElementById(territoryName);
       const listener = this.#handleTerritoryClick(territoryName).bind(this);
       this.#clickListeners[territoryName] = listener;
-      territoryElement.addEventListener("click", listener);
+      territoryElement.addEventListener('click', listener);
     });
   }
 
@@ -75,28 +75,28 @@ export default class ReinforcementModal {
       duration: 10000,
       escapeMarkup: false,
       close: false,
-      gravity: "bottom",
-       position: "center",
+      gravity: 'bottom',
+      position: 'center',
       style: {
-        padding: "0px",
-        background: "transparent",
+        padding: '0px',
+        background: 'transparent',
       },
     });
   }
 
   #attachToastEventListeners(territoryId, toast) {
-    const inputField = document.querySelector("#number-input");
-    const placeButton = document.querySelector("#place-troops-btn");
-    const incrementButton = document.querySelector("#increment");
-    const decrementButton = document.querySelector("#decrement");
+    const inputField = document.querySelector('#number-input');
+    const placeButton = document.querySelector('#place-troops-btn');
+    const incrementButton = document.querySelector('#increment');
+    const decrementButton = document.querySelector('#decrement');
 
-    placeButton?.addEventListener("click", () =>
+    placeButton?.addEventListener('click', () =>
       this.#handlePlaceButtonClick(territoryId, inputField, toast)
     );
-    incrementButton?.addEventListener("click", () =>
+    incrementButton?.addEventListener('click', () =>
       this.#handleIncrementButtonClick(inputField)
     );
-    decrementButton?.addEventListener("click", () =>
+    decrementButton?.addEventListener('click', () =>
       this.#handleDecrementButtonClick(inputField)
     );
   }
@@ -123,9 +123,8 @@ export default class ReinforcementModal {
     inputField.stepDown();
   }
 
-
   #showTroopDeploymentToast(territoryId) {
-    const existingToast = document.getElementById("troop-toast-box");
+    const existingToast = document.getElementById('troop-toast-box');
     if (existingToast) return;
 
     const toastHTML = this.#createToastHtml();

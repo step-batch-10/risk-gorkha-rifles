@@ -108,7 +108,7 @@ describe("getLastAction", () => {
       currentPlayer: "",
       currentCavalryPos: 0,
       bonusTroops: [0, 10, 20, 30, 40, 50, 60],
-      data: { troopCount: 21 },
+      data: { newTroops: 21 },
       timeStamp: 1,
       playerStates: playerState,
       territoryState,
