@@ -4,9 +4,9 @@ export default class CardsViewModal {
   #eventBus;
   #cardsOption;
   #cardImages = {
-    infantry: "../../images/card.png",
-    cavalry: "../../images/card-back(2).png",
-    artillery: "../../images/card.png",
+    infantry: "../../images/infantry.png",
+    cavalry: "../../images/cavalry.png",
+    artillery: "../../images/artillery.png",
     wild: "../../images/card-back(2).png",
   };
 
