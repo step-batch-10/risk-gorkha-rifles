@@ -276,19 +276,39 @@ export default class GameController {
   }
 
   #handleConqueredTerritory({ action }) {
-    // const { attackerTerritory, defenderTerritory, troopsToAttack } =
-    //   action.data;
-    console.log(action);
-    Toastify({
-      text: `attacker conquered the defender territory`,
-      duration: 3000,
-      gravity: "top",
-      position: "center",
-      stopOnFocus: true,
-      style: {
-        background: "linear-gradient(to right, #3e2514, #c99147)",
-      },
-    }).showToast();
+    const { attackerTerritory, defenderTerritory } = action.data;
+    console.log(attackerTerritory, defenderTerritory);
+    setTimeout(() => {
+      Toastify({
+        text: `attacker conquered the defender territory`,
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #3e2514, #c99147)",
+        },
+      }).showToast();
+      this.#modalManager.troopsForFortification(
+        attackerTerritory,
+        defenderTerritory
+      );
+    }, 5000);
+  }
+
+  #troopsForFortificationInAttack(
+    attackerTerritory,
+    defenderTerritory,
+    troops
+  ) {
+    const fortificationDetails = {
+      fromTerritory: attackerTerritory,
+      toTerritory: defenderTerritory,
+      troopCount: troops,
+    };
+    console.log(fortificationDetails);
+    alert("before sending the troops");
+    this.#apiService.fortification(fortificationDetails);
   }
 
   init() {
@@ -327,6 +347,11 @@ export default class GameController {
     this.#eventBus.on(
       "sendDefenderTroops",
       this.#sendDefenderTroops.bind(this)
+    );
+
+    this.#eventBus.on(
+      "TroopsForFortificationInAttack",
+      this.#troopsForFortificationInAttack.bind(this)
     );
   }
 }

@@ -1,6 +1,6 @@
-import { GameStatus, Territory } from '../types/gameTypes.ts';
-import _ from 'lodash';
-import GoldenCavalry from './goldenCavalry.ts';
+import { GameStatus, Territory } from "../types/gameTypes.ts";
+import _ from "lodash";
+import GoldenCavalry from "./goldenCavalry.ts";
 
 type Data = {
   [key: string]:
@@ -66,7 +66,7 @@ type BattleDetails = {
 
 export default class Game {
   private diceRoller: () => number;
-  private currentPlayer: string = '';
+  private currentPlayer: string = "";
   private players: Set<string>;
   private gameStatus: GameStatus;
   private actions: Action[] = [];
@@ -92,12 +92,12 @@ export default class Game {
     diceRoller: () => number,
     goldenCavalry: GoldenCavalry,
     colours: string[] = [
-      '#50C878',
-      '#DAA520',
-      '#FF7F50',
-      '#DAA520',
-      'brown',
-      'grey',
+      "#50C878",
+      "#DAA520",
+      "#FF7F50",
+      "#DAA520",
+      "brown",
+      "grey",
     ]
   ) {
     this.players = players;
@@ -204,13 +204,13 @@ export default class Game {
 
     this.actions.push(
       this.generateAction(
-        '',
+        "",
         {
           territory: territory,
           troopCount: this.territoryState[territory].troops,
           troopDeployed: troopCount,
         },
-        'updateTroops',
+        "updateTroops",
         playerId,
         null
       )
@@ -241,18 +241,18 @@ export default class Game {
     }
 
     this.actions.push(
-      this.generateAction('', {}, 'stopInitialDeployment', null, null)
+      this.generateAction("", {}, "stopInitialDeployment", null, null)
     );
     const playerCycle = this.selectPlayerTurn(3);
     this.currentPlayer = playerCycle().id;
     this.actions.push(
-      this.generateAction(this.currentPlayer, {}, 'startGame', null, null)
+      this.generateAction(this.currentPlayer, {}, "startGame", null, null)
     );
     this.actions.push(
       this.generateAction(
         this.currentPlayer,
         {},
-        'reinforcementPhase',
+        "reinforcementPhase",
         this.currentPlayer,
         this.currentPlayer
       )
@@ -274,9 +274,9 @@ export default class Game {
 
     this.actions.push(
       this.generateAction(
-        '',
+        "",
         { newTroops: 21 },
-        'startInitialDeployment',
+        "startInitialDeployment",
         null,
         null
       )
@@ -374,13 +374,13 @@ export default class Game {
     playerId: string
   ) {
     if (defender === undefined) {
-      return 'player not found';
+      return "player not found";
     }
 
     const [territory, { owner }] = defender;
     const defenderId = owner;
     this.actions.push(
-      this.generateAction(playerId, {}, 'troopsToDefendWith', null, defenderId)
+      this.generateAction(playerId, {}, "troopsToDefendWith", null, defenderId)
     );
 
     this.activeBattle[defenderId] = { territoryId: territory };
@@ -454,7 +454,7 @@ export default class Game {
     this.territoryState[attackingTerritory].troops -= attackerTroops;
     this.territoryState[defendingTerritory].troops -= defenderTroops;
 
-    const winner = attackerTroops >= defenderTroops ? 'Defender' : 'Attacker';
+    const winner = attackerTroops >= defenderTroops ? "Defender" : "Attacker";
 
     return { attackerTroops, defenderTroops, winner };
   }
@@ -482,6 +482,7 @@ export default class Game {
       defenderTerritory: defender.territoryId as string,
       troopsToAttack: dices[0].length,
     };
+
     this.changeOwner(
       attackerId,
       defenderId,
@@ -489,7 +490,7 @@ export default class Game {
       data.troopsToAttack
     );
     this.actions.push(
-      this.generateAction(userId, data, 'conqueredTerritory', null, null)
+      this.generateAction(userId, data, "conqueredTerritory", null, attackerId)
     );
   }
 
@@ -510,10 +511,10 @@ export default class Game {
       );
 
       this.actions.push(
-        this.generateAction(userId, { dices }, 'diceRoll', null, null)
+        this.generateAction(userId, { dices }, "diceRoll", null, null)
       );
       this.actions.push(
-        this.generateAction(userId, result, 'combatResult', null, null)
+        this.generateAction(userId, result, "combatResult", null, null)
       );
       if (this.isDefenderEliminaated(defender.territoryId as string)) {
         this.createDefenderEliminatedAcion(dices, userId);
@@ -535,7 +536,7 @@ export default class Game {
 
     this.diceAction(actionDetails.playerId);
 
-    return { status: 'success' };
+    return { status: "success" };
   };
 
   public fortification({ data, playerId }: ActionDetails) {
@@ -550,13 +551,13 @@ export default class Game {
 
     this.actions.push(
       this.generateAction(
-        '',
+        "",
         {
           territory: toTerritory,
           troopCount: this.territoryState[toTerritory].troops,
           troopDeployed: troopCount,
         },
-        'updateTroops',
+        "updateTroops",
         playerId,
         null
       )
@@ -630,7 +631,7 @@ export default class Game {
         {
           activeTerritories: this.playerState[playerId].territories,
         },
-        'fortification',
+        "fortification",
         playerId,
         playerId
       )

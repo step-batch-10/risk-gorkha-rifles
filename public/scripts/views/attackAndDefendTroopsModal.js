@@ -19,6 +19,14 @@ export class AttackDefenceModal {
           `;
   }
 
+  #createFortificationTroopsHtml() {
+    return `<div id="troops-to-fortify">
+              <input id="troops-input" type="text" placeholder="Troops to fortify" style="width: 200px;" min="1" max="3"/>
+              <button id="submit-button" style="margin-left: 5px;">Submit</button>
+            </div>
+          `;
+  }
+
   #createToast(createToastHTML) {
     const toastHTML = createToastHTML();
     const myToast = Toastify({
@@ -61,6 +69,27 @@ export class AttackDefenceModal {
     button.addEventListener("click", () => {
       myToast.hideToast();
       this.#eventbus.emit("sendAttckerTroops", parseInt(input.value));
+    });
+  }
+
+  showTroopsToFortification(attackerTerritory, defenderTerritory) {
+    const troopsToFortify = document.getElementById("troops-to-fortify");
+    if (troopsToFortify) troopsToFortify.innerHTML = "";
+    const toast = this.#createToast(
+      this.#createFortificationTroopsHtml.bind(this)
+    );
+
+    const input = document.getElementById("troops-input");
+    const button = document.getElementById("submit-button");
+    // console.log(input.value);
+    button.addEventListener("click", () => {
+      toast.hideToast();
+      this.#eventbus.emit(
+        "TroopsForFortificationInAttack",
+        attackerTerritory,
+        defenderTerritory,
+        parseInt(input.value)
+      );
     });
   }
 }

@@ -128,4 +128,10 @@ export default class ModalManager {
   troopsToAttackWith() {
     return this.#troopsSelection.showTroopsToAttack();
   }
+  troopsForFortification(attackerTerritory, defenderTerritory) {
+    return this.#troopsSelection.showTroopsToFortification(
+      attackerTerritory,
+      defenderTerritory
+    );
+  }
 }
