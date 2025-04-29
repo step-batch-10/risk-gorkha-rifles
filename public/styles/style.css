@@ -333,7 +333,7 @@ main {
 
 #cards-option {
   position: absolute;
-  bottom: 22%;
+  bottom: 20%;
   left: 1%;
   height: 140px;
   width: 96px;
@@ -350,8 +350,8 @@ main {
 }
 
 #cards-option:hover {
-  /* border-color: rgba(166, 138, 100, 1); */
-  box-shadow: 0.5px 0.5px 8px rgb(166, 138, 100);
+  box-shadow: 1px 1px 8px rgb(117, 98, 71);
+  transform: scale(1.02);
   opacity: 90%;
 }
 
