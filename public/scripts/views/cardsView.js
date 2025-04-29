@@ -7,7 +7,7 @@ export default class CardsViewModal {
     infantry: "../../images/infantry.png",
     cavalry: "../../images/cavalry.png",
     artillery: "../../images/artillery.png",
-    wild: "../../images/card-back(2).png",
+    wild: "../../images/combinedArms.png",
   };
 
   constructor(modelId, cardsOptionId, eventBus) {
