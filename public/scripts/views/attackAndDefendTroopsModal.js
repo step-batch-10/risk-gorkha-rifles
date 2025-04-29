@@ -72,7 +72,7 @@ export class AttackDefenceModal {
     });
   }
 
-  showTroopsToFortification(attackerTerritory, defenderTerritory) {
+  showTroopsToFortification(attackerTerritory, defenderTerritory, maxTroops) {
     const troopsToFortify = document.getElementById("troops-to-fortify");
     if (troopsToFortify) troopsToFortify.innerHTML = "";
     const toast = this.#createToast(
@@ -81,14 +81,23 @@ export class AttackDefenceModal {
 
     const input = document.getElementById("troops-input");
     const button = document.getElementById("submit-button");
-    // console.log(input.value);
     button.addEventListener("click", () => {
       toast.hideToast();
+      const troops = parseInt(input.value);
+      if (troops >= maxTroops) {
+        alert("keep at least one troop in territory");
+        this.showTroopsToFortification(
+          attackerTerritory,
+          defenderTerritory,
+          maxTroops
+        );
+        return;
+      }
       this.#eventbus.emit(
         "TroopsForFortificationInAttack",
         attackerTerritory,
         defenderTerritory,
-        parseInt(input.value)
+        troops
       );
     });
   }

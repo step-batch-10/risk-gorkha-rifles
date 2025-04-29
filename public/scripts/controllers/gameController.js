@@ -277,6 +277,8 @@ export default class GameController {
 
   #handleConqueredTerritory({ action }) {
     const { attackerTerritory, defenderTerritory } = action.data;
+
+    console.log(action);
     console.log(attackerTerritory, defenderTerritory);
     setTimeout(() => {
       Toastify({
@@ -289,9 +291,17 @@ export default class GameController {
           background: "linear-gradient(to right, #3e2514, #c99147)",
         },
       }).showToast();
+      const territoryState = Object.entries(action.territoryState).filter(
+        ([territory]) => {
+          return territory === attackerTerritory;
+        }
+      );
+      const maxTroops = territoryState[0][1].troops;
+      console.log(maxTroops, "max troops");
       this.#modalManager.troopsForFortification(
         attackerTerritory,
-        defenderTerritory
+        defenderTerritory,
+        maxTroops
       );
     }, 5000);
   }
@@ -306,6 +316,7 @@ export default class GameController {
       toTerritory: defenderTerritory,
       troopCount: troops,
     };
+
     this.#apiService.fortification(fortificationDetails);
   }
 
