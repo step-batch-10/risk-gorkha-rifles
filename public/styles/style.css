@@ -1071,3 +1071,8 @@ button {
   color: #fff;
   background-color: #7f4f24;
 }
+
+.select-card {
+  transform: scale(1.2);
+  border: 1px solid white;
+}

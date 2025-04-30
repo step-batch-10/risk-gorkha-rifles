@@ -54,6 +54,7 @@ export default class CardsViewModal {
           this.#showToast("Cards cannot be traded");
           return;
         }
+        card.classList.toggle("select-card");
         this.#selectedCards = new Set();
         this.#selectedCards.add(card.dataset.card);
         return;
@@ -87,7 +88,7 @@ export default class CardsViewModal {
     if (!this.#isReinforcementPhase) {
       tradeButton.style.display = "none";
     } else {
-      tradeButton.style.display = "block";
+      tradeButton.style.display = "flex";
     }
 
     const input = document.createElement("input");

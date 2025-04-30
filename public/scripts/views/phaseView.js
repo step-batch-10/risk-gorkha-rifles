@@ -65,7 +65,6 @@ export default class PhaseView {
   }
 
   #handleReinforcementRequestClick() {
-    this.#displayNextPhaseButton();
     this.#eventBus.emit("requestReinforcement");
   }
 
@@ -93,6 +92,7 @@ export default class PhaseView {
     const draftPhase = document.getElementById("draft-phase");
     draftPhase.style.display = "block";
 
+    this.#displayNextPhaseButton();
     const reinforcementRequestButton =
       draftPhaseContainer.querySelector("#draft-action");
 

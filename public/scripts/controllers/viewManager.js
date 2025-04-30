@@ -272,5 +272,7 @@ export default class ViewManager {
     main.removeAttribute("filter");
     atkId.classList.remove("fly");
     dfdId.classList.remove("fly");
+    // atkId.setAttribute("filter", "url(#filter_texture)");
+    // dfdId.setAttribute("filter", "url(#filter_texture)");
   }
 }

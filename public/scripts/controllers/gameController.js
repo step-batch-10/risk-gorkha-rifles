@@ -258,7 +258,7 @@ export default class GameController {
     this.#modalManager.troopsToDefendWith();
   }
 
-  async #handleDiceRoll() {
+  async #handleDiceRoll({ dices }) {
     Toastify({
       text: `Dice are rolling`,
       duration: 3000,
@@ -271,10 +271,9 @@ export default class GameController {
     }).showToast();
 
     this.#modalManager.startDice([1, 1, 1], [1, 1]);
-    // const [attackerDice, defenderDice] = dices;
+    const [attackerDice, defenderDice] = dices;
     await new Promise((resolve) => setTimeout(resolve, 3000));
-    this.#modalManager.startDice([6, 5, 4], [1, 1]);
-    // this.#modalManager.startDice(attackerDice, defenderDice);
+    this.#modalManager.startDice(attackerDice, defenderDice);
     this.#viewManager.blurOut(
       this.#attackingTerritory,
       this.#defendingTerritory

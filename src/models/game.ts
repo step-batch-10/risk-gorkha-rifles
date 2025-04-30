@@ -572,8 +572,8 @@ export default class Game {
       const result = this.battleOutcome(
         attacker.territoryId as string,
         defender.territoryId as string,
-        dices[0],
-        dices[1]
+        [6, 5, 4],
+        [1, 1]
       );
 
       this.actions.push(
@@ -610,7 +610,6 @@ export default class Game {
     const troops = data.troops;
 
     this.activeBattle[playerId].troopCount = troops;
-
     this.activeBattle[playerId].diceOutcome = Array.from({
       length: Number(troops),
     }).map(() => this.diceRoller()) as number[];
