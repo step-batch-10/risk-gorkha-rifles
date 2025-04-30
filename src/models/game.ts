@@ -32,8 +32,6 @@ export interface Action {
   currentCavalryPos: number;
   bonusTroops: number[];
   data: {
-    atkId?: string;
-    dfdId?: string;
     territory?: string;
     newTroops?: number;
     troopCount?: number;
