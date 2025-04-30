@@ -553,7 +553,7 @@ export default class Game {
         this.generateAction(attackerId, {}, "gameOver", null, null)
       );
 
-      this.gameStatus = GameStatus.over;
+      // this.gameStatus = GameStatus.over;
       return "winner found";
     }
     return "winner not found";
