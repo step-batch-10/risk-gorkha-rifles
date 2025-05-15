@@ -129,11 +129,11 @@ describe("drawCard", () => {
       "wild",
     ];
     const cm = getCardManager(mockedDeck);
+    assertEquals(cm.drawCard(), "wild");
     assertEquals(cm.drawCard(), "artillery");
-    assertEquals(cm.drawCard(), "artillery");
-    assertEquals(cm.drawCard(), "artillery");
-    assertEquals(cm.drawCard(), "artillery");
-    assertEquals(cm.drawCard(), "artillery");
+    assertEquals(cm.drawCard(), "cavalry");
+    assertEquals(cm.drawCard(), "infantry");
+    assertEquals(cm.drawCard(), "infantry");
   });
 
   it("should return undefined when deck is empty and discard is empty", () => {
@@ -147,6 +147,6 @@ describe("drawCard", () => {
     const cm = getCardManager(mockedDeck);
 
     for (let i = 0; i < 5; i++) cm.drawCard();
-    assertEquals(cm.drawCard(), "artillery");
+    assertEquals(cm.drawCard(), null);
   });
 });
