@@ -1,4 +1,6 @@
-export const getContinents = () => {
+import { Continent } from "../types/gameTypes.ts";
+
+export const getContinents = (): Continent => {
   return {
     NorthAmerica: [
       "alaska",
@@ -52,7 +54,7 @@ export const getContinents = () => {
   };
 };
 
-export const neighbouringTerritories = (): Record<string, string[]> => {
+export const neighbouringTerritories = (): Continent => {
   return {
     alaska: ["northwest-territory", "alberta", "kamchatka"],
     "northwest-territory": ["alaska", "greenland", "alberta", "ontario"],

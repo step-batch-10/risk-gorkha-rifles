@@ -6,9 +6,9 @@ export enum GameStatus {
 export enum AllotStatus {
   waitingLobby = "waitingLobby",
   gameRoom = "gameRoom",
-} 
+}
 
-export type LobbyStatus = { status: boolean; players: string[] };
+export type LobbyStatus = { status: boolean; players: string[]; };
 
 export enum ActionTypes {
   updateTroops = "updateTroops",
@@ -25,14 +25,14 @@ export enum ActionTypes {
   getGamePlayers = "getGamePlayers"
 }
 
-export type AttackDetails = { troops: number | string; attackerId: string };
-export type DefendDetails = { troops: number | string; defenderId: string };
+export type AttackDetails = { troops: number | string; attackerId: string; };
+export type DefendDetails = { troops: number | string; defenderId: string; };
 
 export type DiceDetails = [AttackDetails | DefendDetails];
 
 export type Continent = Record<string, string[]>;
 
-export type Territory = { owner: string; troops: number };
+export type Territory = { owner: string; troops: number; };
 
 export type CardType = "infantry" | "cavalry" | "artillery" | "wild";
 
@@ -72,12 +72,12 @@ export type FortificationDetails = {
 
 export type Data = {
   [key: string]:
-    | number
-    | Record<string, string>
-    | string
-    | Record<string, PlayerState>
-    | number[]
-    | string[];
+  | number
+  | Record<string, string>
+  | string
+  | Record<string, PlayerState>
+  | number[]
+  | string[];
 };
 
 export type TerritoryState = Record<string, Territory>;
@@ -99,3 +99,5 @@ export interface OutgoingActionDetails {
 }
 
 export type PlayerStates = Record<string, PlayerState>;
+
+export type Shuffler = (names: string[]) => string[];
