@@ -31,6 +31,10 @@ export type DefendDetails = { troops: number | string; defenderId: string; };
 export type DiceDetails = [AttackDetails | DefendDetails];
 
 export type Continent = Record<string, string[]>;
+export type Continents = Record<
+  string,
+  { bonusPoints: number, territories: string[]; }
+>;
 
 export type Territory = { owner: string; troops: number; };
 
@@ -101,3 +105,8 @@ export interface OutgoingActionDetails {
 export type PlayerStates = Record<string, PlayerState>;
 
 export type Shuffler = (names: string[]) => string[];
+
+export interface PlayerRegions {
+  territories: string[],
+  continents: string[];
+};

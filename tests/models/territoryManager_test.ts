@@ -1,16 +1,22 @@
 import { assertEquals, assertThrows } from "assert";
 import { describe, it } from "testing";
 
-import { Continent, TerritoryState } from "../../src/types/gameTypes.ts";
+import { Continents, PlayerRegions, TerritoryState } from "../../src/types/gameTypes.ts";
 import TerritoryManager from "../../src/models/territoryManager.ts";
 
-const mockedContinents: Continent = {
-  Asia: ["India", "Japan", "China"],
-  Alska: ["Alberta"]
+const mockedContinents: Continents = {
+  Asia: {
+    bonusPoints: 7,
+    territories: ["India", "Japan", "China"]
+  },
+  Alaska: {
+    bonusPoints: 3,
+    territories: ["Alberta"]
+  }
 };
 
 const createTerritoryManagerInstance = (
-  continents: Continent = mockedContinents,
+  continents: Continents = mockedContinents,
   players: Set<string> = new Set(["1", "2", "3"])) => {
   const territoryManager = new TerritoryManager({ ...continents }, {});
   territoryManager.initialize(players);
@@ -18,7 +24,7 @@ const createTerritoryManagerInstance = (
   return territoryManager;
 };
 
-describe('initializeTerritoryManager', () => {
+describe('initialize territory manager', () => {
   it('should distribute territories equally', () => {
     const territoryManager = createTerritoryManagerInstance();
 
@@ -45,7 +51,7 @@ describe('initializeTerritoryManager', () => {
   });
 });
 
-describe('should update the territoryTroops', () => {
+describe('updateTroops', () => {
   it('should increase the territory troops count', () => {
     const territoryManager = createTerritoryManagerInstance();
     const updatedTroopsCount = territoryManager.updateTroops('India', 12);
@@ -81,4 +87,20 @@ describe('should update the territoryTroops', () => {
 
     assertEquals(updatedTroopsCount, 0);
   });
+});
+
+describe('getPlayerRegions', () => {
+  const territoryManager = createTerritoryManagerInstance();
+  const player1Regions: PlayerRegions = territoryManager.getPlayerRegions('1');
+  const player2Regions: PlayerRegions = territoryManager.getPlayerRegions('2');
+  const player3Regions: PlayerRegions = territoryManager.getPlayerRegions('3');
+
+  assertEquals(player1Regions.continents, ["Alaska"]);
+  assertEquals(player1Regions.territories, ["India", "Alberta"]);
+
+  assertEquals(player2Regions.continents, []);
+  assertEquals(player2Regions.territories, ["Japan"]);
+
+  assertEquals(player3Regions.continents, []);
+  assertEquals(player3Regions.territories, ["China"]);
 });
