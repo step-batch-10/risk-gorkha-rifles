@@ -104,3 +104,20 @@ describe('getPlayerRegions', () => {
   assertEquals(player3Regions.continents, []);
   assertEquals(player3Regions.territories, ["China"]);
 });
+
+describe('getContinentBonus', () => {
+  it('should return the valid continent bonus', () => {
+    const territoryManager = createTerritoryManagerInstance();
+
+    assertEquals(territoryManager.getContinentBonus('Asia'), 7);
+    assertEquals(territoryManager.getContinentBonus('Alaska'), 3);
+  });
+
+  it('should throw an error if continent is not valid ', () => {
+    assertThrows(() => {
+
+    const territoryManager = createTerritoryManagerInstance();
+    territoryManager.getContinentBonus('unknown');
+    })
+  })
+});

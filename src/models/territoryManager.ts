@@ -54,6 +54,10 @@ export default class TerritoryManager {
     return territory in this.territoryState;
   }
 
+  private isValidContinent(continent: string) {
+    return continent in this.continents;
+  }
+
   public updateTroops(territory: string, troopsCount: number) {
     if (!this.isValidTerritory(territory))
       throw new Error('Invalid territory');
@@ -85,5 +89,12 @@ export default class TerritoryManager {
       territories: this.playerTerritories(player),
       continents: this.playerContinents(player)
     };
+  }
+
+  public getContinentBonus(continent: string) {
+    if (!this.isValidContinent(continent))
+      throw new Error("Invalid continent");
+
+    return this.continents[continent].bonusPoints;
   }
 }
