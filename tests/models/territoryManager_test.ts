@@ -74,4 +74,11 @@ describe('should update the territoryTroops', () => {
 
     assertEquals(updatedTroopsCount, 0);
   });
+
+  it('should not decrease the troops count below zero', () => {
+    const territoryManager = createTerritoryManagerInstance();
+    const updatedTroopsCount = territoryManager.updateTroops('India', -3);
+
+    assertEquals(updatedTroopsCount, 0);
+  });
 });

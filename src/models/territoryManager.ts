@@ -46,8 +46,9 @@ export default class TerritoryManager {
   public updateTroops(territory: string, troopsCount: number) {
     if (!this.isValidTerritory(territory))
       throw new Error('Invalid territory');
-      
-    this.territoryState[territory].troops += troopsCount;
+
+    const updatedTroops = this.territoryState[territory].troops += troopsCount;
+    this.territoryState[territory].troops = updatedTroops <= 0 ? 0 : updatedTroops;
 
     return this.territoryState[territory].troops;
   }
