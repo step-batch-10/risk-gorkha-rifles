@@ -152,3 +152,14 @@ describe('getConnectedTerritories', () => {
     });
   });
 });
+
+describe('getNeighbouringTerritories', () => {
+  it('should find the neighbouring territories of other players', () => {
+    const gameManager = createTerritoryManagerInstance();
+    const indiaNeighbours = gameManager.getNeighbouringTerritories("India");
+    const chinaNeighbours = gameManager.getNeighbouringTerritories("China");
+
+    assertEquals(indiaNeighbours, ["China"]);
+    assertEquals(chinaNeighbours, ["India", "Japan"]);
+  });
+});

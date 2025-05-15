@@ -166,4 +166,17 @@ export default class TerritoryManager {
 
     return [...visited];
   }
+
+  public getNeighbouringTerritories(territory: string): string[] {
+    const territoryOwner = this.territoryState[territory].owner;
+    const neighbouringTerritories = this.adjacentTerritories[territory];
+
+    const notOwnedNeighbours = neighbouringTerritories.filter(neighbourTerritory => {
+      const territoryState = this.territoryState[neighbourTerritory];
+
+      return territoryState.owner !== territoryOwner;
+    });
+
+    return notOwnedNeighbours;
+  }
 }
