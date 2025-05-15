@@ -34,4 +34,21 @@ export default class TerritoryManager {
   public initialize(players: Set<string>): TerritoryState {
     return this.distributeTerritories([...players]);
   }
+
+  public getTerritoryState(): TerritoryState {
+    return this.territoryState;
+  }
+
+  private isValidTerritory(territory: string) {
+    return territory in this.territoryState;
+  }
+
+  public updateTroops(territory: string, troopsCount: number) {
+    if (!this.isValidTerritory(territory))
+      throw new Error('Invalid territory');
+      
+    this.territoryState[territory].troops += troopsCount;
+
+    return this.territoryState[territory].troops;
+  }
 }
