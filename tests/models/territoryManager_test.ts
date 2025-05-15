@@ -1,24 +1,38 @@
 import { assertEquals, assertThrows } from "assert";
 import { describe, it } from "testing";
 
-import { Continents, PlayerRegions, TerritoryState } from "../../src/types/gameTypes.ts";
-import TerritoryManager from "../../src/models/territoryManager.ts";
+import { PlayerRegions, TerritoryState } from "../../src/types/gameTypes.ts";
+import TerritoryManager, { Continents } from "../../src/models/territoryManager.ts";
 
 const mockedContinents: Continents = {
   Asia: {
     bonusPoints: 7,
-    territories: ["India", "Japan", "China"]
+    territories: {
+      India: {
+        neighbourTerritories: ["China", "Alberta"]
+      },
+      Japan: {
+        neighbourTerritories: ["China"]
+      },
+      China: {
+        neighbourTerritories: ["India", "Japan"]
+      }
+    }
   },
   Alaska: {
     bonusPoints: 3,
-    territories: ["Alberta"]
+    territories: {
+      Alberta: {
+        neighbourTerritories: ["India"]
+      }
+    }
   }
 };
 
 const createTerritoryManagerInstance = (
   continents: Continents = mockedContinents,
   players: Set<string> = new Set(["1", "2", "3"])) => {
-  const territoryManager = new TerritoryManager({ ...continents }, {});
+  const territoryManager = new TerritoryManager({ ...continents });
   territoryManager.initialize(players);
 
   return territoryManager;
@@ -116,8 +130,25 @@ describe('getContinentBonus', () => {
   it('should throw an error if continent is not valid ', () => {
     assertThrows(() => {
 
-    const territoryManager = createTerritoryManagerInstance();
-    territoryManager.getContinentBonus('unknown');
-    })
-  })
+      const territoryManager = createTerritoryManagerInstance();
+      territoryManager.getContinentBonus('unknown');
+    });
+  });
+});
+
+describe('getConnectedTerritories', () => {
+  it('should find the connected territories', () => {
+    const gameManager = createTerritoryManagerInstance();
+    const connectedTerritories = gameManager.getConnectedTerritories("India");
+
+    assertEquals(connectedTerritories, ["Alberta"]);
+  });
+
+  it('should throw an error for unknown territory', () => {
+    const gameManager = createTerritoryManagerInstance();
+
+    assertThrows(() => {
+      gameManager.getConnectedTerritories("unknown");
+    });
+  });
 });

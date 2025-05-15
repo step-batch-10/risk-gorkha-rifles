@@ -1,25 +1,36 @@
-import { Continents, PlayerRegions, Shuffler, Territory, TerritoryState } from "../types/gameTypes.ts";
+import { PlayerRegions, Shuffler, Territory as TerritoryTS, TerritoryState } from "../types/gameTypes.ts";
+
+export type Territory = {
+  neighbourTerritories: string[];
+};
+
+export type Continent = {
+  bonusPoints: number;
+  territories: Record<string, Territory>;
+};
+
+export type Continents = Record<string, Continent>;
+
+export type AdjacentTerritories = Record<string, string[]>;
 
 export default class TerritoryManager {
   private continents: Continents;
-  private neighboringTerritories: Continents;
+  private adjacentTerritories: AdjacentTerritories = {};
   private territoryState: TerritoryState = {};
   private shuffler: Shuffler;
 
   constructor(
     continents: Continents,
-    neighboringTerritories: Continents,
     shuffler: Shuffler = (territories: string[]) => [...territories]) {
     this.shuffler = shuffler;
     this.continents = continents;
-    this.neighboringTerritories = neighboringTerritories;
   }
 
-  private allTerritories = () => {
+  private allTerritories = (): string[] => {
     const territories: string[] = [];
 
     Object.keys(this.continents).forEach(territory => {
-      const continentTerritories = this.continents[territory].territories;
+      const continentTerritories = Object.keys(this.continents[territory].territories);
       territories.push(...continentTerritories);
     });
 
@@ -27,7 +38,7 @@ export default class TerritoryManager {
   };
 
   private distributeTerritories(players: string[]): TerritoryState {
-    const territoryState: Record<string, Territory> = {};
+    const territoryState: Record<string, TerritoryTS> = {};
     const territoriesList = this.allTerritories();
     const shuffled: string[] = this.shuffler(territoriesList);
 
@@ -42,7 +53,24 @@ export default class TerritoryManager {
     return this.territoryState;
   }
 
+  private getAdajacentTerritories() {
+    const adjacentTerritories: Record<string, string[]> = {};
+
+    for (const continent in this.continents) {
+      const continentTerritories = this.continents[continent].territories;
+
+      for (const territory in continentTerritories) {
+        const territories = continentTerritories[territory];
+        adjacentTerritories[territory] = territories.neighbourTerritories;
+      }
+    }
+
+    return adjacentTerritories;
+  }
+
   public initialize(players: Set<string>): TerritoryState {
+    this.adjacentTerritories = this.getAdajacentTerritories();
+
     return this.distributeTerritories([...players]);
   }
 
@@ -72,7 +100,7 @@ export default class TerritoryManager {
     const playerTerritories = this.playerTerritories(player);
 
     return Object.keys(this.continents).filter(continent => {
-      const continentTerritories = this.continents[continent].territories;
+      const continentTerritories = Object.keys(this.continents[continent].territories);
 
       return continentTerritories.every(
         territory => playerTerritories.includes(territory));
@@ -96,5 +124,46 @@ export default class TerritoryManager {
       throw new Error("Invalid continent");
 
     return this.continents[continent].bonusPoints;
+  }
+
+  private getTerritoryOwners(): Record<string, string> {
+    return Object.entries(this.territoryState).reduce((owners, [territory, data]) => {
+      owners[territory] = data.owner;
+      return owners;
+    }, {} as Record<string, string>);
+  }
+
+  private exploreConnectedTerritories(
+    adjacencyMap: Record<string, string[]>,
+    current: string,
+    visited: Set<string>,
+    territoryOwners: Record<string, string>,
+    targetOwner: string
+  ): void {
+    visited.add(current);
+
+    for (const neighbor of adjacencyMap[current]) {
+      const isUnvisitedSameOwner =
+        territoryOwners[neighbor] === targetOwner && !visited.has(neighbor);
+
+      if (isUnvisitedSameOwner) {
+        this.exploreConnectedTerritories(adjacencyMap, neighbor, visited, territoryOwners, targetOwner);
+      }
+    }
+  }
+
+  public getConnectedTerritories(startTerritory: string): string[] {
+    if (!this.isValidTerritory(startTerritory))
+      throw new Error(`Territory "${startTerritory}" not found.`);
+
+    const targetOwner = this.territoryState[startTerritory].owner;
+    const territoryOwners = this.getTerritoryOwners();
+    const visited = new Set<string>();
+
+    this.exploreConnectedTerritories(this.adjacentTerritories, startTerritory, visited, territoryOwners, targetOwner);
+
+    visited.delete(startTerritory);
+
+    return [...visited];
   }
 }
