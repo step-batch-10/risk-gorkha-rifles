@@ -5,6 +5,8 @@ import { serveStatic } from "hono/deno";
 import { BEAN } from "./constant/Bean.ts";
 import { BlankEnv, BlankSchema } from "hono/types";
 import { loginHandler } from "./handler/authHandler.ts";
+import { SessionRepository } from "./repository/sessionRepository.ts";
+import { joinLobbyHandler } from "./handler/lobbyHandler.ts";
 
 type App = Hono<BlankEnv, BlankSchema, "/">;
 
@@ -36,10 +38,41 @@ export default class Server {
     return next();
   }
 
+  private async authMiddleware(context: Context, next: Next) {
+    const sessionId = context.req.header("session-id");
+    if (!sessionId) {
+      return context.json({ error: "Session ID is required" }, 401);
+    }
+
+    const sessionRepository: SessionRepository = context.get(BEAN.sessionRepository);
+    const session = sessionRepository.findSessionById(sessionId);
+
+    if (!session) return context.json({ error: "Invalid session ID" }, 401);
+    context.set("userId", session.userId);
+
+    return await next();
+  }
+
+  private handleLobbyRoutes(): App {
+    const lobbyRoutes = new Hono();
+    lobbyRoutes.post("/join", joinLobbyHandler);
+
+    return lobbyRoutes;
+  }
+
+  private handleAPIRoutes(): App {
+    const apiRoutes = new Hono();
+    apiRoutes.use(this.authMiddleware.bind(this));
+    apiRoutes.route("/lobby", this.handleLobbyRoutes());
+
+    return apiRoutes;
+  }
+
   private registerRoutes(app: App) {
     app.use(logger());
     app.use(this.setContext.bind(this));
     app.route("auth", this.handleAuthRoutes());
+    app.route("api", this.handleAPIRoutes());
     app.get("*", serveStatic({ root: "./public/" }));
   }
 

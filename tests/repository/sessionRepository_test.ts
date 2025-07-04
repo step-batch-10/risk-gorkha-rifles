@@ -51,4 +51,32 @@ describe("SessionRepository", () => {
 
     assertEquals(sessions, []);
   });
+
+  it("validates session existence", () => {
+    const createId = () => "valid-session";
+    const repo = new SessionRepository(createId);
+
+    const sessionId = repo.createSession("user-1");
+
+    assertEquals(repo.isValidSession(sessionId), true);
+    assertEquals(repo.isValidSession("invalid-session"), false);
+  });
+
+  it("deletes a session", () => {
+    const createId = () => "session-to-delete";
+    const repo = new SessionRepository(createId);
+
+    const sessionId = repo.createSession("user-1");
+    assertEquals(repo.isValidSession(sessionId), true);
+
+    repo.deleteSession(sessionId);
+    assertEquals(repo.isValidSession(sessionId), false);
+  });
+
+  it("returns the correct bean name", () => {
+    const createId = () => "any-session";
+    const repo = new SessionRepository(createId);
+
+    assertEquals(repo.name, "sessionRepository");
+  });
 });
