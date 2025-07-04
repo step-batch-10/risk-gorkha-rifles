@@ -5,7 +5,7 @@ import { AuthService, ValidationError } from "../service/authService.ts";
 
 export const loginHandler = async (context: Context) => {
   try {
-    const { username, avatar } = await context.req.json();    
+    const { username, avatar } = await context.req.json();
     const authService: AuthService = context.get("authService");
 
     const { sessionId, userId } = authService.handleLogin(username, avatar);

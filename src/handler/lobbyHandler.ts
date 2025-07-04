@@ -8,7 +8,7 @@ export const joinLobbyHandler = async (context: Context) => {
     const { noOfPlayers } = await context.req.json();
     const userId = context.get("userId");
     const lobbyService: LobbyService = context.get(BEAN.lobbyService);
-    
+
     if (!noOfPlayers) {
       return context.json({ error: "Invalid request data" }, 400);
     }
@@ -16,8 +16,6 @@ export const joinLobbyHandler = async (context: Context) => {
     lobbyService.joinLobby(noOfPlayers, userId);
     return context.json(null, 200);
   } catch (error) {
-    console.log(error);
-
     if (error instanceof ValidationError)
       return context.json({ error: error.message }, 400);
 
