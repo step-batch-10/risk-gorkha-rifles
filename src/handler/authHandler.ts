@@ -18,7 +18,7 @@ export const loginHandler = async (context: Context) => {
     if (err instanceof ValidationError) {
       return context.json({ message: err.message }, 400);
     }
-    console.log(err);
-    throw context.json(null, 500);
+
+    return context.json(null, 500);
   }
 };

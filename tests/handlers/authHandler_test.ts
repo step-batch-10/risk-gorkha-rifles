@@ -110,4 +110,16 @@ describe('Login handler test - Auth Handler', () => {
     assertEquals(response.status, 302);
     assertEquals(response.headers.get("set-cookie"), "sessionId=1; Path=/, userId=1; Path=/");
   });
+
+  it('should return 500 if JSON parsing fails', async () => {
+    const server = createServer();
+
+    const response = await server.request("/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: '{ "username": "broken_user"'
+    });
+
+    assertEquals(response.status, 500);
+  });
 });
