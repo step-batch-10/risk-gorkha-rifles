@@ -1,10 +1,18 @@
 import { Hono } from "hono";
 import Server, { ContextBean } from "./server.ts";
 
-import { AuthService } from "./services/authService.ts";
+import { AuthService } from "./service/authService.ts";
+import { UserRepository } from "./repository/userRepository.ts";
+import { SessionRepository } from "./repository/sessionRepository.ts";
+
+const uniqueIdGenerator = () => crypto.randomUUID();
 
 const getContextBeans = (): ContextBean[] => {
-  return [new AuthService()];
+  const userRepository = new UserRepository(uniqueIdGenerator);
+  const sessionRepository = new SessionRepository(uniqueIdGenerator);
+  const authService = new AuthService(userRepository, sessionRepository);
+
+  return [authService];
 };
 
 const main = () => {

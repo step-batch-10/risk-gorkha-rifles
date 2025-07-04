@@ -2,9 +2,9 @@ import { Context, Hono, Next } from "hono";
 import { logger } from "hono/logger";
 import { serveStatic } from "hono/deno";
 
-import { BEAN } from "./constants/Bean.ts";
+import { BEAN } from "./constant/Bean.ts";
 import { BlankEnv, BlankSchema } from "hono/types";
-import { loginHandler } from "./handlers/authHandler.ts";
+import { loginHandler } from "./handler/authHandler.ts";
 
 type App = Hono<BlankEnv, BlankSchema, "/">;
 
