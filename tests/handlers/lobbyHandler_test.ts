@@ -48,7 +48,8 @@ describe("Lobby Handler", () => {
       body: JSON.stringify({ noOfPlayers: 3 })
     });
 
-    assertEquals(response.status, 200);
+    assertEquals(response.status, 302);
+    assertEquals(response.headers.get("location"), "waiting.html");
   });
 
   it("should return 400 if noOfPlayers is not provided", async () => {

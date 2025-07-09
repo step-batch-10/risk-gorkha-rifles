@@ -14,7 +14,7 @@ export const joinLobbyHandler = async (context: Context) => {
     }
 
     lobbyService.joinLobby(noOfPlayers, userId);
-    return context.json(null, 200);
+    return context.redirect("waiting.html");
   } catch (error) {
     if (error instanceof ValidationError)
       return context.json({ error: error.message }, 400);

@@ -17,14 +17,14 @@ const showToast = (message) => {
   }).showToast();
 };
 
-const handleJoinGame = async (numOfPlayers) => {
+const handleJoinGame = async (noOfPlayers) => {
   try {
-    const response = await fetch("/game/join-game", {
+    const response = await fetch(`${URLs.baseUrl}api/lobby/join`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ numOfPlayers }),
+      body: JSON.stringify({ noOfPlayers: parseInt(noOfPlayers) }),
     });
 
     if (response.redirected) {
