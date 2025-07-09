@@ -40,18 +40,47 @@ export default class Server {
     return next();
   }
 
-  private async authMiddleware(context: Context, next: Next) {
-    const sessionId = getCookie(context, "sessionId");
+  private getURLPathname = (url: string): string => {
+    return new URLPattern(url).pathname;
+  };
 
-    if (!sessionId) {
-      return context.json({ error: "Session ID is required" }, 401);
-    }
+  private isApiRoute = (url: string): boolean => {
+    const apiRoutes = ["/api"];
+    const pathname = this.getURLPathname(url);
+
+    return apiRoutes.some(route => pathname.startsWith(route));
+  };
+
+  private isValidSession = (context: Context): boolean => {
+    const sessionId = getCookie(context, "sessionId");
+    if (!sessionId) return false;
 
     const sessionRepository: SessionRepository = context.get(BEAN.sessionRepository);
     const session = sessionRepository.findSessionById(sessionId);
 
-    if (!session) return context.json({ error: "Invalid session ID" }, 401);
+    if (!session) return false;
     context.set("userId", session.userId);
+
+    return true;
+  };
+
+  private isPrivateStaticRoute(url: string) {
+    const privateStaticRoutes = ["/", "/game"];
+    const pathname = this.getURLPathname(url);
+
+    return privateStaticRoutes.includes(pathname);
+  }
+
+  private async authMiddleware(context: Context, next: Next) {
+    if (this.isValidSession(context)) return await next();
+
+    if (this.isApiRoute(context.req.url)) {
+      return context.json({ error: "Session ID is required" }, 401);
+    }
+
+    if (this.isPrivateStaticRoute(context.req.url)) {
+      return context.redirect("/login", 302);
+    }
 
     return await next();
   }
@@ -65,7 +94,6 @@ export default class Server {
 
   private handleAPIRoutes(): App {
     const apiRoutes = new Hono();
-    apiRoutes.use(this.authMiddleware.bind(this));
     apiRoutes.get("/profile", profileHandler);
     apiRoutes.route("/lobby", this.handleLobbyRoutes());
 
@@ -75,6 +103,7 @@ export default class Server {
   private registerRoutes(app: App) {
     app.use(logger());
     app.use(this.setContext.bind(this));
+    app.use(this.authMiddleware.bind(this));
     app.route("auth", this.handleAuthRoutes());
     app.route("api", this.handleAPIRoutes());
     app.get("*", serveStatic({ root: "./public/" }));

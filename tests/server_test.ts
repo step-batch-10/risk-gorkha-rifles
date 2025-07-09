@@ -17,7 +17,7 @@ const createServer = () => {
 };
 
 describe('Sessions Tests | Server', () => {
-  it('should reuturn 401 for api routes if sessionId not present', async () => {
+  it('should return 401 for api routes if sessionId not present', async () => {
     const server = createServer();
     const response = await server.request("/api/anything", {
       method: "GET"
@@ -26,7 +26,7 @@ describe('Sessions Tests | Server', () => {
     assertEquals(401, response.status);
   });
 
-  it('should reuturn 401 for api routes if sessionId is invalid', async () => {
+  it('should return 401 for api routes if sessionId is invalid', async () => {
     const server = createServer();
     const response = await server.request("/api/anything", {
       method: "GET",
@@ -36,5 +36,25 @@ describe('Sessions Tests | Server', () => {
     });
 
     assertEquals(401, response.status);
+  });
+
+    it('should redirect to login if unauth user tried visiting protected route (/)', async () => {
+    const server = createServer();
+    const response = await server.request("/", {
+      method: "GET"
+    });
+
+    assertEquals(302, response.status);
+    assertEquals("/login", response.headers.get("location"));
+    });
+  
+     it('should redirect to login if unauth user tried visiting protected route (/game)', async () => {
+    const server = createServer();
+    const response = await server.request("/game", {
+      method: "GET"
+    });
+
+    assertEquals(302, response.status);
+    assertEquals("/login", response.headers.get("location"));
   });
 });
