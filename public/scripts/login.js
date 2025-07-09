@@ -1,3 +1,5 @@
+import { URLs } from '../scripts/utils/URLs.js';
+
 const showToast = (message) => {
   Toastify({
     text: message,
@@ -10,7 +12,7 @@ const showToast = (message) => {
     style: {
       background: "linear-gradient(to right, #3e2514, #c99147)",
     },
-    onClick: function () {},
+    onClick: function () { },
   }).showToast();
 };
 
@@ -21,7 +23,7 @@ const handleLogin = async (userName, avatarSrc) => {
       : { username: userName, avatar: avatarSrc };
 
   try {
-    const response = await fetch("/login", {
+    const response = await fetch(`${URLs.baseUrl}auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
