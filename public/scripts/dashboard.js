@@ -1,3 +1,5 @@
+import { URLs } from "./utils/URLs.js";
+
 const showToast = (message) => {
   Toastify({
     text: message,
@@ -11,7 +13,7 @@ const showToast = (message) => {
       background:
         "linear-gradient(to right,rgb(251, 196, 85),rgb(255, 166, 0))",
     },
-    onClick: function () {},
+    onClick: function () { },
   }).showToast();
 };
 
@@ -110,7 +112,7 @@ const renderDashBoard = ({ username, avatar }) => {
 };
 
 const main = async () => {
-  const response = await fetch("/game/profile-details");
+  const response = await fetch(`${URLs.baseUrl}api/profile`);
   const playerDetails = await response.json();
 
   renderDashBoard(playerDetails);

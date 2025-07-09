@@ -28,7 +28,7 @@ describe("Lobby Handler", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "session-id": "1"
+        "Cookie": "sessionId=1"
       },
       body: JSON.stringify({ noOfPlayers: 5 })
     });
@@ -43,7 +43,7 @@ describe("Lobby Handler", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "session-id": "1"
+        "Cookie": "sessionId=1"
       },
       body: JSON.stringify({ noOfPlayers: 3 })
     });
@@ -58,7 +58,7 @@ describe("Lobby Handler", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "session-id": "1"
+        "Cookie": "sessionId=1"
       },
       body: JSON.stringify({})
     });
@@ -73,7 +73,7 @@ describe("Lobby Handler", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "session-id": "1"
+        "Cookie": "sessionId=1"
       },
       body: "{ noOfPlayers: 6 "
     });

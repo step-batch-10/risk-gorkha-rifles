@@ -1,5 +1,10 @@
+export interface UserProfile {
+  username: string;
+  avatar: string;
+}
+
 export class UserRepository {
-  private users: Map<string, { username: string; avatar: string; }> = new Map();
+  private users: Map<string, UserProfile> = new Map();
   private createId: () => string;
 
   constructor(createId: () => string) {
@@ -12,7 +17,7 @@ export class UserRepository {
     return userId;
   }
 
-  public findUserById(userId: string): { username: string; avatar: string; } | undefined {
+  public findUserById(userId: string): UserProfile | undefined {
     return this.users.get(userId);
   }
 

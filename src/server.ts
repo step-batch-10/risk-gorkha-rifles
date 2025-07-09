@@ -5,8 +5,10 @@ import { serveStatic } from "hono/deno";
 import { BEAN } from "./constant/Bean.ts";
 import { BlankEnv, BlankSchema } from "hono/types";
 import { loginHandler } from "./handler/authHandler.ts";
-import { SessionRepository } from "./repository/sessionRepository.ts";
+import { profileHandler } from "./handler/accountHandler.ts";
 import { joinLobbyHandler } from "./handler/lobbyHandler.ts";
+import { SessionRepository } from "./repository/sessionRepository.ts";
+import { getCookie } from "hono/cookie";
 
 type App = Hono<BlankEnv, BlankSchema, "/">;
 
@@ -39,7 +41,8 @@ export default class Server {
   }
 
   private async authMiddleware(context: Context, next: Next) {
-    const sessionId = context.req.header("session-id");
+    const sessionId = getCookie(context, "sessionId");
+
     if (!sessionId) {
       return context.json({ error: "Session ID is required" }, 401);
     }
@@ -63,6 +66,7 @@ export default class Server {
   private handleAPIRoutes(): App {
     const apiRoutes = new Hono();
     apiRoutes.use(this.authMiddleware.bind(this));
+    apiRoutes.get("/profile", profileHandler);
     apiRoutes.route("/lobby", this.handleLobbyRoutes());
 
     return apiRoutes;
