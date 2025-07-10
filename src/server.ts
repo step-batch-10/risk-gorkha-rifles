@@ -65,10 +65,10 @@ export default class Server {
   };
 
   private isPrivateStaticRoute(url: string) {
-    const privateStaticRoutes = ["/", "/game"];
+    const privateStaticRoute = "/game";
     const pathname = this.getURLPathname(url);
 
-    return privateStaticRoutes.includes(pathname);
+    return pathname === "/" || pathname.startsWith(privateStaticRoute);
   }
 
   private async authMiddleware(context: Context, next: Next) {

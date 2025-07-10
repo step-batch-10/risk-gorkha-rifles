@@ -38,7 +38,7 @@ describe('Sessions Tests | Server', () => {
     assertEquals(401, response.status);
   });
 
-    it('should redirect to login if unauth user tried visiting protected route (/)', async () => {
+  it('should redirect to login if unauth user tried visiting protected route (/)', async () => {
     const server = createServer();
     const response = await server.request("/", {
       method: "GET"
@@ -46,11 +46,21 @@ describe('Sessions Tests | Server', () => {
 
     assertEquals(302, response.status);
     assertEquals("/login", response.headers.get("location"));
-    });
-  
-     it('should redirect to login if unauth user tried visiting protected route (/game)', async () => {
+  });
+
+  it('should redirect to login if unauth user tried visiting protected route (/game)', async () => {
     const server = createServer();
     const response = await server.request("/game", {
+      method: "GET"
+    });
+
+    assertEquals(302, response.status);
+    assertEquals("/login", response.headers.get("location"));
+  });
+
+  it('should redirect to login if unauth user tried visiting protected route (/game/anything)', async () => {
+    const server = createServer();
+    const response = await server.request("/game/anything", {
       method: "GET"
     });
 
