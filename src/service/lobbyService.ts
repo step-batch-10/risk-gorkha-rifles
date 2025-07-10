@@ -82,6 +82,13 @@ export default class LobbyService implements ContextBean {
     return null;
   }
 
+  public getLobbyPlayers(playerId: string): string[] | undefined {
+    const playerLobby = this.findPlayerLobby(playerId);
+    if (!playerLobby) return undefined;
+
+    return this.lobbies.get(playerLobby);
+  }
+
   private getRequiredPlayers(type: LobbyType): number {
     return LOBBY_CONFIG[type];
   }

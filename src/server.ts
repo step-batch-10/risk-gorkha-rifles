@@ -6,7 +6,7 @@ import { BEAN } from "./constant/Bean.ts";
 import { BlankEnv, BlankSchema } from "hono/types";
 import { loginHandler } from "./handler/authHandler.ts";
 import { profileHandler } from "./handler/accountHandler.ts";
-import { joinLobbyHandler } from "./handler/lobbyHandler.ts";
+import { joinLobbyHandler, lobbyStatusHandler } from "./handler/lobbyHandler.ts";
 import { SessionRepository } from "./repository/sessionRepository.ts";
 import { getCookie } from "hono/cookie";
 
@@ -88,6 +88,7 @@ export default class Server {
   private handleLobbyRoutes(): App {
     const lobbyRoutes = new Hono();
     lobbyRoutes.post("/join", joinLobbyHandler);
+    lobbyRoutes.get("/status", lobbyStatusHandler);
 
     return lobbyRoutes;
   }

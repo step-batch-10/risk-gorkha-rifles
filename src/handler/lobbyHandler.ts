@@ -2,6 +2,7 @@ import { Context } from "hono";
 import LobbyService from "../service/lobbyService.ts";
 import { ValidationError } from "../service/authService.ts";
 import { BEAN } from "../constant/Bean.ts";
+import AccountService from "../service/accountService.ts";
 
 export const joinLobbyHandler = async (context: Context) => {
   try {
@@ -21,4 +22,19 @@ export const joinLobbyHandler = async (context: Context) => {
 
     return context.json(null, 500);
   }
+};
+
+export const lobbyStatusHandler = (context: Context) => {
+  const userId: string = context.get("userId");
+  const lobbyService: LobbyService = context.get("lobbyService");
+  const accountService: AccountService = context.get("accountService");
+
+  const players = lobbyService.getLobbyPlayers(userId);
+
+  if (!players)
+    return context.json({ status: false });
+
+  const playerProfiles = accountService.buildProfiles(players);
+
+  return context.json({ status: true, players: playerProfiles });
 };

@@ -14,6 +14,12 @@ export default class AccountService implements ContextBean {
     return this.userRepository.findUserById(userId);
   }
 
+  public buildProfiles(players: string[]): UserProfile[] {
+    return players
+      .map(playerId => this.userRepository.findUserById(playerId))
+      .filter(player => player !== undefined);
+  }
+
   get name(): BEAN {
     return this._baseName;
   }

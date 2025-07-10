@@ -39,7 +39,8 @@ describe("LobbyService", () => {
       lobbyService.joinLobby(5, "player1");
     } catch (err: any) {
       assertEquals(err instanceof Error, true);
-      assertEquals(err.message, "Invalid number of players: 5");}
+      assertEquals(err.message, "Invalid number of players: 5");
+    }
   });
 
   it("should not add a player twice to the same lobby", () => {
@@ -95,5 +96,28 @@ describe("LobbyService", () => {
     } catch (err) {
       assertEquals(err instanceof Error, true);
     }
+  });
+
+  it("should return lobby waiting players", () => {
+    const gameService = new MockGameService();
+    const lobbyService = new LobbyService(gameService);
+    lobbyService.joinLobby(3, "1");
+    lobbyService.joinLobby(3, "2");
+
+    const lobbyPlayers = lobbyService.getLobbyPlayers("1");
+
+    assertEquals(["1", "2"], lobbyPlayers);
+  });
+
+
+  it("should return null if player is not in the lobby", () => {
+    const gameService = new MockGameService();
+    const lobbyService = new LobbyService(gameService);
+    lobbyService.joinLobby(3, "1");
+    lobbyService.joinLobby(3, "2");
+
+    const lobbyPlayers = lobbyService.getLobbyPlayers("3");
+
+    assertEquals(undefined, lobbyPlayers);
   });
 });
