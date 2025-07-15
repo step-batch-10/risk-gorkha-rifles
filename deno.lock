@@ -15,7 +15,7 @@
     "jsr:@std/testing@*": "1.0.11",
     "jsr:@std/testing@^1.0.11": "1.0.11",
     "jsr:@std/testing@^1.0.14": "1.0.14",
-    "npm:hono@^4.8.3": "4.8.3",
+    "npm:hono@^4.8.4": "4.8.4",
     "npm:lodash@*": "4.17.21",
     "npm:lodash@^4.17.21": "4.17.21"
   },
@@ -84,8 +84,8 @@
     }
   },
   "npm": {
-    "hono@4.8.3": {
-      "integrity": "sha512-jYZ6ZtfWjzBdh8H/0CIFfCBHaFL75k+KMzaM177hrWWm2TWL39YMYaJgB74uK/niRc866NMlH9B8uCvIo284WQ=="
+    "hono@4.8.4": {
+      "integrity": "sha512-KOIBp1+iUs0HrKztM4EHiB2UtzZDTBihDtOF5K6+WaJjCPeaW4Q92R8j63jOhvJI5+tZSMuKD9REVEXXY9illg=="
     },
     "lodash@4.17.21": {
       "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
@@ -169,7 +169,7 @@
       "jsr:@std/assert@^1.0.13",
       "jsr:@std/testing@^1.0.11",
       "jsr:@std/testing@^1.0.14",
-      "npm:hono@^4.8.3",
+      "npm:hono@^4.8.4",
       "npm:lodash@^4.17.21"
     ]
   }

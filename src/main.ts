@@ -1,20 +1,38 @@
 import { Hono } from "hono";
+import lodash from "npm:lodash";
 import Server, { ContextBean } from "./server.ts";
 
-import GameService from "./service/gameService.ts";
 import LobbyService from "./service/lobbyService.ts";
 import { AuthService } from "./service/authService.ts";
 import AccountService from "./service/accountService.ts";
+import { getContinents } from "./constant/continents.ts";
+import { RiskFactoryConfig, RiskGame } from "./core/risk.ts";
 import { UserRepository } from "./repository/userRepository.ts";
 import { SessionRepository } from "./repository/sessionRepository.ts";
+import GameService, { GameServiceConfig } from "./service/gameService.ts";
 
-const uniqueIdGenerator = () => crypto.randomUUID();
+export type IdGenerator = () => string;
+const uniqueIdGenerator: IdGenerator = () => crypto.randomUUID();
+
+const createGameService = () => {
+  const riskFactoryConfig: RiskFactoryConfig = {
+    getContinents,
+    shuffler: lodash.shuffle
+  };
+
+  const config: GameServiceConfig = {
+    createGame: RiskGame.createFactory(riskFactoryConfig),
+    idGenerator: uniqueIdGenerator
+  };
+
+  return new GameService(config);
+};
 
 const getContextBeans = (): ContextBean[] => {
   const userRepository = new UserRepository(uniqueIdGenerator);
   const sessionRepository = new SessionRepository(uniqueIdGenerator);
 
-  const gameService = new GameService();
+  const gameService = createGameService();
   const lobbyService = new LobbyService(gameService);
   const accountService = new AccountService(userRepository);
   const authService = new AuthService(userRepository, sessionRepository);

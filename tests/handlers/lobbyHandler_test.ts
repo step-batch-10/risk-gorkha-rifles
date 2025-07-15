@@ -5,16 +5,16 @@ import { Hono } from "hono";
 import Server from "../../src/server.ts";
 import { SessionRepository } from "../../src/repository/sessionRepository.ts";
 import LobbyService from "../../src/service/lobbyService.ts";
-import GameService from "../../src/service/gameService.ts";
 import AccountService from "../../src/service/accountService.ts";
 import { UserRepository } from "../../src/repository/userRepository.ts";
+import { createGameService } from "../service/gameService_test.ts";
 
 const createServer = () => {
   const app = new Hono();
 
   const mockedSessionService = new SessionRepository(() => "1");
   mockedSessionService.createSession("1");
-  const lobbyService = new LobbyService(new GameService());
+  const lobbyService = new LobbyService(createGameService());
   const server = new Server(app, [mockedSessionService, lobbyService]);
 
   server.initialize();
@@ -93,7 +93,7 @@ describe("Lobby Handler", () => {
       sessionService.createSession("2");
       sessionService.createSession("3");
 
-      const lobbyService = new LobbyService(new GameService());
+      const lobbyService = new LobbyService(createGameService());
       lobbyService.joinLobby(4, "1");
       lobbyService.joinLobby(4, "2");
       lobbyService.joinLobby(4, "3");
@@ -141,7 +141,7 @@ describe("Lobby Handler", () => {
       sessionService.createSession("2");
       sessionService.createSession("3");
 
-      const lobbyService = new LobbyService(new GameService());
+      const lobbyService = new LobbyService(createGameService());
       lobbyService.joinLobby(3, "1");
       lobbyService.joinLobby(3, "2");
       lobbyService.joinLobby(3, "3");

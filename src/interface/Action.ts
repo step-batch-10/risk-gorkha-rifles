@@ -1,0 +1,3 @@
+export enum Actions {
+  INITIAL_DEPLOYMENT = 'INITIAL_DEPLOYMENT'
+};
