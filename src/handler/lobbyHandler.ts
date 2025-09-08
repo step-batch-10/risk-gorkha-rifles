@@ -26,8 +26,8 @@ export const joinLobbyHandler = async (context: Context) => {
 
 export const lobbyStatusHandler = (context: Context) => {
   const userId: string = context.get("userId");
-  const lobbyService: LobbyService = context.get("lobbyService");
-  const accountService: AccountService = context.get("accountService");
+  const lobbyService: LobbyService = context.get(BEAN.lobbyService);
+  const accountService: AccountService = context.get(BEAN.accountService);
 
   const players = lobbyService.getLobbyPlayers(userId);
 

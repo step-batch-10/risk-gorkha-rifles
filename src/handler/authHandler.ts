@@ -2,11 +2,12 @@ import { Context } from "hono";
 
 import { setCookie } from "hono/cookie";
 import { AuthService, ValidationError } from "../service/authService.ts";
+import { BEAN } from "../constant/Bean.ts";
 
 export const loginHandler = async (context: Context) => {
   try {
     const { username, avatar } = await context.req.json();
-    const authService: AuthService = context.get("authService");
+    const authService: AuthService = context.get(BEAN.authService);
 
     const { sessionId, userId } = authService.handleLogin(username, avatar);
 
