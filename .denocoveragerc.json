@@ -1,7 +1,7 @@
 {
-  "lines": 90,
-  "branches": 85,
-  "functions": 95,
+  "lines": 100,
+  "branches": 100,
+  "functions": 100,
   "perFile": true,
   "exclude": "src/main.ts"
 }
