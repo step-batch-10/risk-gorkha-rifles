@@ -204,6 +204,12 @@ export default class Game {
       return null;
     }
 
+    const availableTroops = this.playerStates[playerId].availableTroops;
+    if (availableTroops < Number(troopCount)) {
+      console.warn(`Player ${playerId} tried to deploy ${troopCount} troops but only has ${availableTroops} available`);
+      return null;
+    }
+
     this.territoryState[territory].troops += Number(troopCount);
     this.playerStates[playerId].availableTroops -= Number(troopCount);
 

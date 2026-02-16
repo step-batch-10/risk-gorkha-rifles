@@ -1,5 +1,5 @@
 import { assert } from "assert";
-import { describe, it } from "jsr:@std/testing/bdd";
+import { describe, it } from "testing";
 import Server from "../src/server.ts";
 import { Hono } from "hono";
 import Users from "../src/models/users.ts";

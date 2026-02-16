@@ -2,8 +2,9 @@
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.13",
     "@std/testing": "jsr:@std/testing@^1.0.13",
-    "assert": "jsr:@std/assert@^1.0.12",
+    "assert": "jsr:@std/assert@^1.0.13",
     "lodash": "npm:lodash@^4.17.21",
+    "@types/lodash": "npm:@types/lodash@^4.17.0",
     "hono": "npm:hono@^4.7.11",
     "testing": "jsr:@std/testing@^1.0.11/bdd"
   },

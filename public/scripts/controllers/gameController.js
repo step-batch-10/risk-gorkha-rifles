@@ -129,7 +129,8 @@ export default class GameController {
     this.#modalManager.startReinforcementPhase(
       userId,
       action.territoryState,
-      action.data
+      action.data,
+      action.playerStates
     );
   }
 

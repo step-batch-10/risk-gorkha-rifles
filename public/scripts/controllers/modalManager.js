@@ -30,11 +30,12 @@ export default class ModalManager {
     }, 4500);
   }
 
-  startReinforcementPhase(userId, territoryState, data) {
+  startReinforcementPhase(userId, territoryState, data, playerStates) {
     this.#reinforcementPhaseModal.addTerritoryListeners(
       userId,
       territoryState,
-      data
+      data,
+      playerStates
     );
   }
 

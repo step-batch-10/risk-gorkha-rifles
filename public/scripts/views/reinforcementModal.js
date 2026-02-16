@@ -40,11 +40,11 @@ export default class ReinforcementModal {
     });
   }
 
-  addTerritoryListeners(currentPlayer, territories, actionData) {
+  addTerritoryListeners(currentPlayer, territories, actionData, actionPlayerStates) {
     const { newTroops } = actionData;
     this.#totalTroops = newTroops;
-    this.#remainingTroops = newTroops;
-
+    this.#remainingTroops = actionPlayerStates[currentPlayer].availableTroops;
+    
     this.#currentPlayer = currentPlayer;
     this.#territories = territories;
 
@@ -60,10 +60,11 @@ export default class ReinforcementModal {
     return `
       <div id="troop-toast-box">
         <div class="custom-number-input">
-          <input type="number" id="number-input" value="0" min="0" max="100" />
+          <input type="number" id="number-input" value="1" min="1" max="${this.#remainingTroops}" />
         </div>
-        </div>
+        <div class="troop-info">Available: ${this.#remainingTroops} troops</div>
         <div id="place-troops-btn">Place</div>
+      </div>
     `;
   }
 
@@ -109,17 +110,29 @@ export default class ReinforcementModal {
   }
 
   #handlePlaceButtonClick(territoryName, inputField, toast) {
+    const troopCount = parseInt(inputField.value);
+    
     if (
       !inputField.value ||
-      (inputField.value <= 0) | (inputField.value > this.#remainingTroops)
+      isNaN(troopCount) ||
+      troopCount <= 0 ||
+      troopCount > this.#remainingTroops
     ) {
-      return this.#showToast("Invalid troops count");
+      return this.#showToast(`Invalid troops count. You have ${this.#remainingTroops} troops available.`);
     }
 
-    ApiService.saveTroopsDeployment(territoryName, inputField.value);
+    this.#remainingTroops -= troopCount;
+
+    ApiService.saveTroopsDeployment(territoryName, troopCount);
 
     toast.hideToast();
     this.#removeTerritoryHighlight();
+    
+    if (this.#remainingTroops > 0) {
+      this.#showToast(`${troopCount} troops deployed. ${this.#remainingTroops} troops remaining.`);
+    } else {
+      this.#showToast(`All troops deployed!`);
+    }
   }
 
   #showTroopDeploymentToast(territoryId) {

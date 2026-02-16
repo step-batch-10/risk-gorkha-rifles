@@ -7,7 +7,7 @@ import {
   getContinents,
   neighbouringTerritories,
 } from "../src/utils/continents.ts";
-import lodash from "npm:lodash";
+import lodash from "lodash";
 
 export const uniqueId = () => {
   return Date.now().toString(36) + Math.random().toString(36);

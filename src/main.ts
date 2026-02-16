@@ -3,7 +3,7 @@ import Session from "./models/session.ts";
 import Users from "./models/users.ts";
 import Server from "./server.ts";
 import { Continent } from "./types/gameTypes.ts";
-import lodash from "npm:lodash";
+import lodash from "lodash";
 import { getContinents, neighbouringTerritories } from "./utils/continents.ts";
 import Messages from "./models/messages.ts";
 
