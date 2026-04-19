@@ -1,4 +1,4 @@
-import { assertEquals } from "assert";
+import { assertEquals } from "@std/assert";
 import { describe, it } from "testing";
 import { getContinents } from "../../src/utils/continents.ts";
 

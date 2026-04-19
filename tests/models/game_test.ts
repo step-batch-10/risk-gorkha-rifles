@@ -1,4 +1,4 @@
-import { assertEquals, assert, assertFalse } from "assert";
+import { assertEquals, assert, assertFalse } from "@std/assert";
 import { describe, it } from "testing";
 import Game, { ActionDetails } from "../../src/models/game.ts";
 import { neighbouringTerritories } from "../../src/utils/continents.ts";

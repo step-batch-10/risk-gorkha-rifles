@@ -1,4 +1,4 @@
-import { assert } from "assert";
+import { assert } from "@std/assert";
 import { describe, it } from "testing";
 import Server from "../src/server.ts";
 import { Hono } from "hono";

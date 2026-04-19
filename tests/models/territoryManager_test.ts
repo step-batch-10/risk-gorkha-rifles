@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "assert";
+import { assertEquals, assertThrows } from "@std/assert";
 import { describe, it } from "testing";
 
 import { PlayerRegions, TerritoryState } from "../../src/types/gameTypes.ts";

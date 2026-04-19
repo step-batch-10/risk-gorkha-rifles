@@ -1,5 +1,5 @@
 import { describe, it } from "testing";
-import { assertEquals } from "assert";
+import { assertEquals } from "@std/assert";
 import Messages from "../../src/models/messages.ts";
 
 const createMessagesInstance = () => {
